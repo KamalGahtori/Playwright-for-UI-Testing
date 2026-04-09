@@ -1,0 +1,24 @@
+{
+  "homepage": {
+    "chromium-desktop": "4/10/2026, 12:12:49 AM",
+    "firefox-desktop": "4/10/2026, 12:12:51 AM",
+    "chromium-iphone-8": "4/10/2026, 12:14:17 AM",
+    "webkit-desktop": "4/10/2026, 12:14:06 AM",
+    "chromium-iphone-12-pro": "4/10/2026, 12:14:33 AM",
+    "chromium-galaxy-s20-ultra": "4/10/2026, 12:15:09 AM",
+    "chromium-ipad-air": "4/10/2026, 12:15:25 AM",
+    "chromium-ipad-mini": "4/10/2026, 12:16:30 AM",
+    "chromium-ipad-pro": "4/10/2026, 12:16:35 AM"
+  },
+  "about-us": {
+    "chromium-desktop": "4/10/2026, 12:13:32 AM",
+    "firefox-desktop": "4/10/2026, 12:13:32 AM",
+    "webkit-desktop": "4/10/2026, 12:14:14 AM",
+    "chromium-iphone-8": "4/10/2026, 12:14:44 AM",
+    "chromium-iphone-12-pro": "4/10/2026, 12:14:59 AM",
+    "chromium-galaxy-s20-ultra": "4/10/2026, 12:15:51 AM",
+    "chromium-ipad-air": "4/10/2026, 12:15:57 AM",
+    "chromium-ipad-mini": "4/10/2026, 12:16:59 AM",
+    "chromium-ipad-pro": "4/10/2026, 12:17:06 AM"
+  }
+}

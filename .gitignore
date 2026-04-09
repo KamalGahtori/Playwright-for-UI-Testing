@@ -1,0 +1,24 @@
+# ── Dependencies ──────────────────────────────────────────────────────
+node_modules/
+
+# ── Playwright Artifacts (generated per run) ──────────────────────────
+test-results/
+
+# ── Reports (generated per run, only latest kept locally) ─────────────
+reports/
+
+# ── Environment Secrets ───────────────────────────────────────────────
+.env
+
+# ── OS / Editor Files ────────────────────────────────────────────────
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# ── Playwright Browser Cache ─────────────────────────────────────────
+playwright/.cache/
+
+# ── Temporary / Log Files ────────────────────────────────────────────
+*.tmp
+*.log
