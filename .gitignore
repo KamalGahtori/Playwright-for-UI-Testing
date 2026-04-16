@@ -3,6 +3,7 @@ node_modules/
 
 # ── Playwright Artifacts (generated per run) ──────────────────────────
 test-results/
+playwright-report/
 
 # ── Reports (generated per run, only latest kept locally) ─────────────
 reports/

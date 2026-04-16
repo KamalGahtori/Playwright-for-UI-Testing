@@ -38,6 +38,8 @@ Golden Baselines are the "source of truth". The framework will compare future te
 | **All Platforms** | `npm run update:baseline` | Captures goldens for all 9 projects. |
 | **By Browser** | `npm run update:baseline:chrome` | Captures all Chrome devices. |
 | **By Device** | `npm run update:baseline:device "ID"` | Captures one specific ID (e.g., `chromium-desktop`). |
+| **Update Desktop** | `npm run update:baseline:device -- chromium-desktop` |
+| **Update iPhone 12** | `npm run update:baseline:device -- chromium-iphone-12-pro` |
 
 <br>
 
@@ -54,6 +56,8 @@ Run these anytime code changes to ensure the website hasn't broken visually.
 | **All Platforms** | `npm run test:visual` | Compares all 9 platforms against goldens. |
 | **By Browser** | `npm run test:visual:chrome` | Checks all Chrome-based platforms. |
 | **By Device** | `npm run test:visual:device "ID"` | Checks a specific ID (e.g., `chromium-iphone-12-pro`). |
+| **Test Desktop** | `npm run test:visual:device -- chromium-desktop` |
+| **Test iPhone 12** | `npm run test:visual:device -- chromium-iphone-12-pro` |
 | **Interactive UI** | `npm run test:visual:ui` | 🖥️ **Opens the Playwright UI Dashboard.** |
 
 <br>

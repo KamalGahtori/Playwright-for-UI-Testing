@@ -34,12 +34,15 @@ Efficiency and reliability are favored over arbitrary timeouts.
 - **Centralized Scrubbing**: All masking, hiding, and clicking logic MUST be centralized in [base-fixtures.js](file:///home/kamalks337/Documents/Learning/Playwright_for_UI_Testing/tests/fixtures/base-fixtures.js).
 - **Hard Overrides**: Assertions in [visual.spec.js](file:///home/kamalks337/Documents/Learning/Playwright_for_UI_Testing/tests/visual-regression/visual.spec.js) use an explicit 30s timeout to bypass project-level defaults.
 
-## 5. Handling Dynamic Content (Anti-Flakiness)
-Prevent false-positive failures through a "Hierarchy of Defense" in the fixture layer:
-1.  **Click (Interaction)**: Dismisses overlays (e.g. Cookie Banners). Define in `GLOBAL_CLICK_SELECTORS`.
-2.  **Hide (Display: None)**: Removes persistent noise (e.g. Chat bots, Maps). Define in `GLOBAL_HIDE_SELECTORS`.
-3.  **Mask (Blackout)**: Covers dynamic media (e.g. Carousels, Videos). Define in `GLOBAL_MASK_SELECTORS`.
-4.  **Tolerance (Pixel Buffer)**: Use global `maxDiffPixelRatio` (0.01-0.03) to ignore minor anti-aliasing or font-rendering variance.
+## 5. Handling Dynamic Content (Freeze, Don't Mask)
+Prevent false-positive failures through a "Hierarchy of Defense" driven entirely by runtime heuristic detection in `volatility-detector.js`:
+1.  **Dismiss** (Behavioral): Auto-clicks consent banners by detecting fixed elements containing privacy/cookie keywords.
+2.  **Hide** (Structural): Stamps `display: none` on chat widgets, full-screen popup modals, and cross-origin iframes based on extreme z-indexes and position.
+3.  **Freeze** (Observational): Pauses infinite CSS animations and freezes slider/carousel transforms (like Owl Carousel) in place to preserve layout while eliminating pixel variance.
+4.  **Mask** (Residual): Only apply Playwright blackout masks to truly unpredictable pixels (like math captcha text).
+5.  **Tolerance** (Pixel Buffer): Use global `maxDiffPixelRatio` (0.01-0.03) to ignore minor anti-aliasing or font-rendering variance.
+
+**RULE: Zero Hardcoded Selectors.** The core framework must never use hardcoded, site-specific CSS selectors arrays (e.g. `GLOBAL_MASK_SELECTORS`). All volatility must be neutralized behaviorally or structurally to maintain multi-site portability.
 
 ## 6. Actionable Error Management
 Every failure must provide a clear path to resolution via emoji-coded headers:
