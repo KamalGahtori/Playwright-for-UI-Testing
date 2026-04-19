@@ -1,92 +1,118 @@
-# Playwright Visual Regression Framework 🎭
+# Playwright Visual Regression Framework
 
-A highly scalable, data-driven framework for automatic visual regression testing across **9** browser and device combinations.
-
-<br>
+Structural and Aesthetic Integrity Audit for marketing landing pages. Validates layout, fonts, spacing, and colors across **9 browser/device combinations** while automatically ignoring volatile content — carousels, counters, chat widgets, and live data — with zero hardcoded selectors.
 
 ---
 
-## 🚀 1. Quick Start
+## Project structure
 
-### Step 1: Install Dependencies
+```
+Playwright-for-UI-Testing/
+├── playwright.config.js       # browser projects, viewports, thresholds
+├── endpoints.config.js        # pages under test — only file you edit to add pages
+├── .env                       # your BASE_URL (not committed)
+├── .env.example               # template
+│
+├── tests/visual/
+│   └── visual.spec.js         # the test — viewport-chunk loop, header to footer
+│
+├── utils/
+│   ├── base-fixtures.js       # page warm-up + per-viewport stabilization fixtures
+│   └── volatility-detector.js # 5-phase intelligent detection engine
+│
+├── page-objects/              # page-specific selectors (add as needed)
+│
+└── golden-baselines/          # reference screenshots committed to git
+```
+
+---
+
+## Quick start
+
 ```bash
 npm install
 npx playwright install
-npx playwright install-deps webkit  # Required for Linux users
+cp .env.example .env          # then set BASE_URL=https://your-site.com
 ```
 
-<br>
+---
 
-### Step 2: Configure Environment
+## Adding a page
+
+Open `endpoints.config.js` and add one entry:
+
+```js
+{ id: 'services', path: '/services' }
+```
+
+Capture the baseline:
+
 ```bash
-cp .env.example .env
-# Edit .env and set BASE_URL=https://your-site.com
+npm run update:baseline -- -g "[services]"
 ```
 
-<br>
-
 ---
 
-## 📸 2. Generating Baseline Images
+## Commands
 
-Golden Baselines are the "source of truth". The framework will compare future tests against these images.
+### Run tests
 
-### Capture Commands
+| Command | Scope |
+|---|---|
+| `npm run test:visual` | All 9 browser/device projects |
+| `npm run test:visual:chrome` | Chromium desktop + mobile + tablet |
+| `npm run test:visual:firefox` | Firefox desktop |
+| `npm run test:visual:safari` | WebKit desktop |
+| `npm run test:visual:device -- chromium-desktop` | One specific project |
+| `npm run test:visual:ui` | Playwright UI dashboard (local dev) |
 
-| Scope | Command | Description |
-| :--- | :--- | :--- |
-| **All Platforms** | `npm run update:baseline` | Captures goldens for all 9 projects. |
-| **By Browser** | `npm run update:baseline:chrome` | Captures all Chrome devices. |
-| **By Device** | `npm run update:baseline:device "ID"` | Captures one specific ID (e.g., `chromium-desktop`). |
-| **Update Desktop** | `npm run update:baseline:device -- chromium-desktop` |
-| **Update iPhone 12** | `npm run update:baseline:device -- chromium-iphone-12-pro` |
+### Capture / update baselines
 
-<br>
+| Command | Scope |
+|---|---|
+| `npm run update:baseline` | All 9 projects |
+| `npm run update:baseline:chrome` | Chromium only |
+| `npm run update:baseline:device -- chromium-desktop` | One project |
 
----
+### Reports
 
-## 🧪 3. Running Visual Tests
-
-Run these anytime code changes to ensure the website hasn't broken visually.
-
-### Run Commands
-
-| Scope | Command | Description |
-| :--- | :--- | :--- |
-| **All Platforms** | `npm run test:visual` | Compares all 9 platforms against goldens. |
-| **By Browser** | `npm run test:visual:chrome` | Checks all Chrome-based platforms. |
-| **By Device** | `npm run test:visual:device "ID"` | Checks a specific ID (e.g., `chromium-iphone-12-pro`). |
-| **Test Desktop** | `npm run test:visual:device -- chromium-desktop` |
-| **Test iPhone 12** | `npm run test:visual:device -- chromium-iphone-12-pro` |
-| **Interactive UI** | `npm run test:visual:ui` | 🖥️ **Opens the Playwright UI Dashboard.** |
-
-<br>
-
----
-
-## 📊 4. Reviewing Results
-
-### Open Static Report
 ```bash
-npm run report
+npm run report      # open HTML report in browser
 ```
-
-### Static vs UI Mode
-*   **Static Report (`npm run report`)**: Best for CI/CD or quick review of pixel differences in a browser tab.
-*   **UI Mode (`npm run test:visual:ui`)**: Best for local development. It allows you to re-run individual tests, see live actions, and toggle between baseline and actual images.
-
-<br>
 
 ---
 
-## ⚙️ 5. Maintenance
+## How it works
 
-### Adding a New Page
-Simply add a new entry to `endpoints.config.js`:
-```javascript
-{ id: 'new-page', path: '/new-page-url' }
-```
-Then run the update command:
-```bash
-npm run update:baseline -- -g "[new-page]"
-```
+Every test follows a two-phase approach:
+
+**Phase A — Full page load** (once per page)
+1. Wait for DOM, network idle, and fonts
+2. Scroll the entire page to trigger all lazy loaders (WP Rocket, IntersectionObserver)
+3. Wait for every `<img>` to fully decode
+4. Return to top
+
+**Phase B — Per-viewport stabilization** (once per viewport chunk)
+1. Dismiss cookie/consent banners
+2. **Behavioral scan** — observe the viewport for 450ms; anything that changes (carousel sliding, counter incrementing, ticker scrolling) is automatically stamped for masking
+3. Hide third-party widgets (chat bubbles, cross-origin iframes)
+4. Freeze infinite CSS animations in-place
+5. Build mask list and take the screenshot
+
+The carousel **container** stays fully visible in every screenshot — its size, padding, and position are tested. Only the inner **track** (the sliding part) is masked. Layout is always verified; volatile content is always ignored.
+
+---
+
+## Projects (9 total)
+
+| ID | Browser | Viewport |
+|---|---|---|
+| `chromium-desktop` | Chromium | 1280×720 |
+| `firefox-desktop` | Firefox | 1280×720 |
+| `webkit-desktop` | WebKit | 1280×720 |
+| `chromium-iphone-8` | Chromium | iPhone 8 |
+| `chromium-iphone-12-pro` | Chromium | iPhone 12 Pro |
+| `chromium-galaxy-s20-ultra` | Chromium | Galaxy S20 Ultra |
+| `chromium-ipad-air` | Chromium | iPad (gen 7) |
+| `chromium-ipad-mini` | Chromium | iPad Mini |
+| `chromium-ipad-pro` | Chromium | iPad Pro 11 |

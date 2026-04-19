@@ -13,11 +13,27 @@
 
 module.exports = [
   {
-    id: 'homepage',
+    id: 'Homepage',
     path: '/',
   },
   {
-    id: 'about-us',
+    id: 'About Us',
     path: '/about-us-ksolves',
+  },
+  {
+    id: 'Life at Ksolves',
+    path: '/life-at-ksolves',
+  },
+  {
+    id: 'Legacy Circle',
+    path: '/legacy-circle',
+  },
+  {
+    id: 'Careers',
+    path: '/careers',
+  },
+  {
+    id: 'Investors',
+    path: '/investors',
   }
 ];
