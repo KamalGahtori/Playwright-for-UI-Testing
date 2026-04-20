@@ -1,25 +1,31 @@
 # ── Dependencies ──────────────────────────────────────────────────────
 node_modules/
 
-# ── Playwright Artifacts (generated per run) ──────────────────────────
-test-results/
-playwright-report/
+# ── Playwright generated artifacts (re-created on every run) ──────────
+# These folders are written by Playwright automatically.
+# Do NOT commit them — they change every run and contain no source truth.
+test-results/       # raw failure screenshots, traces, diffs
+playwright-report/  # HTML diff report
 
-# ── Reports (generated per run, only latest kept locally) ─────────────
-reports/
-
-# ── Environment Secrets ───────────────────────────────────────────────
+# ── Environment secrets ───────────────────────────────────────────────
+# Copy .env.example → .env and set BASE_URL. Never commit .env.
 .env
 
-# ── OS / Editor Files ────────────────────────────────────────────────
+# ── OS / editor metadata ──────────────────────────────────────────────
 .DS_Store
 Thumbs.db
 .vscode/
 .idea/
 
-# ── Playwright Browser Cache ─────────────────────────────────────────
+# ── Claude Code local settings ────────────────────────────────────────
+# The .claude/ folder holds machine-specific tool permissions (settings.local.json).
+# CLAUDE.md (project context) is in the repo root and IS committed — it is not
+# inside .claude/ and is unaffected by this rule.
+.claude/
+
+# ── Playwright browser cache ──────────────────────────────────────────
 playwright/.cache/
 
-# ── Temporary / Log Files ────────────────────────────────────────────
+# ── Temporary / log files ─────────────────────────────────────────────
 *.tmp
 *.log

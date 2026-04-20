@@ -1,154 +1,168 @@
 // playwright.config.js
 // ─────────────────────────────────────────────────────────────────────
-// Playwright Configuration
-// Visual Regression, Design Compliance & Content Verification Framework
+// Global Playwright configuration.
 //
-// This file defines:
-//   1. All 9 browser-device project combinations
-//   2. Viewport sizes and device emulations
-//   3. Screenshot comparison thresholds per device category
-//   4. Report output (HTML)
-//   5. Retry, parallelism, and trace settings
-//   6. Environment variable loading from .env
+// Defines all 9 browser/device projects, screenshot thresholds,
+// parallelism settings, timeouts, and the HTML reporter.
 // ─────────────────────────────────────────────────────────────────────
 
-require('dotenv').config();
+require('dotenv').config(); // Load BASE_URL and other vars from .env
 
 const { defineConfig, devices } = require('@playwright/test');
-const path = require('path');
 
-// ── Viewport Constants ──────────────────────────────────────────────
+// Desktop viewport used by all three desktop browser projects.
+// 1920×1080 matches the most common monitor resolution for a fair
+// representation of what a typical user sees.
 const DESKTOP_VIEWPORT = { width: 1920, height: 1080 };
 
 module.exports = defineConfig({
-  // ── Test Directory ──────────────────────────────────────────────────
+
+  // Where Playwright looks for test files.
   testDir: './tests',
 
-  // ── Golden Baseline Directory ───────────────────────────────────────
+  // Where golden baseline screenshots are stored and read from.
+  // Organised as {snapshotDir}/{browser}/{device}/{page-id}.png
   snapshotDir: './golden-baselines',
 
-  // ── Retry Policy ────────────────────────────────────────────────────
+  // How many times to retry a failed test before marking it failed.
+  // Defaults to 0 (no retries). Can be overridden via RETRIES env var
+  // if you want CI to retry flaky network conditions.
   retries: parseInt(process.env.RETRIES || '0', 10),
 
-  // ── Parallelism ─────────────────────────────────────────────────────
-  // We run synchronously for BOTH tests and updates to ensure 
-  // identical timing and environment symmetry.
+  // ── Parallelism ───────────────────────────────────────────────────
+  // Both settings are intentionally conservative.
+  //
+  // fullyParallel: false — tests within a file run one at a time.
+  // workers: 2           — at most 2 test files run simultaneously.
+  //
+  // Visual regression tests must be reproducible. Running too many
+  // browser instances in parallel causes CPU/GPU contention which
+  // produces slightly different rendering output between the baseline
+  // capture run and the comparison run, leading to false failures.
   fullyParallel: false,
   workers: 2,
 
-  // ── Timeouts ────────────────────────────────────────────────────────
+  // Hard ceiling for any single test (navigation + warm-up + screenshot).
+  // Long pages on mobile can take 90s+ to fully load and screenshot.
   timeout: 120_000,
 
-  // ── Folder Management ──────────────────────────────────────────────
-  // raw artifacts (screenshots of failures, traces) go here:
+  // Where Playwright writes raw per-test artifacts (failure screenshots,
+  // traces). Excluded from git via .gitignore.
   outputDir: 'test-results',
 
-  // ── Shared Browser Settings ─────────────────────────────────────────
+  // ── Settings shared across all projects ───────────────────────────
   use: {
-    baseURL: process.env.BASE_URL,
+    baseURL: process.env.BASE_URL, // Read from .env — e.g. https://www.ksolves.com/
+
+    // Record a trace only on the first retry, keeping storage low.
+    // View traces with: npx playwright show-trace trace.zip
     trace: 'on-first-retry',
+
+    // Capture a screenshot only when a test fails (for the HTML report).
     screenshot: 'only-on-failure',
+
+    // How long to wait for a single action (click, fill, etc.) to complete.
     actionTimeout: 30_000,
   },
 
-  // ── Screenshot Comparison Thresholds ────────────────────────────────
+  // ── Screenshot comparison thresholds ──────────────────────────────
   expect: {
-    timeout: 30_000, // Global timeout for all 'expect' assertions
+    // How long toHaveScreenshot() waits before giving up.
+    // Must be long enough for Playwright to scroll and render a full
+    // mobile page — large pages can take 30s+ just to screenshot.
+    timeout: 30_000,
+
     toHaveScreenshot: {
-      maxDiffPixelRatio: 0.03, // Global tolerance for all 9 projects
-      timeout: 30_000,         // Crucial: 30s for 17k-pixel mobile renders
+      // Allow up to 3% of pixels to differ before a test fails.
+      // This absorbs sub-pixel anti-aliasing and minor font rendering
+      // variance between operating systems. It does NOT absorb real
+      // design changes. The per-assertion override in visual.spec.js
+      // tightens this to 2% for actual comparisons.
+      maxDiffPixelRatio: 0.03,
+
+      // Separate timeout for the screenshot assertion itself.
+      // Mirrors the expect.timeout above.
+      timeout: 30_000,
     },
   },
 
-  // ── Reporter Configuration ──────────────────────────────────────────
+  // ── Reporter ──────────────────────────────────────────────────────
   reporter: [
-    ['list'],
+    ['list'],  // Prints each test result to the terminal as it runs
+    // Generates an interactive HTML report with side-by-side diff images.
+    // open: 'never' means it does not auto-launch after the run — use
+    // `npm run report` to open it manually.
     ['html', { outputFolder: 'playwright-report', open: 'never' }],
   ],
 
-  // ── Project Definitions ─────────────────────────────────────────────
+  // ── Browser / device projects ─────────────────────────────────────
   // 9 projects total:
-  //   3 Desktop (Chromium, Firefox, WebKit @ 1280×720)
-  //   3 Mobile  (iPhone 12 Pro, iPhone 8, Galaxy S20 Ultra × Chromium)
-  //   3 Tablet  (iPad Air, iPad Mini, iPad Pro × Chromium)
-  // ────────────────────────────────────────────────────────────────────
+  //   3 Desktop  — Chromium, Firefox, WebKit at 1920×1080
+  //   3 Mobile   — iPhone 8, iPhone 12 Pro, Galaxy S20 Ultra (Chromium emulation)
+  //   3 Tablet   — iPad Air, iPad Mini, iPad Pro (Chromium emulation)
+  //
+  // snapshotPathTemplate tells Playwright where to read/write baselines for
+  // each project. {snapshotDir} = './golden-baselines', {arg} = page id,
+  // {ext} = '.png'.
   projects: [
 
-    // ── DESKTOP BROWSERS ──
+    // ── DESKTOP ───────────────────────────────────────────────────
     {
       name: 'chromium-desktop',
-      use: {
-        browserName: 'chromium',
-        viewport: DESKTOP_VIEWPORT,
-      },
+      use: { browserName: 'chromium', viewport: DESKTOP_VIEWPORT },
       snapshotPathTemplate: '{snapshotDir}/chromium/desktop/{arg}{ext}',
     },
     {
       name: 'firefox-desktop',
-      use: {
-        browserName: 'firefox',
-        viewport: DESKTOP_VIEWPORT,
-      },
+      use: { browserName: 'firefox', viewport: DESKTOP_VIEWPORT },
       snapshotPathTemplate: '{snapshotDir}/firefox/desktop/{arg}{ext}',
     },
     {
       name: 'webkit-desktop',
-      use: {
-        browserName: 'webkit',
-        viewport: DESKTOP_VIEWPORT,
-      },
+      // WebKit is Apple's browser engine (used by Safari). Testing it on
+      // desktop catches Safari-specific rendering quirks (font metrics,
+      // CSS property support, image decoding differences).
+      use: { browserName: 'webkit', viewport: DESKTOP_VIEWPORT },
       snapshotPathTemplate: '{snapshotDir}/webkit-desktop/{arg}{ext}',
     },
 
-    // ── MOBILE DEVICES (Chromium Emulation) ──
+    // ── MOBILE (Chromium emulation) ────────────────────────────────
+    // Spread operator pulls in the full device profile from Playwright's
+    // built-in device registry: viewport size, device pixel ratio,
+    // user-agent string, touch support, etc.
     {
       name: 'chromium-iphone-8',
-      use: {
-        ...devices['iPhone 8'],
-        browserName: 'chromium',
-      },
+      use: { ...devices['iPhone 8'], browserName: 'chromium' },
       snapshotPathTemplate: '{snapshotDir}/chromium/iphone-8/{arg}{ext}',
     },
     {
       name: 'chromium-iphone-12-pro',
-      use: {
-        ...devices['iPhone 12 Pro'],
-        browserName: 'chromium',
-      },
+      use: { ...devices['iPhone 12 Pro'], browserName: 'chromium' },
       snapshotPathTemplate: '{snapshotDir}/chromium/iphone-12-pro/{arg}{ext}',
     },
     {
       name: 'chromium-galaxy-s20-ultra',
-      use: {
-        ...devices['Galaxy S20 Ultra'],
-        browserName: 'chromium',
-      },
+      use: { ...devices['Galaxy S20 Ultra'], browserName: 'chromium' },
       snapshotPathTemplate: '{snapshotDir}/chromium/galaxy-s20-ultra/{arg}{ext}',
     },
 
-    // ── TABLET DEVICES (Chromium Emulation) ──
+    // ── TABLET (Chromium emulation) ────────────────────────────────
     {
       name: 'chromium-ipad-air',
-      use: {
-        ...devices['iPad (gen 7)'],
-        browserName: 'chromium',
-      },
+      // Playwright's 'iPad (gen 7)' profile maps to the standard iPad
+      // viewport (810×1080 portrait). Named 'ipad-air' in our project
+      // for clarity.
+      use: { ...devices['iPad (gen 7)'], browserName: 'chromium' },
       snapshotPathTemplate: '{snapshotDir}/chromium/ipad-air/{arg}{ext}',
     },
     {
       name: 'chromium-ipad-mini',
-      use: {
-        ...devices['iPad Mini'],
-        browserName: 'chromium',
-      },
+      use: { ...devices['iPad Mini'], browserName: 'chromium' },
       snapshotPathTemplate: '{snapshotDir}/chromium/ipad-mini/{arg}{ext}',
     },
     {
       name: 'chromium-ipad-pro',
-      use: {
-        ...devices['iPad Pro 11'],
-        browserName: 'chromium',
-      },
+      use: { ...devices['iPad Pro 11'], browserName: 'chromium' },
       snapshotPathTemplate: '{snapshotDir}/chromium/ipad-pro/{arg}{ext}',
     },
   ],
