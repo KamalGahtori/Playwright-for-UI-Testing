@@ -2,34 +2,52 @@
 // ─────────────────────────────────────────────────────────────────────
 // Intelligent Layout-Aware Volatility Detection Engine
 //
-// DETECTION PIPELINE (called once per page):
-//   0a. ensureFullPageLoad     — block until every <img> has decoded
-//   0b. waitForLayoutStability — block until no element shifts position
-//   1.  dismissOverlays        — click away cookie/consent banners
-//   2.  behavioralVolatilityScan — two-snapshot diff across the FULL page
-//   3.  hideWidgetsAndOverlays — hide chat widgets, cross-origin iframes
-//   4.  freezeVolatileContent  — pause infinite CSS animations; stamp carousel tracks
-//   5.  detectMaskTargets      — collect [data-vr-volatile] + captcha selectors
+// EXPORTED FUNCTIONS (called from base-fixtures.js):
+//
+//   ensureFullPageLoad(page)
+//     Block until every <img> in the DOM has decoded.
+//
+//   scanViewportForVolatileContent(page)
+//     350ms mini behavioral scan on elements CURRENTLY in viewport.
+//     Called at each scroll position during Pass 2 so viewport-triggered
+//     carousels and IntersectionObserver animations are caught while active.
+//
+//   waitForLayoutStability(page)
+//     Snapshot-compare structural landmarks every 500ms until nothing moves.
+//
+//   fastForwardFiniteAnimations(page)
+//     Set duration of finite CSS animations and transitions to 0.001ms so
+//     entrance effects (slide-in, fade-in, counter) reach their final state
+//     before the screenshot. Infinite animations are left untouched —
+//     they are handled later by freezeVolatileContent.
+//
+//   dismissOverlays(page)
+//     Click away cookie/consent banners.
+//
+//   behavioralVolatilityScan(page)
+//     500ms full-page two-snapshot diff. Stamps [data-vr-volatile] on any
+//     element whose direct text, CSS transform, or background-position changed.
+//     Uses DIRECT text nodes (not inherited textContent) and KEEP-SPECIFIC
+//     de-duplication to prevent the entire page from being masked.
+//
+//   hideWidgetsAndOverlays(page)
+//     Hide chat widgets, popups, cross-origin iframes via [data-vr-hide].
+//
+//   freezeVolatileContent(page)
+//     Pause infinite CSS animations. Stamp carousel tracks (named + generic).
+//     Generic detection: overflow:hidden parent + translate-transformed child.
+//
+//   detectMaskTargets(page)
+//     Return CSS selectors covering [data-vr-volatile] + captcha.
 //
 // DESIGN PRINCIPLE: Mask Content, Test Containers
-//   The carousel CONTAINER (size, padding, alignment) stays in the diff.
-//   Only the sliding TRACK — the volatile inner content — is masked.
-//
-// KEY INVARIANTS IN THE BEHAVIORAL SCAN:
-//   • Only DIRECT text nodes are compared (not inherited textContent).
-//     This prevents the cascade where a carousel slide change causes
-//     every ancestor (section, main, body) to appear volatile.
-//   • De-duplication keeps the MOST SPECIFIC (deepest) volatile element.
-//     If element A contains volatile element B, A is removed — only B
-//     is masked. This prevents a section-level mask from blacking out
-//     everything on the page.
+//   The carousel CONTAINER (size, position, padding) stays in the diff.
+//   Only the sliding TRACK is masked. Layout is always verified.
 // ─────────────────────────────────────────────────────────────────────
 
 /**
- * Phase 0a: Block until every <img> in the document has fully decoded.
- * Must be called AFTER the lazy-loader scroll so images have started loading.
- *
- * @param {import('@playwright/test').Page} page
+ * Block until every <img> in the document has fully decoded.
+ * Call after the lazy-loader scroll so images have started loading.
  */
 async function ensureFullPageLoad(page) {
   await page.evaluate(async () => {
@@ -42,18 +60,118 @@ async function ensureFullPageLoad(page) {
       });
     };
     await Promise.allSettled(Array.from(document.querySelectorAll('img')).map(waitForImg));
-    try {
-      await Promise.race([document.fonts.ready, new Promise(r => setTimeout(r, 2000))]);
-    } catch {}
+    try { await Promise.race([document.fonts.ready, new Promise(r => setTimeout(r, 2000))]); }
+    catch {}
   });
 }
 
 /**
- * Phase 0b: Wait until no significant element is changing position.
- * Snapshot-compares offsetTop/offsetHeight of structural landmarks every 500ms.
- * Exits as soon as two consecutive samples match (stable), ceiling: 3s.
+ * Per-viewport mini behavioral scan — called at each scroll position during Pass 2.
  *
- * @param {import('@playwright/test').Page} page
+ * WHY THIS EXISTS:
+ *   The full-page scan (behavioralVolatilityScan) runs from the top of the page
+ *   after returning from scrolling. Carousels and counters that are triggered by
+ *   IntersectionObserver only animate when they are inside the viewport. By the
+ *   time we're back at the top, those below-fold elements have paused — so the
+ *   full-page scan misses them.
+ *
+ *   This function runs at each section WHILE the user is scrolled to it, so
+ *   those active animations are observed and stamped during this pass.
+ *
+ *   Uses the same DIRECT TEXT + KEEP-SPECIFIC de-duplication as the full scan.
+ */
+async function scanViewportForVolatileContent(page) {
+  await page.evaluate(async () => {
+    const delay    = ms => new Promise(r => setTimeout(r, ms));
+    const SCAN_MS  = 350;
+    const MIN_AREA = 400;
+    const SKIP_TAGS = new Set([
+      'html','head','body','script','style','meta','link','noscript','svg','path','g','defs',
+    ]);
+
+    const directText = el => {
+      let t = '';
+      for (const node of el.childNodes) if (node.nodeType === 3) t += node.nodeValue;
+      return t.trim().substring(0, 200);
+    };
+
+    const vpH = window.innerHeight;
+    const vpW = window.innerWidth;
+
+    // Only elements currently visible in the browser window
+    const candidates = Array.from(document.querySelectorAll('*')).filter(el => {
+      if (el.getAttribute('data-vr-volatile') || el.getAttribute('data-vr-frozen')) return false;
+      if (SKIP_TAGS.has(el.tagName.toLowerCase())) return false;
+      const cs = getComputedStyle(el);
+      if (cs.display === 'none' || cs.visibility === 'hidden') return false;
+      if (parseFloat(cs.opacity) === 0) return false;
+      const rect = el.getBoundingClientRect();
+      if (rect.bottom < 0 || rect.top > vpH) return false;
+      if (rect.right < 0 || rect.left > vpW) return false;
+      if (rect.width * rect.height < MIN_AREA) return false;
+      return true;
+    });
+
+    const snap = candidates.map(el => {
+      const cs = getComputedStyle(el);
+      return {
+        el,
+        text:      directText(el),
+        transform: cs.transform,
+        bgPos:     cs.backgroundPosition,
+        left:      cs.left,
+        marginL:   cs.marginLeft,
+      };
+    });
+
+    await delay(SCAN_MS);
+
+    const volatile = new Map();
+    for (const s of snap) {
+      const { el } = s;
+      if (!document.contains(el)) continue;
+      const cs    = getComputedStyle(el);
+      const text2 = directText(el);
+      const tf2   = cs.transform;
+      const bg2   = cs.backgroundPosition;
+      const left2 = cs.left;
+      const mL2   = cs.marginLeft;
+
+      if (s.text !== text2 && (s.text.length > 0 || text2.length > 0)) {
+        volatile.set(el, 'vp-content');
+      } else if (s.transform !== tf2 && s.transform !== 'none' && tf2 !== 'none') {
+        volatile.set(el, 'vp-transform');
+      } else if (s.bgPos !== bg2) {
+        volatile.set(el, 'vp-background');
+      } else if (s.left !== left2 && s.left !== 'auto' && left2 !== 'auto') {
+        volatile.set(el, 'vp-left');
+      } else if (s.marginL !== mL2 && s.marginL !== '0px' && mL2 !== '0px') {
+        volatile.set(el, 'vp-margin');
+      }
+    }
+
+    // De-dup: keep specific, remove generic ancestors
+    const toRemove = new Set();
+    for (const [container] of volatile) {
+      for (const [candidate] of volatile) {
+        if (candidate !== container && container.contains(candidate)) {
+          toRemove.add(container);
+          break;
+        }
+      }
+    }
+    for (const el of toRemove) volatile.delete(el);
+
+    for (const [el, reason] of volatile) {
+      el.setAttribute('data-vr-volatile', reason);
+    }
+  });
+}
+
+/**
+ * Snapshot-compare structural landmarks every 500ms.
+ * Exits as soon as two consecutive samples match. Ceiling: 3s.
+ * Catches: WP Rocket CLS, entrance animation layout shifts.
  */
 async function waitForLayoutStability(page) {
   await page.evaluate(async () => {
@@ -67,21 +185,57 @@ async function waitForLayoutStability(page) {
         .join('|');
 
     let prev = snapshot();
-    for (let i = 0; i < 6; i++) {   // max 6 × 500ms = 3s
+    for (let i = 0; i < 6; i++) {
       await delay(500);
       const curr = snapshot();
-      if (curr === prev) return;     // stable — exit early
+      if (curr === prev) return;
       prev = curr;
     }
   });
 }
 
 /**
- * Phase 1: Dismiss cookie/consent banners.
- * Behavioral detection: fixed/sticky + consent keywords + dismiss button.
+ * Fast-forward all FINITE CSS animations and transitions to their end state.
  *
- * @param {import('@playwright/test').Page} page
- * @returns {Promise<string[]>}
+ * WHY:
+ *   Entrance animations (slide-in, fade-in, counter increment) are finite —
+ *   they run once and stop. If the screenshot is taken mid-animation, elements
+ *   appear at wrong positions or opacities.
+ *   Setting duration to 0.001ms forces them to complete instantly before the
+ *   layout stability check runs.
+ *
+ *   INFINITE animations (carousels, pulsing dots) are intentionally LEFT ALONE
+ *   here — they will be paused later by freezeVolatileContent.
+ */
+async function fastForwardFiniteAnimations(page) {
+  await page.evaluate(() => {
+    document.querySelectorAll('*').forEach(el => {
+      try {
+        const cs = getComputedStyle(el);
+
+        // Finite animation → fast-forward to end
+        if (cs.animationName !== 'none' && cs.animationIterationCount !== 'infinite') {
+          el.style.animationDuration   = '0.001ms';
+          el.style.animationDelay      = '0ms';
+          el.style.animationFillMode   = 'forwards';
+        }
+
+        // All CSS transitions → instant (eliminates hover/state transition uncertainty)
+        if (cs.transitionDuration && cs.transitionDuration !== '0s') {
+          el.style.transitionDuration = '0.001ms';
+          el.style.transitionDelay    = '0ms';
+        }
+      } catch {}
+    });
+  });
+
+  // Short pause to let instant animations fire their end keyframe
+  await page.waitForTimeout(300);
+}
+
+/**
+ * Dismiss cookie/consent banners.
+ * Detection: fixed/sticky position + consent keyword + dismiss button.
  */
 async function dismissOverlays(page) {
   const dismissed = await page.evaluate(async () => {
@@ -95,28 +249,26 @@ async function dismissOverlays(page) {
       } catch { return false; }
     });
 
-    const consentPattern = /cookie|consent|privacy.?policy|gdpr/i;
-    const dismissPattern = /accept|got\s*it|close|ok\b|agree|dismiss|understand|×|✕|✖/i;
+    const consentPat = /cookie|consent|privacy.?policy|gdpr/i;
+    const dismissPat = /accept|got\s*it|close|ok\b|agree|dismiss|understand|×|✕|✖/i;
 
     for (const el of fixedEls) {
-      if (!consentPattern.test(el.textContent || '')) continue;
-      const interactives = Array.from(
-        el.querySelectorAll('button, a, [role="button"], [class*="btn"]')
-      );
-      let bestBtn = null, bestScore = 0;
-      for (const btn of interactives) {
+      if (!consentPat.test(el.textContent || '')) continue;
+      const btns = Array.from(el.querySelectorAll('button,a,[role="button"],[class*="btn"]'));
+      let best = null, bestScore = 0;
+      for (const btn of btns) {
         const txt = (btn.textContent || '').trim();
-        let score = 0;
-        if (dismissPattern.test(txt)) score += 10;
-        if (/accept|got\s*it|agree/i.test(txt)) score += 5;
-        if (btn.tagName === 'BUTTON') score += 2;
-        if (btn.offsetWidth > 0 && btn.offsetHeight > 0) score += 3;
-        if (score > bestScore) { bestScore = score; bestBtn = btn; }
+        let s = 0;
+        if (dismissPat.test(txt)) s += 10;
+        if (/accept|got\s*it|agree/i.test(txt)) s += 5;
+        if (btn.tagName === 'BUTTON') s += 2;
+        if (btn.offsetWidth > 0 && btn.offsetHeight > 0) s += 3;
+        if (s > bestScore) { bestScore = s; best = btn; }
       }
-      if (bestBtn && bestScore >= 5) {
+      if (best && bestScore >= 5) {
         try {
-          bestBtn.click();
-          results.push(`Dismissed: "${(bestBtn.textContent || '').trim().substring(0, 40)}"`);
+          best.click();
+          results.push(`Dismissed: "${(best.textContent || '').trim().substring(0, 40)}"`);
           await delay(600);
         } catch {}
       }
@@ -140,61 +292,39 @@ async function dismissOverlays(page) {
 }
 
 /**
- * Phase 2: Behavioral volatility scan — the core intelligence layer.
+ * Full-page behavioral volatility scan — called once after returning to top.
  *
- * Observes the ENTIRE page for 500ms and compares two DOM snapshots.
- * Stamps volatile elements with [data-vr-volatile] for Playwright masking.
+ * Compares two DOM snapshots 500ms apart across the ENTIRE document.
+ * Stamps elements whose DIRECT text, CSS transform, or background-position changed.
  *
- * TWO CRITICAL DESIGN DECISIONS that prevent the "entire page masked" problem:
+ * DIRECT TEXT (not textContent):
+ *   Comparing el.textContent causes a cascade — a carousel slide changing
+ *   text marks every ancestor (section, main, body) as volatile, eventually
+ *   masking the whole page. We compare only the text that the element OWNS
+ *   directly (Text node children), so only the specific changing element is stamped.
  *
- * A) DIRECT TEXT ONLY — we compare only the text nodes that are IMMEDIATE
- *    children of each element, not el.textContent (which cascades through
- *    all descendants). This means a carousel slide changing "Testimonial 1"
- *    to "Testimonial 2" marks ONLY that slide — not the section, not the
- *    main, not the body.
- *
- * B) KEEP SPECIFIC, REMOVE GENERIC — de-duplication removes any element that
- *    CONTAINS another volatile element. We keep the deepest/most-specific
- *    match and discard ancestors. This is the OPPOSITE of the naive approach
- *    of removing children when a parent is volatile.
- *
- * Detects (zero hardcoded selectors):
- *   - Carousel/slider tracks (CSS transform changes)
- *   - Number counters & tickers (direct text changes)
- *   - Auto-cycling testimonials (direct text changes)
- *   - CSS background sliders (background-position changes)
- *   - Any live-data widget whose own text node updates
- *
- * @param {import('@playwright/test').Page} page
- * @returns {Promise<number>} count of elements stamped volatile
+ * KEEP-SPECIFIC de-duplication:
+ *   If element A CONTAINS volatile element B, we remove A and keep B.
+ *   This ensures masking is surgical — only the specific volatile region
+ *   is blacked out, not its entire parent container.
  */
 async function behavioralVolatilityScan(page) {
   const count = await page.evaluate(async () => {
     const delay = ms => new Promise(r => setTimeout(r, ms));
-    const SCAN_MS = 500;
+    const SCAN_MS  = 500;
     const MIN_AREA = 400;
     const SKIP_TAGS = new Set([
-      'html','head','body','script','style','meta','link',
-      'noscript','title','br','hr','svg','path','g','defs','use',
+      'html','head','body','script','style','meta','link','noscript','svg','path','g','defs',
     ]);
 
-    // ── Helper: direct text of an element (NOT inherited from children) ──
-    // Comparing el.textContent would cascade — every ancestor of a changing
-    // element would also appear to have changed text. Instead, we compare
-    // only TEXT_NODE children (nodeType === 3). This makes the detection
-    // surgical: only the element that DIRECTLY owns the changing text is flagged.
     const directText = el => {
       let t = '';
-      for (const node of el.childNodes) {
-        if (node.nodeType === 3) t += node.nodeValue; // 3 = TEXT_NODE
-      }
+      for (const node of el.childNodes) if (node.nodeType === 3) t += node.nodeValue;
       return t.trim().substring(0, 300);
     };
 
-    // ── Collect all rendered candidates across the full document ─────
     const candidates = Array.from(document.querySelectorAll('*')).filter(el => {
-      if (el.getAttribute('data-vr-volatile') ||
-          el.getAttribute('data-vr-frozen') ||
+      if (el.getAttribute('data-vr-volatile') || el.getAttribute('data-vr-frozen') ||
           el.getAttribute('data-vr-hide')) return false;
       if (SKIP_TAGS.has(el.tagName.toLowerCase())) return false;
       const cs = getComputedStyle(el);
@@ -205,71 +335,57 @@ async function behavioralVolatilityScan(page) {
       return true;
     });
 
-    // ── Snapshot 1 ───────────────────────────────────────────────────
     const snap = candidates.map(el => {
       const cs = getComputedStyle(el);
       return {
         el,
-        text:      directText(el),       // DIRECT text only — no cascade
+        text:      directText(el),
         transform: cs.transform,
         bgPos:     cs.backgroundPosition,
+        left:      cs.left,
+        marginL:   cs.marginLeft,
       };
     });
 
     await delay(SCAN_MS);
 
-    // ── Snapshot 2 + comparison ──────────────────────────────────────
-    const volatile = new Map(); // el → reason
+    const volatile = new Map();
     for (const s of snap) {
       const { el } = s;
       if (!document.contains(el)) continue;
+      const cs    = getComputedStyle(el);
+      const text2 = directText(el);
+      const tf2   = cs.transform;
+      const bg2   = cs.backgroundPosition;
+      const left2 = cs.left;
+      const mL2   = cs.marginLeft;
 
-      const cs     = getComputedStyle(el);
-      const text2  = directText(el);
-      const tf2    = cs.transform;
-      const bgPos2 = cs.backgroundPosition;
-
-      // Direct text changed (counter, ticker, auto-cycling text)
       if (s.text !== text2 && (s.text.length > 0 || text2.length > 0)) {
         volatile.set(el, 'content');
-      // Transform changed AND was already non-identity (slider track)
       } else if (s.transform !== tf2 && s.transform !== 'none' && tf2 !== 'none') {
         volatile.set(el, 'transform');
-      // Background position changed (CSS background slider)
-      } else if (s.bgPos !== bgPos2) {
+      } else if (s.bgPos !== bg2) {
         volatile.set(el, 'background');
+      } else if (s.left !== left2 && s.left !== 'auto' && left2 !== 'auto') {
+        volatile.set(el, 'left');
+      } else if (s.marginL !== mL2 && s.marginL !== '0px' && mL2 !== '0px') {
+        volatile.set(el, 'margin');
       }
     }
 
-    // ── De-duplication: KEEP SPECIFIC, REMOVE GENERIC ───────────────
-    // For each volatile element, check if it CONTAINS another volatile
-    // element. If yes, it is a generic container — remove it and keep
-    // only the more specific child.
-    //
-    // Example: page has volatile={slide-p, carousel-div, section, main}
-    //   main contains section → remove main
-    //   section contains carousel-div → remove section
-    //   carousel-div contains slide-p → remove carousel-div
-    //   slide-p contains nothing volatile → KEEP slide-p
-    // Result: only slide-p is stamped and masked. ✓
+    // Keep specific, remove generic ancestors
     const toRemove = new Set();
-    const volatileEls = [...volatile.keys()];
-
-    for (const container of volatileEls) {
-      for (const candidate of volatileEls) {
+    const vEls = [...volatile.keys()];
+    for (const container of vEls) {
+      for (const candidate of vEls) {
         if (candidate !== container && container.contains(candidate)) {
-          // container wraps a more-specific volatile element → remove container
-          toRemove.add(container);
-          break;
+          toRemove.add(container); break;
         }
       }
     }
     for (const el of toRemove) volatile.delete(el);
 
-    // ── Stamp survivors ──────────────────────────────────────────────
-    for (const [el, reason] of volatile) {
-      el.setAttribute('data-vr-volatile', reason);
-    }
+    for (const [el, reason] of volatile) el.setAttribute('data-vr-volatile', reason);
 
     return volatile.size;
   });
@@ -278,10 +394,7 @@ async function behavioralVolatilityScan(page) {
 }
 
 /**
- * Phase 3: Hide third-party widgets, popups, and cross-origin iframes.
- *
- * @param {import('@playwright/test').Page} page
- * @returns {Promise<string[]>}
+ * Hide third-party widgets, popups, and cross-origin iframes via [data-vr-hide].
  */
 async function hideWidgetsAndOverlays(page) {
   const hidden = await page.evaluate(() => {
@@ -298,28 +411,25 @@ async function hideWidgetsAndOverlays(page) {
     const all = Array.from(document.querySelectorAll('*'));
     const vpArea = window.innerWidth * window.innerHeight;
 
-    // Fixed chat widgets & floating buttons
     for (const el of all) {
       try {
         const cs = getComputedStyle(el);
         if (cs.position !== 'fixed') continue;
-        const z = parseInt(cs.zIndex, 10) || 0;
+        const z    = parseInt(cs.zIndex, 10) || 0;
         const rect = el.getBoundingClientRect();
-        const pct = (rect.width * rect.height / vpArea) * 100;
+        const pct  = (rect.width * rect.height / vpArea) * 100;
         if (z >= 10000 && pct > 0 && pct < 15) {
           stamp(el, `Chat/widget: ${el.tagName}#${el.id || ''}(z:${z})`); continue;
         }
         if (z >= 100000) {
           stamp(el, `Chat container: ${el.tagName}#${el.id || ''}(z:${z})`); continue;
         }
-        const classText = (el.className?.toString?.() || '') + ' ' + (el.id || '');
-        if (/popup|modal|auto-capture|overlay/i.test(classText) && z >= 10000) {
+        const cls = (el.className?.toString?.() || '') + ' ' + (el.id || '');
+        if (/popup|modal|auto-capture|overlay/i.test(cls) && z >= 10000)
           stamp(el, `Popup overlay: ${el.tagName}#${el.id || ''}(z:${z})`);
-        }
       } catch {}
     }
 
-    // WhatsApp floating icons
     for (const el of document.querySelectorAll(
       'a[href*="whatsapp"],a[href*="whatsaap"],[class*="whatsapp"],[class*="whatsaap"]'
     )) {
@@ -328,7 +438,6 @@ async function hideWidgetsAndOverlays(page) {
         stamp(el.parentElement, 'WhatsApp wrapper');
     }
 
-    // Cross-origin iframes
     for (const iframe of document.querySelectorAll('iframe')) {
       const src = iframe.src || '';
       if (!src || src === 'about:blank') {
@@ -336,9 +445,9 @@ async function hideWidgetsAndOverlays(page) {
         continue;
       }
       try {
-        const iframeHost = new URL(src).hostname;
-        if (iframeHost && !iframeHost.includes(hostname) && !hostname.includes(iframeHost))
-          stamp(iframe, `Cross-origin iframe: ${iframeHost}`);
+        const h = new URL(src).hostname;
+        if (h && !h.includes(hostname) && !hostname.includes(h))
+          stamp(iframe, `Cross-origin iframe: ${h}`);
       } catch { stamp(iframe, `Iframe: ${src.substring(0, 60)}`); }
     }
 
@@ -353,71 +462,113 @@ async function hideWidgetsAndOverlays(page) {
         position: fixed !important; top: -9999px !important;
         left: -9999px !important; width: 0 !important;
         height: 0 !important; overflow: hidden !important;
-      }`
-    });
+      }` });
   }
   return hidden;
 }
 
 /**
- * Phase 4: Freeze infinite CSS animations; stamp carousel tracks + videos.
+ * Freeze infinite CSS animations and stamp volatile carousel tracks.
  *
- * FREEZE (element stays visible, animation paused at current frame):
- *   - Elements with animation-iteration-count: infinite
+ * THREE detection layers for carousels:
+ *   A) Named structural — .owl-stage, .swiper-wrapper, .slick-track, etc.
+ *   B) Generic structural — any element with a translate transform whose
+ *      parent is overflow:hidden (catches ALL carousel libraries not in list A)
+ *   C) Viewport behavioral — already stamped by scanViewportForVolatileContent
+ *      during Pass 2 (vp-transform reason)
  *
- * STAMP as [data-vr-volatile] (content masked, container tested):
- *   - Known carousel track selectors (.owl-stage, .swiper-wrapper, etc.)
- *   - <video> elements
- *
- * @param {import('@playwright/test').Page} page
- * @returns {Promise<string[]>}
+ * The carousel CONTAINER is never stamped — its layout stays in the diff.
+ * Only the TRACK (the part that translates) is masked.
  */
 async function freezeVolatileContent(page) {
   const frozen = await page.evaluate(() => {
     const results = [];
 
-    // Pause infinite CSS animations
+    // ── A: Pause + mask infinite CSS animations ─────────────────────
+    // Infinite animations produce different visual frames on every page load.
+    // Pausing alone is non-deterministic: the element freezes wherever the
+    // browser happens to be in the animation cycle at the moment our CSS
+    // kicks in. We must ALSO mask them so pixel diffs are always clean.
     for (const el of document.querySelectorAll('*')) {
       try {
         const cs = getComputedStyle(el);
         if (cs.animationName !== 'none' && cs.animationIterationCount === 'infinite') {
           el.setAttribute('data-vr-frozen', 'animation');
-          results.push(`Froze: "${cs.animationName}" on ${el.tagName}.${(el.className?.toString?.() || '').split(' ')[0]}`);
+          el.setAttribute('data-vr-volatile', 'animation-infinite');
+          results.push(`Froze+masked anim: "${cs.animationName}" on ${el.tagName}.${(el.className?.toString?.() || '').split(' ')[0]}`);
         }
       } catch {}
     }
 
-    // Stamp carousel tracks — outer container stays visible, only track is masked
-    const TRACKS = [
+    // ── B: Named carousel tracks ─────────────────────────────────────
+    const NAMED_TRACKS = [
       '.owl-stage', '.swiper-wrapper', '.slick-track',
       '[class*="carousel-inner"]', '[class*="slider-track"]', '[class*="slide-track"]',
     ].join(',');
-    for (const track of document.querySelectorAll(TRACKS)) {
+
+    for (const track of document.querySelectorAll(NAMED_TRACKS)) {
       if (!track.getAttribute('data-vr-volatile')) {
-        track.setAttribute('data-vr-volatile', 'carousel-track');
-        results.push(`Stamped carousel track: ${track.className?.toString?.().split(' ')[0]}`);
+        track.setAttribute('data-vr-volatile', 'carousel-named');
+        results.push(`Named carousel track: ${track.className?.toString?.().split(' ')[0]}`);
       }
     }
 
-    // Stamp video elements
+    // ── C: Generic carousel tracks ───────────────────────────────────
+    // Pattern: element with an active CSS transform whose parent has
+    // overflow:hidden — this is how virtually every carousel library works.
+    // We stamp the TRACK element, not the container, so the container layout
+    // (size, position, padding) remains visible and tested.
+    //
+    // We check BOTH matrix() and matrix3d() because modern carousels use
+    // translate3d for GPU acceleration, which computes to matrix3d in
+    // getComputedStyle. Without matrix3d support, 3D-transformed carousels
+    // (including circular/coverflow effects) slip through undetected.
+    const IDENTITY_2D = 'matrix(1, 0, 0, 1, 0, 0)';
+    const IDENTITY_3D = 'matrix3d(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1)';
+    for (const el of document.querySelectorAll('*')) {
+      if (el.getAttribute('data-vr-volatile') || el.getAttribute('data-vr-frozen')) continue;
+      try {
+        const cs = getComputedStyle(el);
+        const tf = cs.transform;
+        if (!tf || tf === 'none' || tf === IDENTITY_2D || tf === IDENTITY_3D) continue;
+
+        // Any non-identity matrix (2D or 3D) means the element has been transformed
+        const isNonIdentityMatrix = tf.startsWith('matrix(') || tf.startsWith('matrix3d(');
+        if (!isNonIdentityMatrix) continue;
+
+        // Parent must clip overflow (carousel wrapper pattern)
+        const parent = el.parentElement;
+        if (!parent) continue;
+        const pcs = getComputedStyle(parent);
+        if (pcs.overflow !== 'hidden' && pcs.overflowX !== 'hidden' && pcs.overflowX !== 'clip') continue;
+
+        // Must have at least one sibling (carousels have multiple slides)
+        if (parent.children.length < 2) continue;
+
+        el.setAttribute('data-vr-volatile', 'carousel-generic');
+        results.push(`Generic carousel track: ${el.tagName}.${(el.className?.toString?.() || '').split(' ')[0]}`);
+      } catch {}
+    }
+
+    // ── D: Video elements ────────────────────────────────────────────
     for (const video of document.querySelectorAll('video')) {
       if (!video.getAttribute('data-vr-volatile') && !video.getAttribute('data-vr-hide')) {
         video.setAttribute('data-vr-volatile', 'video');
-        results.push(`Stamped video: ${video.id || 'unnamed'}`);
+        results.push(`Video: ${video.id || 'unnamed'}`);
       }
     }
 
     return results;
   });
 
+  // CSS to pause infinite animations (keeps element visible, just stops motion)
   await page.addStyleTag({ content: `
     [data-vr-frozen="animation"], [data-vr-frozen="animation"] * {
       animation-play-state: paused !important;
       animation-delay: -1s !important;
-    }`
-  });
+    }` });
 
-  // Stop jQuery-based carousel autoplay
+  // Stop jQuery-based autoplay (Owl Carousel, etc.)
   await page.evaluate(() => {
     try {
       const jq = typeof jQuery !== 'undefined' ? jQuery : (typeof $ !== 'undefined' ? $ : null);
@@ -438,37 +589,29 @@ async function freezeVolatileContent(page) {
 }
 
 /**
- * Phase 5: Build the Playwright mask selector list.
+ * Build the final Playwright mask selector list.
  *
- * Returns CSS selectors for:
- *   1. [data-vr-volatile] — covers everything stamped by behavioral scan + structural detection
- *   2. Captcha QUESTION text — detects "What is X + Y?" math patterns and stamps
- *      the closest captcha container so the full question row is masked (not just input)
+ * Selectors returned:
+ *   1. [data-vr-volatile] — covers everything stamped by viewport scan, full-page
+ *      scan, and structural detection (carousel tracks, videos)
+ *   2. Captcha question containers — detects "What is X + Y?" math patterns and
+ *      stamps the entire captcha form row (question text + input field)
  *   3. Captcha inputs — matched by name/id attributes
- *
- * @param {import('@playwright/test').Page} page
- * @returns {Promise<string[]>}
  */
 async function detectMaskTargets(page) {
   const selectors = await page.evaluate(() => {
     const set = new Set();
 
-    // ── Captcha question text detection ─────────────────────────────
-    // Finds elements whose DIRECT text contains a math question such as
-    // "What is 6 + 9 ?" or "What is 14 - 3?" and stamps the closest
-    // captcha container so the ENTIRE row (question + input) is masked.
-    const MATH_CAPTCHA = /what\s+is\s+\d+\s*[+\-×÷*/]\s*\d+/i;
+    // ── Captcha question detection ───────────────────────────────────
+    // Match DIRECT text containing math question "What is 6 + 9?"
+    const MATH = /what\s+is\s+\d+\s*[+\-×÷*/]\s*\d+/i;
     for (const el of document.querySelectorAll('label,span,p,div,li,td')) {
-      // Use direct text only — avoid matching parents that contain this via textContent
-      let directText = '';
-      for (const node of el.childNodes) {
-        if (node.nodeType === 3) directText += node.nodeValue;
-      }
-      if (!MATH_CAPTCHA.test(directText.trim())) continue;
+      let direct = '';
+      for (const node of el.childNodes) if (node.nodeType === 3) direct += node.nodeValue;
+      if (!MATH.test(direct.trim())) continue;
       const container =
         el.closest('.ks-captcha-line,.form-group,.wpcf7-form-control-wrap,[class*="captcha"]')
-        || el.parentElement
-        || el;
+        || el.parentElement || el;
       container.setAttribute('data-vr-volatile', 'captcha-question');
     }
 
@@ -477,11 +620,9 @@ async function detectMaskTargets(page) {
       '.ks-captcha-line,.dscf7captcha,.ksolve_captcha,.dscf7_captcha_icon,[class*="captcha"]'
     )) {
       if (!el.className) continue;
-      // Bug was /\\s+/ — the double-backslash made it literal \s, not whitespace.
-      const selector = el.className.toString().trim().split(/\s+/)
-        .filter(c => c.length > 0)
-        .map(c => `.${CSS.escape(c)}`).join('');
-      if (selector.length > 0) set.add(selector);
+      const sel = el.className.toString().trim().split(/\s+/)
+        .filter(c => c.length > 0).map(c => `.${CSS.escape(c)}`).join('');
+      if (sel.length > 0) set.add(sel);
     }
 
     // ── Captcha inputs ───────────────────────────────────────────────
@@ -494,10 +635,8 @@ async function detectMaskTargets(page) {
       }
     }
 
-    // ── All behaviorally/structurally volatile elements ──────────────
-    if (document.querySelector('[data-vr-volatile]')) {
-      set.add('[data-vr-volatile]');
-    }
+    // ── All volatile elements (behavioral + structural) ──────────────
+    if (document.querySelector('[data-vr-volatile]')) set.add('[data-vr-volatile]');
 
     return [...set];
   });
@@ -507,7 +646,9 @@ async function detectMaskTargets(page) {
 
 module.exports = {
   ensureFullPageLoad,
+  scanViewportForVolatileContent,
   waitForLayoutStability,
+  fastForwardFiniteAnimations,
   dismissOverlays,
   behavioralVolatilityScan,
   hideWidgetsAndOverlays,

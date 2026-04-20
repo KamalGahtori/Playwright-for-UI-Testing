@@ -9,12 +9,20 @@
 //     fire (WP Rocket, IntersectionObserver, data-bg, data-src, native lazy).
 //     Does NOT capture screenshots. Goal: start every network request.
 //
-//   Pass 2 — Verify:
+//   Pass 2 — Verify + Per-Viewport Scan:
 //     Scroll top→bottom again, 500ms per viewport. At each section we wait
-//     for every visible <img> to decode before moving on. Goal: ensure
-//     every image, logo, and icon is fully rendered in the DOM.
+//     for every visible <img> to decode AND run a 350ms per-viewport
+//     behavioral mini-scan to catch IntersectionObserver-triggered carousels
+//     that only animate when they are actually in the viewport.
+//
+//   Footer Stabilisation:
+//     Slow-crawl from 65% of page height to the absolute bottom in waves.
+//     Monitors document.body.scrollHeight for growth (WP Rocket defers
+//     footer injection until it enters the viewport). Waits at the bottom
+//     for all footer images to decode before continuing.
 //
 //   Pass 3 — Settle + Screenshot:
+//     Fast-forward finite entrance animations to their final state.
 //     Return to top. Wait for layout stability (no element shifts position).
 //     Run the full stabilization pipeline (dismiss → scan → hide → freeze → mask).
 //     Take ONE fullPage:true screenshot covering header → footer.
@@ -26,7 +34,7 @@
 // WHAT IS MASKED (excluded from the pixel diff):
 //   Carousel/slider inner tracks, auto-incrementing counters, chat widgets,
 //   popups, CAPTCHA (question text AND input), video elements, any element
-//   that changed its own direct text or CSS transform during the 500ms scan.
+//   that changed its own direct text or CSS transform during the scan.
 // ─────────────────────────────────────────────────────────────────────
 
 const base = require('@playwright/test');
@@ -117,12 +125,12 @@ const test = base.test.extend({
         await page.waitForTimeout(400);
       });
 
-      // ── PASS 2: Verify ─────────────────────────────────────────────
+      // ── PASS 2: Verify + Per-Viewport Behavioral Scan ─────────────
       // Scroll top→bottom again at 500ms per viewport.
-      // At each section we explicitly wait for every visible <img> to
-      // report complete before advancing. This guarantees no broken image
-      // or placeholder logo makes it into the screenshot.
-      await test.step('Pass 2 — Verifying All Images & Logos Are Loaded', async () => {
+      // At each section: wait for every visible <img> to decode AND run
+      // a 350ms per-viewport mini-scan to catch carousel animations that
+      // only activate when the carousel is actually in the viewport.
+      await test.step('Pass 2 — Verifying Images & Scanning for Dynamic Content', async () => {
         const vpH = await page.evaluate(() => window.innerHeight);
         let y = 0;
 
@@ -147,7 +155,6 @@ const test = base.test.extend({
                 setTimeout(resolve, 4000);
               });
             };
-            // Check images that overlap this viewport band
             const imgs = Array.from(document.querySelectorAll('img')).filter(img => {
               const rect = img.getBoundingClientRect();
               return rect.bottom >= 0 && rect.top <= vpH;
@@ -155,16 +162,130 @@ const test = base.test.extend({
             await Promise.allSettled(imgs.map(waitForImg));
           });
 
+          // Per-viewport behavioral mini-scan: catches IntersectionObserver-triggered
+          // carousels that only animate while they are actually in the viewport.
+          await volatilityDetector.scanViewportForVolatileContent(page);
+
           await page.waitForTimeout(500);
           y += vpH;
         }
 
-        // Bottom-out again to ensure footer images load
+        // Bottom-out again after the full scroll pass
         await page.evaluate(() => {
           window.scrollTo({ top: document.body.scrollHeight, behavior: 'instant' });
           window.dispatchEvent(new Event('scroll'));
         });
         await page.waitForTimeout(600);
+      });
+
+      // ── Footer Stabilisation ───────────────────────────────────────
+      // WP Rocket defers footer content via IntersectionObserver and uses
+      // CSS background-image (not <img> tags) for footer logos and icons.
+      // Our ensureFullPageLoad() only waits for <img> tags, so background
+      // images can still be mid-load when we return to the top.
+      //
+      // Strategy:
+      //   1. Slow-crawl the bottom half of the page in small steps.
+      //      Repeat until document.body.scrollHeight stops growing
+      //      (WP Rocket no longer injecting new content).
+      //   2. Hold at the absolute bottom for 3 s so CSS background-image
+      //      URLs have enough time to be fetched and painted.
+      //   3. Force-load any remaining data-bg / data-src elements that
+      //      are currently in or near the viewport.
+      //   4. Nudge one viewport up then back to the absolute bottom to
+      //      re-fire IntersectionObserver for any deferred blocks.
+      //   5. Final 2 s hold before returning to the top.
+      await test.step('Footer Stabilisation — Ensuring Footer Is Fully Rendered', async () => {
+        const MAX_WAVES  = 8;
+        const STEP_DELAY = 700; // ms per scroll step (slower = more time for IO)
+
+        for (let wave = 0; wave < MAX_WAVES; wave++) {
+          const { vpH, totalH } = await page.evaluate(() => ({
+            vpH:    window.innerHeight,
+            totalH: document.body.scrollHeight,
+          }));
+          const heightBefore = totalH;
+
+          // Crawl from 40 % of page to the absolute bottom in 20 %-viewport steps
+          const startY = Math.floor(totalH * 0.40);
+          const step   = Math.floor(vpH * 0.20);
+          let y = startY;
+
+          while (y < await page.evaluate(() => document.body.scrollHeight)) {
+            await page.evaluate(scrollY => {
+              window.scrollTo({ top: scrollY, behavior: 'instant' });
+              window.dispatchEvent(new Event('scroll'));
+            }, y);
+            await page.waitForTimeout(STEP_DELAY);
+            y += step;
+          }
+
+          // Hard bottom-out
+          await page.evaluate(() => {
+            window.scrollTo({ top: document.body.scrollHeight, behavior: 'instant' });
+            window.dispatchEvent(new Event('scroll'));
+          });
+          await page.waitForTimeout(800);
+
+          const heightAfter = await page.evaluate(() => document.body.scrollHeight);
+          if (heightAfter <= heightBefore) break; // page height stabilised
+        }
+
+        // Hold at the very bottom for 3 s so CSS background-image resources
+        // (footer logos, icons) have time to be fetched and painted.
+        await page.waitForTimeout(3000);
+
+        // Force-inject any remaining lazy assets visible near the bottom
+        await page.evaluate(() => {
+          document.querySelectorAll('[data-bg]').forEach(el => {
+            const bg = el.getAttribute('data-bg');
+            if (bg) {
+              el.style.backgroundImage = `url(${bg})`;
+              el.removeAttribute('data-bg');
+              el.classList.add('lazyloaded');
+            }
+          });
+          document.querySelectorAll('[data-src]').forEach(el => {
+            const src = el.getAttribute('data-src');
+            if (src) { el.setAttribute('src', src); el.removeAttribute('data-src'); }
+          });
+          document.querySelectorAll('img[loading="lazy"]').forEach(img => {
+            img.setAttribute('loading', 'eager');
+          });
+        });
+
+        // Nudge: one viewport up, then back to the bottom — re-fires any
+        // IntersectionObserver callbacks that fire on viewport entry
+        const nudgeY = await page.evaluate(() =>
+          Math.max(0, document.body.scrollHeight - window.innerHeight * 2)
+        );
+        await page.evaluate(y => window.scrollTo({ top: y, behavior: 'instant' }), nudgeY);
+        await page.waitForTimeout(600);
+        await page.evaluate(() => {
+          window.scrollTo({ top: document.body.scrollHeight, behavior: 'instant' });
+          window.dispatchEvent(new Event('scroll'));
+        });
+
+        // Final 2 s hold — CSS background images finish loading
+        await page.waitForTimeout(2000);
+
+        // Wait for all <img> tags in the bottom 40 % of the page
+        await page.evaluate(async () => {
+          const footerTop = document.body.scrollHeight * 0.60;
+          const waitForImg = img => {
+            if (img.complete && img.naturalHeight > 0) return Promise.resolve();
+            return new Promise(resolve => {
+              img.addEventListener('load',  resolve, { once: true });
+              img.addEventListener('error', resolve, { once: true });
+              setTimeout(resolve, 5000);
+            });
+          };
+          const footerImgs = Array.from(document.querySelectorAll('img')).filter(img => {
+            const absTop = img.getBoundingClientRect().top + window.scrollY;
+            return absTop >= footerTop;
+          });
+          await Promise.allSettled(footerImgs.map(waitForImg));
+        });
       });
 
       // ── Wait for every image across the entire page ────────────────
@@ -173,9 +294,13 @@ const test = base.test.extend({
       });
 
       // ── PASS 3: Settle at top ──────────────────────────────────────
-      // Return to top, wait for layout to stop shifting (no element moves
-      // between two 500ms snapshots), then final buffer before screenshot.
+      // Fast-forward finite entrance animations so they snap to their final
+      // state before the layout stability gate runs. Then return to top,
+      // wait for layout to stop shifting, final buffer before screenshot.
       await test.step('Pass 3 — Layout Stability Gate', async () => {
+        // Snap entrance animations to final state (does not touch infinite animations)
+        await volatilityDetector.fastForwardFiniteAnimations(page);
+
         await page.evaluate(() => window.scrollTo(0, 0));
         await page.waitForTimeout(500);
         await volatilityDetector.waitForLayoutStability(page);
