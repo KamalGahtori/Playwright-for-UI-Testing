@@ -18,7 +18,7 @@ const { defineConfig, devices } = require('@playwright/test');
 const path = require('path');
 
 // ── Viewport Constants ──────────────────────────────────────────────
-const DESKTOP_VIEWPORT = { width: 1280, height: 720 };
+const DESKTOP_VIEWPORT = { width: 1920, height: 1080 };
 
 module.exports = defineConfig({
   // ── Test Directory ──────────────────────────────────────────────────

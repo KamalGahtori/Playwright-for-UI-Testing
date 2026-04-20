@@ -61,6 +61,20 @@ const test = base.test.extend({
             new Promise(r => setTimeout(r, 3000)),
           ]));
         } catch {}
+
+        // WP Rocket injects [data-wpr-lazyrender]{content-visibility:auto} which tells
+        // the browser to skip rendering off-screen sections entirely. This causes two
+        // problems: (1) children of off-screen sections have getBoundingClientRect()
+        // returning {w:0,h:0}, making the behavioral scan miss them; (2) footer and
+        // below-fold sections may appear blank in fullPage screenshots until scrolled.
+        // Overriding to `visible` forces the browser to render all sections upfront.
+        await page.addStyleTag({ content: `
+          [data-wpr-lazyrender] {
+            content-visibility: visible !important;
+            contain-intrinsic-size: unset !important;
+          }
+        ` });
+        await page.waitForTimeout(300); // allow browser to reflow all now-visible sections
       });
 
       // ── Force all lazy-load mechanisms before scrolling ────────────
@@ -89,6 +103,22 @@ const test = base.test.extend({
           document.querySelectorAll('[data-src]:not(img)').forEach(el => {
             const src = el.getAttribute('data-src');
             if (src) el.setAttribute('src', src);
+          });
+          // WP Rocket data-lazy-src (the primary lazy-load attribute WP Rocket uses,
+          // distinct from the generic data-src). Covers images, srcsets, and bg elements.
+          document.querySelectorAll('[data-lazy-src]').forEach(el => {
+            const src = el.getAttribute('data-lazy-src');
+            if (!src || src.startsWith('data:')) return; // skip SVG placeholder
+            if (el.tagName === 'IMG') {
+              el.setAttribute('src', src);
+              const srcset = el.getAttribute('data-lazy-srcset');
+              if (srcset) el.setAttribute('srcset', srcset);
+            } else {
+              el.style.backgroundImage = `url(${src})`;
+            }
+            el.removeAttribute('data-lazy-src');
+            el.removeAttribute('data-lazy-srcset');
+            el.classList.add('lazyloaded');
           });
         });
       });

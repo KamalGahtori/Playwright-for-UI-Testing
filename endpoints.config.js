@@ -35,5 +35,9 @@ module.exports = [
   {
     id: 'Investors',
     path: '/investors',
+  },
+  {
+    id: 'AI-ML Services',
+    path: '/ai-ml-services',
   }
 ];

@@ -499,6 +499,23 @@ async function detectMaskTargets(page) {
       set.add('[data-vr-volatile]');
     }
 
+    // ── Direct carousel/slider class selectors ───────────────────────
+    // WP Rocket lazy-loads carousel JS (Owl, Swiper, Slick). The carousel
+    // can initialise AFTER Phase 4 has run, so the [data-vr-volatile] stamp
+    // on .owl-stage may be lost when the carousel rewrites the DOM node.
+    // These selectors are added unconditionally — Playwright resolves them
+    // at screenshot time (not here), so they mask correctly even when the
+    // carousel initialises late. Playwright silently skips selectors that
+    // match zero elements, so adding them unconditionally is safe.
+    // .owl-dots / .swiper-pagination / .slick-dots are the active-slide
+    // indicators that live OUTSIDE the track; masking them prevents
+    // carousel position differences from causing diffs between runs.
+    [
+      '.owl-stage', '.owl-dots',
+      '.swiper-wrapper', '.swiper-pagination',
+      '.slick-track', '.slick-dots',
+    ].forEach(sel => set.add(sel));
+
     return [...set];
   });
 
