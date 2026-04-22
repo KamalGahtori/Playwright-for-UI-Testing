@@ -1,23 +1,800 @@
 {
   "Homepage": {
-    "chromium-desktop": "4/20/2026, 11:06:32 PM"
+    "chromium-desktop": "4/21/2026, 5:48:41 PM",
+    "chromium-iphone-12-pro": "4/21/2026, 10:07:27 PM",
+    "chromium-iphone-8": "4/21/2026, 9:55:58 PM",
+    "chromium-galaxy-s20-ultra": "4/21/2026, 10:18:59 PM",
+    "chromium-ipad-air": "4/21/2026, 10:30:41 PM",
+    "chromium-ipad-mini": "4/21/2026, 10:42:17 PM",
+    "chromium-ipad-pro": "4/21/2026, 10:53:55 PM"
   },
   "About-Us": {
-    "chromium-desktop": "4/20/2026, 11:07:40 PM"
+    "chromium-desktop": "4/21/2026, 9:45:39 PM",
+    "chromium-iphone-12-pro": "4/21/2026, 10:07:30 PM",
+    "chromium-iphone-8": "4/21/2026, 9:56:05 PM",
+    "chromium-galaxy-s20-ultra": "4/21/2026, 10:19:02 PM",
+    "chromium-ipad-air": "4/21/2026, 10:30:56 PM",
+    "chromium-ipad-mini": "4/21/2026, 10:42:18 PM",
+    "chromium-ipad-pro": "4/21/2026, 10:53:55 PM"
   },
   "Life-at-Ksolves": {
-    "chromium-desktop": "4/20/2026, 11:08:17 PM"
+    "chromium-desktop": "4/21/2026, 9:45:39 PM",
+    "chromium-iphone-8": "4/21/2026, 9:56:12 PM",
+    "chromium-iphone-12-pro": "4/21/2026, 10:07:45 PM",
+    "chromium-galaxy-s20-ultra": "4/21/2026, 10:19:25 PM",
+    "chromium-ipad-air": "4/21/2026, 10:31:05 PM",
+    "chromium-ipad-mini": "4/21/2026, 10:42:25 PM",
+    "chromium-ipad-pro": "4/21/2026, 10:54:04 PM"
   },
   "Legacy-Circle": {
-    "chromium-desktop": "4/20/2026, 11:09:06 PM"
+    "chromium-desktop": "4/21/2026, 9:45:40 PM",
+    "chromium-iphone-8": "4/21/2026, 9:56:15 PM",
+    "chromium-iphone-12-pro": "4/21/2026, 10:07:47 PM",
+    "chromium-galaxy-s20-ultra": "4/21/2026, 10:19:26 PM",
+    "chromium-ipad-air": "4/21/2026, 10:31:08 PM",
+    "chromium-ipad-mini": "4/21/2026, 10:42:30 PM",
+    "chromium-ipad-pro": "4/21/2026, 10:54:06 PM"
   },
   "Careers": {
-    "chromium-desktop": "4/20/2026, 11:09:56 PM"
+    "chromium-desktop": "4/21/2026, 9:45:39 PM",
+    "chromium-iphone-12-pro": "4/21/2026, 10:07:52 PM",
+    "chromium-iphone-8": "4/21/2026, 9:56:19 PM",
+    "chromium-galaxy-s20-ultra": "4/21/2026, 10:19:28 PM",
+    "chromium-ipad-air": "4/21/2026, 10:31:10 PM",
+    "chromium-ipad-mini": "4/21/2026, 10:42:36 PM",
+    "chromium-ipad-pro": "4/21/2026, 10:54:19 PM"
   },
   "Investors": {
-    "chromium-desktop": "4/20/2026, 11:10:38 PM"
+    "chromium-desktop": "4/21/2026, 9:55:09 PM",
+    "chromium-iphone-8": "4/21/2026, 10:06:39 PM",
+    "chromium-iphone-12-pro": "4/21/2026, 10:18:10 PM",
+    "chromium-galaxy-s20-ultra": "4/21/2026, 10:29:40 PM",
+    "chromium-ipad-air": "4/21/2026, 10:41:19 PM",
+    "chromium-ipad-mini": "4/21/2026, 10:52:58 PM",
+    "chromium-ipad-pro": "4/21/2026, 11:04:20 PM"
   },
   "AI-ML-Services": {
-    "chromium-desktop": "4/20/2026, 11:11:05 PM"
+    "chromium-desktop": "4/21/2026, 9:46:20 PM",
+    "chromium-iphone-8": "4/21/2026, 9:56:47 PM",
+    "chromium-iphone-12-pro": "4/21/2026, 10:08:10 PM",
+    "chromium-galaxy-s20-ultra": "4/21/2026, 10:20:01 PM",
+    "chromium-ipad-air": "4/21/2026, 10:31:44 PM",
+    "chromium-ipad-mini": "4/21/2026, 10:43:11 PM",
+    "chromium-ipad-pro": "4/21/2026, 10:54:39 PM"
+  },
+  "Big-Data-Consulting": {
+    "chromium-desktop": "4/21/2026, 9:46:37 PM",
+    "chromium-iphone-8": "4/21/2026, 9:57:04 PM",
+    "chromium-iphone-12-pro": "4/21/2026, 10:08:29 PM",
+    "chromium-galaxy-s20-ultra": "4/21/2026, 10:20:06 PM",
+    "chromium-ipad-air": "4/21/2026, 10:31:48 PM",
+    "chromium-ipad-mini": "4/21/2026, 10:43:20 PM",
+    "chromium-ipad-pro": "4/21/2026, 10:54:58 PM"
+  },
+  "Snowflake-Consulting": {
+    "chromium-desktop": "4/21/2026, 9:46:39 PM",
+    "chromium-iphone-8": "4/21/2026, 9:57:05 PM",
+    "chromium-iphone-12-pro": "4/21/2026, 10:08:35 PM",
+    "chromium-galaxy-s20-ultra": "4/21/2026, 10:20:09 PM",
+    "chromium-ipad-air": "4/21/2026, 10:31:49 PM",
+    "chromium-ipad-mini": "4/21/2026, 10:43:28 PM",
+    "chromium-ipad-pro": "4/21/2026, 10:55:01 PM"
+  },
+  "Databricks-Consulting": {
+    "chromium-desktop": "4/21/2026, 9:46:55 PM",
+    "chromium-iphone-8": "4/21/2026, 9:57:06 PM",
+    "chromium-iphone-12-pro": "4/21/2026, 10:08:40 PM",
+    "chromium-galaxy-s20-ultra": "4/21/2026, 10:20:24 PM",
+    "chromium-ipad-air": "4/21/2026, 10:31:56 PM",
+    "chromium-ipad-mini": "4/21/2026, 10:43:30 PM",
+    "chromium-ipad-pro": "4/21/2026, 10:55:10 PM"
+  },
+  "Salesforce-Services": {
+    "chromium-desktop": "4/21/2026, 9:47:04 PM",
+    "chromium-iphone-8": "4/21/2026, 9:57:14 PM",
+    "chromium-iphone-12-pro": "4/21/2026, 10:08:41 PM",
+    "chromium-galaxy-s20-ultra": "4/21/2026, 10:20:59 PM",
+    "chromium-ipad-air": "4/21/2026, 10:32:29 PM",
+    "chromium-ipad-mini": "4/21/2026, 10:43:30 PM",
+    "chromium-ipad-pro": "4/21/2026, 10:55:15 PM"
+  },
+  "Odoo-Development": {
+    "chromium-desktop": "4/21/2026, 9:47:17 PM",
+    "chromium-iphone-8": "4/21/2026, 9:57:40 PM",
+    "chromium-iphone-12-pro": "4/21/2026, 10:09:04 PM",
+    "chromium-galaxy-s20-ultra": "4/21/2026, 10:21:00 PM",
+    "chromium-ipad-air": "4/21/2026, 10:32:38 PM",
+    "chromium-ipad-mini": "4/21/2026, 10:44:03 PM",
+    "chromium-ipad-pro": "4/21/2026, 10:55:29 PM"
+  },
+  "DevOps-Consulting": {
+    "chromium-desktop": "4/21/2026, 9:47:17 PM",
+    "chromium-iphone-8": "4/21/2026, 9:57:48 PM",
+    "chromium-iphone-12-pro": "4/21/2026, 10:09:16 PM",
+    "chromium-galaxy-s20-ultra": "4/21/2026, 10:21:03 PM",
+    "chromium-ipad-air": "4/21/2026, 10:32:42 PM",
+    "chromium-ipad-mini": "4/21/2026, 10:44:09 PM",
+    "chromium-ipad-pro": "4/21/2026, 10:55:42 PM"
+  },
+  "Request-for-Proposal": {
+    "chromium-desktop": "4/21/2026, 9:47:21 PM",
+    "chromium-iphone-8": "4/21/2026, 9:57:50 PM",
+    "chromium-iphone-12-pro": "4/21/2026, 10:09:19 PM",
+    "chromium-galaxy-s20-ultra": "4/21/2026, 10:21:05 PM",
+    "chromium-ipad-air": "4/21/2026, 10:32:44 PM",
+    "chromium-ipad-mini": "4/21/2026, 10:44:13 PM",
+    "chromium-ipad-pro": "4/21/2026, 10:55:44 PM"
+  },
+  "Other-IT-Services": {
+    "chromium-desktop": "4/21/2026, 9:47:32 PM",
+    "chromium-iphone-8": "4/21/2026, 9:57:55 PM",
+    "chromium-iphone-12-pro": "4/21/2026, 10:09:21 PM",
+    "chromium-galaxy-s20-ultra": "4/21/2026, 10:21:09 PM",
+    "chromium-ipad-air": "4/21/2026, 10:32:51 PM",
+    "chromium-ipad-mini": "4/21/2026, 10:44:19 PM",
+    "chromium-ipad-pro": "4/21/2026, 10:56:01 PM"
+  },
+  "Support-Services": {
+    "chromium-desktop": "4/21/2026, 9:47:45 PM",
+    "chromium-iphone-8": "4/21/2026, 9:58:08 PM",
+    "chromium-iphone-12-pro": "4/21/2026, 10:09:32 PM",
+    "chromium-galaxy-s20-ultra": "4/21/2026, 10:21:45 PM",
+    "chromium-ipad-air": "4/21/2026, 10:33:13 PM",
+    "chromium-ipad-mini": "4/21/2026, 10:44:28 PM",
+    "chromium-ipad-pro": "4/21/2026, 10:56:07 PM"
+  },
+  "Apache-NiFi-Support": {
+    "chromium-desktop": "4/21/2026, 9:47:55 PM",
+    "chromium-iphone-8": "4/21/2026, 9:58:21 PM",
+    "chromium-iphone-12-pro": "4/21/2026, 10:09:45 PM",
+    "chromium-galaxy-s20-ultra": "4/21/2026, 10:21:49 PM",
+    "chromium-ipad-air": "4/21/2026, 10:33:22 PM",
+    "chromium-ipad-mini": "4/21/2026, 10:44:59 PM",
+    "chromium-ipad-pro": "4/21/2026, 10:56:12 PM"
+  },
+  "Apache-Cassandra-Support": {
+    "chromium-desktop": "4/21/2026, 9:47:56 PM",
+    "chromium-iphone-8": "4/21/2026, 9:58:28 PM",
+    "chromium-iphone-12-pro": "4/21/2026, 10:09:56 PM",
+    "chromium-galaxy-s20-ultra": "4/21/2026, 10:21:49 PM",
+    "chromium-ipad-air": "4/21/2026, 10:33:25 PM",
+    "chromium-ipad-mini": "4/21/2026, 10:45:05 PM",
+    "chromium-ipad-pro": "4/21/2026, 10:56:23 PM"
+  },
+  "Apache-Kafka-Support": {
+    "chromium-desktop": "4/21/2026, 9:48:03 PM",
+    "chromium-iphone-8": "4/21/2026, 9:58:33 PM",
+    "chromium-iphone-12-pro": "4/21/2026, 10:09:57 PM",
+    "chromium-galaxy-s20-ultra": "4/21/2026, 10:21:51 PM",
+    "chromium-ipad-air": "4/21/2026, 10:33:27 PM",
+    "chromium-ipad-mini": "4/21/2026, 10:45:07 PM",
+    "chromium-ipad-pro": "4/21/2026, 10:56:36 PM"
+  },
+  "Apache-Spark-Support": {
+    "chromium-desktop": "4/21/2026, 9:48:07 PM",
+    "chromium-iphone-8": "4/21/2026, 9:58:53 PM",
+    "chromium-iphone-12-pro": "4/21/2026, 10:10:21 PM",
+    "chromium-galaxy-s20-ultra": "4/21/2026, 10:22:15 PM",
+    "chromium-ipad-air": "4/21/2026, 10:33:48 PM",
+    "chromium-ipad-mini": "4/21/2026, 10:45:18 PM",
+    "chromium-ipad-pro": "4/21/2026, 10:56:48 PM"
+  },
+  "Apache-Hadoop-Support": {
+    "chromium-desktop": "4/21/2026, 9:48:20 PM",
+    "chromium-iphone-8": "4/21/2026, 9:59:03 PM",
+    "chromium-iphone-12-pro": "4/21/2026, 10:10:27 PM",
+    "chromium-galaxy-s20-ultra": "4/21/2026, 10:22:29 PM",
+    "chromium-ipad-air": "4/21/2026, 10:33:53 PM",
+    "chromium-ipad-mini": "4/21/2026, 10:45:26 PM",
+    "chromium-ipad-pro": "4/21/2026, 10:56:49 PM"
+  },
+  "Apache-Druid-Support": {
+    "chromium-desktop": "4/21/2026, 9:48:28 PM",
+    "chromium-iphone-8": "4/21/2026, 9:59:06 PM",
+    "chromium-iphone-12-pro": "4/21/2026, 10:10:30 PM",
+    "chromium-galaxy-s20-ultra": "4/21/2026, 10:22:31 PM",
+    "chromium-ipad-air": "4/21/2026, 10:34:03 PM",
+    "chromium-ipad-mini": "4/21/2026, 10:45:40 PM",
+    "chromium-ipad-pro": "4/21/2026, 10:56:52 PM"
+  },
+  "Apache-Pinot-Support": {
+    "chromium-desktop": "4/21/2026, 9:48:33 PM",
+    "chromium-iphone-8": "4/21/2026, 9:59:08 PM",
+    "chromium-iphone-12-pro": "4/21/2026, 10:10:38 PM",
+    "chromium-galaxy-s20-ultra": "4/21/2026, 10:22:32 PM",
+    "chromium-ipad-air": "4/21/2026, 10:34:06 PM",
+    "chromium-ipad-mini": "4/21/2026, 10:45:45 PM",
+    "chromium-ipad-pro": "4/21/2026, 10:57:00 PM"
+  },
+  "Thanos-Support": {
+    "chromium-desktop": "4/21/2026, 9:48:40 PM",
+    "chromium-iphone-8": "4/21/2026, 9:59:13 PM",
+    "chromium-iphone-12-pro": "4/21/2026, 10:10:39 PM",
+    "chromium-galaxy-s20-ultra": "4/21/2026, 10:22:33 PM",
+    "chromium-ipad-air": "4/21/2026, 10:34:11 PM",
+    "chromium-ipad-mini": "4/21/2026, 10:45:46 PM",
+    "chromium-ipad-pro": "4/21/2026, 10:57:11 PM"
+  },
+  "MongoDB-Support": {
+    "chromium-desktop": "4/21/2026, 9:48:41 PM",
+    "chromium-iphone-8": "4/21/2026, 9:59:29 PM",
+    "chromium-iphone-12-pro": "4/21/2026, 10:11:01 PM",
+    "chromium-galaxy-s20-ultra": "4/21/2026, 10:22:49 PM",
+    "chromium-ipad-air": "4/21/2026, 10:34:25 PM",
+    "chromium-ipad-mini": "4/21/2026, 10:45:54 PM",
+    "chromium-ipad-pro": "4/21/2026, 10:57:25 PM"
+  },
+  "Rook-Ceph-Support": {
+    "chromium-desktop": "4/21/2026, 9:48:50 PM",
+    "chromium-iphone-8": "4/21/2026, 9:59:39 PM",
+    "chromium-iphone-12-pro": "4/21/2026, 10:11:02 PM",
+    "chromium-galaxy-s20-ultra": "4/21/2026, 10:23:03 PM",
+    "chromium-ipad-air": "4/21/2026, 10:34:27 PM",
+    "chromium-ipad-mini": "4/21/2026, 10:45:59 PM",
+    "chromium-ipad-pro": "4/21/2026, 10:57:32 PM"
+  },
+  "Prometheus-Enterprise-Support": {
+    "chromium-desktop": "4/21/2026, 9:49:06 PM",
+    "chromium-iphone-8": "4/21/2026, 9:59:48 PM",
+    "chromium-iphone-12-pro": "4/21/2026, 10:11:11 PM",
+    "chromium-galaxy-s20-ultra": "4/21/2026, 10:23:10 PM",
+    "chromium-ipad-air": "4/21/2026, 10:34:43 PM",
+    "chromium-ipad-mini": "4/21/2026, 10:46:19 PM",
+    "chromium-ipad-pro": "4/21/2026, 10:57:38 PM"
+  },
+  "Grafana-Consulting": {
+    "chromium-desktop": "4/21/2026, 9:49:08 PM",
+    "chromium-iphone-8": "4/21/2026, 9:59:51 PM",
+    "chromium-iphone-12-pro": "4/21/2026, 10:11:18 PM",
+    "chromium-galaxy-s20-ultra": "4/21/2026, 10:23:15 PM",
+    "chromium-ipad-air": "4/21/2026, 10:34:47 PM",
+    "chromium-ipad-mini": "4/21/2026, 10:46:24 PM",
+    "chromium-ipad-pro": "4/21/2026, 10:57:42 PM"
+  },
+  "RabbitMQ-Consulting": {
+    "chromium-desktop": "4/21/2026, 9:49:15 PM",
+    "chromium-iphone-8": "4/21/2026, 9:59:53 PM",
+    "chromium-iphone-12-pro": "4/21/2026, 10:11:21 PM",
+    "chromium-galaxy-s20-ultra": "4/21/2026, 10:23:15 PM",
+    "chromium-ipad-air": "4/21/2026, 10:34:51 PM",
+    "chromium-ipad-mini": "4/21/2026, 10:46:24 PM",
+    "chromium-ipad-pro": "4/21/2026, 10:57:47 PM"
+  },
+  "ZooKeeper-Support": {
+    "chromium-desktop": "4/21/2026, 9:49:17 PM",
+    "chromium-iphone-8": "4/21/2026, 10:00:06 PM",
+    "chromium-iphone-12-pro": "4/21/2026, 10:11:39 PM",
+    "chromium-galaxy-s20-ultra": "4/21/2026, 10:23:24 PM",
+    "chromium-ipad-air": "4/21/2026, 10:35:01 PM",
+    "chromium-ipad-mini": "4/21/2026, 10:46:30 PM",
+    "chromium-ipad-pro": "4/21/2026, 10:57:58 PM"
+  },
+  "Apache-HBase-Support": {
+    "chromium-desktop": "4/21/2026, 9:49:23 PM",
+    "chromium-iphone-8": "4/21/2026, 10:00:17 PM",
+    "chromium-iphone-12-pro": "4/21/2026, 10:11:40 PM",
+    "chromium-galaxy-s20-ultra": "4/21/2026, 10:23:37 PM",
+    "chromium-ipad-air": "4/21/2026, 10:35:02 PM",
+    "chromium-ipad-mini": "4/21/2026, 10:46:37 PM",
+    "chromium-ipad-pro": "4/21/2026, 10:58:07 PM"
+  },
+  "MySQL-Support": {
+    "chromium-desktop": "4/21/2026, 9:49:37 PM",
+    "chromium-iphone-8": "4/21/2026, 10:00:25 PM",
+    "chromium-iphone-12-pro": "4/21/2026, 10:11:49 PM",
+    "chromium-galaxy-s20-ultra": "4/21/2026, 10:23:47 PM",
+    "chromium-ipad-air": "4/21/2026, 10:35:19 PM",
+    "chromium-ipad-mini": "4/21/2026, 10:46:55 PM",
+    "chromium-ipad-pro": "4/21/2026, 10:58:15 PM"
+  },
+  "PostgreSQL-Support": {
+    "chromium-desktop": "4/21/2026, 9:49:42 PM",
+    "chromium-iphone-8": "4/21/2026, 10:00:34 PM",
+    "chromium-iphone-12-pro": "4/21/2026, 10:12:00 PM",
+    "chromium-galaxy-s20-ultra": "4/21/2026, 10:23:52 PM",
+    "chromium-ipad-air": "4/21/2026, 10:35:25 PM",
+    "chromium-ipad-mini": "4/21/2026, 10:47:06 PM",
+    "chromium-ipad-pro": "4/21/2026, 10:58:23 PM"
+  },
+  "Elasticsearch-Support": {
+    "chromium-desktop": "4/21/2026, 9:49:51 PM",
+    "chromium-iphone-8": "4/21/2026, 10:00:36 PM",
+    "chromium-iphone-12-pro": "4/21/2026, 10:12:01 PM",
+    "chromium-galaxy-s20-ultra": "4/21/2026, 10:23:57 PM",
+    "chromium-ipad-air": "4/21/2026, 10:35:27 PM",
+    "chromium-ipad-mini": "4/21/2026, 10:47:10 PM",
+    "chromium-ipad-pro": "4/21/2026, 10:58:24 PM"
+  },
+  "OpenSearch-Support": {
+    "chromium-desktop": "4/21/2026, 9:49:52 PM",
+    "chromium-iphone-8": "4/21/2026, 10:00:45 PM",
+    "chromium-iphone-12-pro": "4/21/2026, 10:12:17 PM",
+    "chromium-galaxy-s20-ultra": "4/21/2026, 10:24:01 PM",
+    "chromium-ipad-air": "4/21/2026, 10:35:37 PM",
+    "chromium-ipad-mini": "4/21/2026, 10:47:15 PM",
+    "chromium-ipad-pro": "4/21/2026, 10:58:32 PM"
+  },
+  "Flink-Support": {
+    "chromium-desktop": "4/21/2026, 9:49:56 PM",
+    "chromium-iphone-8": "4/21/2026, 10:00:56 PM",
+    "chromium-iphone-12-pro": "4/21/2026, 10:12:19 PM",
+    "chromium-galaxy-s20-ultra": "4/21/2026, 10:24:14 PM",
+    "chromium-ipad-air": "4/21/2026, 10:35:40 PM",
+    "chromium-ipad-mini": "4/21/2026, 10:47:16 PM",
+    "chromium-ipad-pro": "4/21/2026, 10:58:43 PM"
+  },
+  "Apache-Airflow": {
+    "chromium-desktop": "4/21/2026, 9:50:09 PM",
+    "chromium-iphone-8": "4/21/2026, 10:01:01 PM",
+    "chromium-iphone-12-pro": "4/21/2026, 10:12:24 PM",
+    "chromium-galaxy-s20-ultra": "4/21/2026, 10:24:20 PM",
+    "chromium-ipad-air": "4/21/2026, 10:35:52 PM",
+    "chromium-ipad-mini": "4/21/2026, 10:47:29 PM",
+    "chromium-ipad-pro": "4/21/2026, 10:58:49 PM"
+  },
+  "Ambari-Consulting-Support": {
+    "chromium-desktop": "4/21/2026, 9:50:17 PM",
+    "chromium-iphone-8": "4/21/2026, 10:01:14 PM",
+    "chromium-iphone-12-pro": "4/21/2026, 10:12:37 PM",
+    "chromium-galaxy-s20-ultra": "4/21/2026, 10:24:28 PM",
+    "chromium-ipad-air": "4/21/2026, 10:36:01 PM",
+    "chromium-ipad-mini": "4/21/2026, 10:47:46 PM",
+    "chromium-ipad-pro": "4/21/2026, 10:58:59 PM"
+  },
+  "BigTop-Consulting-Support": {
+    "chromium-desktop": "4/21/2026, 9:50:25 PM",
+    "chromium-iphone-8": "4/21/2026, 10:01:14 PM",
+    "chromium-iphone-12-pro": "4/21/2026, 10:12:38 PM",
+    "chromium-galaxy-s20-ultra": "4/21/2026, 10:24:35 PM",
+    "chromium-ipad-air": "4/21/2026, 10:36:02 PM",
+    "chromium-ipad-mini": "4/21/2026, 10:47:48 PM",
+    "chromium-ipad-pro": "4/21/2026, 10:59:00 PM"
+  },
+  "Apache-StreamSets-Consulting": {
+    "chromium-desktop": "4/21/2026, 9:50:26 PM",
+    "chromium-iphone-8": "4/21/2026, 10:01:23 PM",
+    "chromium-iphone-12-pro": "4/21/2026, 10:12:55 PM",
+    "chromium-galaxy-s20-ultra": "4/21/2026, 10:24:39 PM",
+    "chromium-ipad-air": "4/21/2026, 10:36:14 PM",
+    "chromium-ipad-mini": "4/21/2026, 10:47:52 PM",
+    "chromium-ipad-pro": "4/21/2026, 10:59:07 PM"
+  },
+  "ClickHouse": {
+    "chromium-desktop": "4/21/2026, 9:50:27 PM",
+    "chromium-iphone-8": "4/21/2026, 10:01:32 PM",
+    "chromium-iphone-12-pro": "4/21/2026, 10:12:58 PM",
+    "chromium-galaxy-s20-ultra": "4/21/2026, 10:24:48 PM",
+    "chromium-ipad-air": "4/21/2026, 10:36:14 PM",
+    "chromium-ipad-mini": "4/21/2026, 10:47:54 PM",
+    "chromium-ipad-pro": "4/21/2026, 10:59:15 PM"
+  },
+  "Trino-Consulting": {
+    "chromium-desktop": "4/21/2026, 9:50:39 PM",
+    "chromium-iphone-8": "4/21/2026, 10:01:35 PM",
+    "chromium-iphone-12-pro": "4/21/2026, 10:12:58 PM",
+    "chromium-galaxy-s20-ultra": "4/21/2026, 10:24:54 PM",
+    "chromium-ipad-air": "4/21/2026, 10:36:23 PM",
+    "chromium-ipad-mini": "4/21/2026, 10:48:04 PM",
+    "chromium-ipad-pro": "4/21/2026, 10:59:23 PM"
+  },
+  "Apache-Hive": {
+    "chromium-desktop": "4/21/2026, 9:50:46 PM",
+    "chromium-iphone-8": "4/21/2026, 10:01:49 PM",
+    "chromium-iphone-12-pro": "4/21/2026, 10:13:12 PM",
+    "chromium-galaxy-s20-ultra": "4/21/2026, 10:25:00 PM",
+    "chromium-ipad-air": "4/21/2026, 10:36:32 PM",
+    "chromium-ipad-mini": "4/21/2026, 10:48:18 PM",
+    "chromium-ipad-pro": "4/21/2026, 10:59:33 PM"
+  },
+  "Apache-Drill": {
+    "chromium-desktop": "4/21/2026, 9:50:59 PM",
+    "chromium-iphone-8": "4/21/2026, 10:01:52 PM",
+    "chromium-iphone-12-pro": "4/21/2026, 10:13:17 PM",
+    "chromium-galaxy-s20-ultra": "4/21/2026, 10:25:10 PM",
+    "chromium-ipad-air": "4/21/2026, 10:36:38 PM",
+    "chromium-ipad-mini": "4/21/2026, 10:48:22 PM",
+    "chromium-ipad-pro": "4/21/2026, 10:59:35 PM"
+  },
+  "Apache-Tez": {
+    "chromium-desktop": "4/21/2026, 9:50:59 PM",
+    "chromium-iphone-8": "4/21/2026, 10:02:00 PM",
+    "chromium-iphone-12-pro": "4/21/2026, 10:13:31 PM",
+    "chromium-galaxy-s20-ultra": "4/21/2026, 10:25:14 PM",
+    "chromium-ipad-air": "4/21/2026, 10:36:50 PM",
+    "chromium-ipad-mini": "4/21/2026, 10:48:31 PM",
+    "chromium-ipad-pro": "4/21/2026, 10:59:47 PM"
+  },
+  "Apache-Superset": {
+    "chromium-desktop": "4/21/2026, 9:51:00 PM",
+    "chromium-iphone-8": "4/21/2026, 10:02:07 PM",
+    "chromium-iphone-12-pro": "4/21/2026, 10:13:34 PM",
+    "chromium-galaxy-s20-ultra": "4/21/2026, 10:25:22 PM",
+    "chromium-ipad-air": "4/21/2026, 10:36:51 PM",
+    "chromium-ipad-mini": "4/21/2026, 10:48:31 PM",
+    "chromium-ipad-pro": "4/21/2026, 10:59:50 PM"
+  },
+  "Dremio": {
+    "chromium-desktop": "4/21/2026, 9:51:12 PM",
+    "chromium-iphone-8": "4/21/2026, 10:02:09 PM",
+    "chromium-iphone-12-pro": "4/21/2026, 10:13:35 PM",
+    "chromium-galaxy-s20-ultra": "4/21/2026, 10:25:28 PM",
+    "chromium-ipad-air": "4/21/2026, 10:37:00 PM",
+    "chromium-ipad-mini": "4/21/2026, 10:48:39 PM",
+    "chromium-ipad-pro": "4/21/2026, 10:59:57 PM"
+  },
+  "Apache-Iceberg": {
+    "chromium-desktop": "4/21/2026, 9:51:17 PM",
+    "chromium-iphone-8": "4/21/2026, 10:02:26 PM",
+    "chromium-iphone-12-pro": "4/21/2026, 10:13:51 PM",
+    "chromium-galaxy-s20-ultra": "4/21/2026, 10:25:35 PM",
+    "chromium-ipad-air": "4/21/2026, 10:37:09 PM",
+    "chromium-ipad-mini": "4/21/2026, 10:48:53 PM",
+    "chromium-ipad-pro": "4/21/2026, 11:00:08 PM"
+  },
+  "Delta-Lake": {
+    "chromium-desktop": "4/21/2026, 9:51:29 PM",
+    "chromium-iphone-8": "4/21/2026, 10:02:27 PM",
+    "chromium-iphone-12-pro": "4/21/2026, 10:13:52 PM",
+    "chromium-galaxy-s20-ultra": "4/21/2026, 10:25:41 PM",
+    "chromium-ipad-air": "4/21/2026, 10:37:09 PM",
+    "chromium-ipad-mini": "4/21/2026, 10:48:56 PM",
+    "chromium-ipad-pro": "4/21/2026, 11:00:08 PM"
+  },
+  "Starburst-Consulting": {
+    "chromium-desktop": "4/21/2026, 9:51:31 PM",
+    "chromium-iphone-8": "4/21/2026, 10:02:34 PM",
+    "chromium-iphone-12-pro": "4/21/2026, 10:14:06 PM",
+    "chromium-galaxy-s20-ultra": "4/21/2026, 10:25:46 PM",
+    "chromium-ipad-air": "4/21/2026, 10:37:22 PM",
+    "chromium-ipad-mini": "4/21/2026, 10:49:05 PM",
+    "chromium-ipad-pro": "4/21/2026, 11:00:18 PM"
+  },
+  "StarRocks-Consulting": {
+    "chromium-desktop": "4/21/2026, 9:51:31 PM",
+    "chromium-iphone-8": "4/21/2026, 10:02:44 PM",
+    "chromium-iphone-12-pro": "4/21/2026, 10:14:12 PM",
+    "chromium-galaxy-s20-ultra": "4/21/2026, 10:25:56 PM",
+    "chromium-ipad-air": "4/21/2026, 10:37:25 PM",
+    "chromium-ipad-mini": "4/21/2026, 10:49:07 PM",
+    "chromium-ipad-pro": "4/21/2026, 11:00:26 PM"
+  },
+  "Hudi-Consulting": {
+    "chromium-desktop": "4/21/2026, 9:51:45 PM",
+    "chromium-iphone-8": "4/21/2026, 10:02:45 PM",
+    "chromium-iphone-12-pro": "4/21/2026, 10:14:12 PM",
+    "chromium-galaxy-s20-ultra": "4/21/2026, 10:26:01 PM",
+    "chromium-ipad-air": "4/21/2026, 10:37:36 PM",
+    "chromium-ipad-mini": "4/21/2026, 10:49:13 PM",
+    "chromium-ipad-pro": "4/21/2026, 11:00:35 PM"
+  },
+  "Dashboard-Ninja-with-AI": {
+    "chromium-desktop": "4/21/2026, 9:51:49 PM",
+    "chromium-iphone-8": "4/21/2026, 10:03:02 PM",
+    "chromium-iphone-12-pro": "4/21/2026, 10:14:28 PM",
+    "chromium-galaxy-s20-ultra": "4/21/2026, 10:26:11 PM",
+    "chromium-ipad-air": "4/21/2026, 10:37:43 PM",
+    "chromium-ipad-mini": "4/21/2026, 10:49:30 PM",
+    "chromium-ipad-pro": "4/21/2026, 11:00:46 PM"
+  },
+  "Access-Manager-Ninja": {
+    "chromium-desktop": "4/21/2026, 9:52:02 PM",
+    "chromium-iphone-8": "4/21/2026, 10:03:05 PM",
+    "chromium-iphone-12-pro": "4/21/2026, 10:14:31 PM",
+    "chromium-galaxy-s20-ultra": "4/21/2026, 10:26:14 PM",
+    "chromium-ipad-air": "4/21/2026, 10:37:46 PM",
+    "chromium-ipad-mini": "4/21/2026, 10:49:31 PM",
+    "chromium-ipad-pro": "4/21/2026, 11:00:50 PM"
+  },
+  "Hotel-Management": {
+    "chromium-desktop": "4/21/2026, 9:52:03 PM",
+    "chromium-iphone-8": "4/21/2026, 10:03:12 PM",
+    "chromium-iphone-12-pro": "4/21/2026, 10:14:40 PM",
+    "chromium-galaxy-s20-ultra": "4/21/2026, 10:26:23 PM",
+    "chromium-ipad-air": "4/21/2026, 10:38:00 PM",
+    "chromium-ipad-mini": "4/21/2026, 10:49:41 PM",
+    "chromium-ipad-pro": "4/21/2026, 11:00:53 PM"
+  },
+  "ReportMate": {
+    "chromium-desktop": "4/21/2026, 9:52:04 PM",
+    "chromium-iphone-8": "4/21/2026, 10:03:20 PM",
+    "chromium-iphone-12-pro": "4/21/2026, 10:14:48 PM",
+    "chromium-galaxy-s20-ultra": "4/21/2026, 10:26:30 PM",
+    "chromium-ipad-air": "4/21/2026, 10:38:01 PM",
+    "chromium-ipad-mini": "4/21/2026, 10:49:41 PM",
+    "chromium-ipad-pro": "4/21/2026, 11:01:00 PM"
+  },
+  "Ksolves-Cloud": {
+    "chromium-desktop": "4/21/2026, 9:52:16 PM",
+    "chromium-iphone-8": "4/21/2026, 10:03:23 PM",
+    "chromium-iphone-12-pro": "4/21/2026, 10:14:52 PM",
+    "chromium-galaxy-s20-ultra": "4/21/2026, 10:26:36 PM",
+    "chromium-ipad-air": "4/21/2026, 10:38:09 PM",
+    "chromium-ipad-mini": "4/21/2026, 10:49:51 PM",
+    "chromium-ipad-pro": "4/21/2026, 11:01:08 PM"
+  },
+  "Ksolves-Store": {
+    "chromium-desktop": "4/21/2026, 9:52:32 PM",
+    "chromium-iphone-8": "4/21/2026, 10:03:46 PM",
+    "chromium-iphone-12-pro": "4/21/2026, 10:15:12 PM",
+    "chromium-galaxy-s20-ultra": "4/21/2026, 10:26:50 PM",
+    "chromium-ipad-air": "4/21/2026, 10:38:24 PM",
+    "chromium-ipad-mini": "4/21/2026, 10:50:14 PM",
+    "chromium-ipad-pro": "4/21/2026, 11:01:27 PM"
+  },
+  "Advanced-Dashboard-Ninja-v18": {
+    "chromium-desktop": "4/21/2026, 9:52:34 PM",
+    "chromium-iphone-8": "4/21/2026, 10:03:48 PM",
+    "chromium-iphone-12-pro": "4/21/2026, 10:15:16 PM",
+    "chromium-galaxy-s20-ultra": "4/21/2026, 10:26:50 PM",
+    "chromium-ipad-air": "4/21/2026, 10:38:27 PM",
+    "chromium-ipad-mini": "4/21/2026, 10:50:16 PM",
+    "chromium-ipad-pro": "4/21/2026, 11:01:31 PM"
+  },
+  "Odoo-WooCommerce-Connector": {
+    "chromium-desktop": "4/21/2026, 9:52:36 PM",
+    "chromium-iphone-8": "4/21/2026, 10:03:55 PM",
+    "chromium-iphone-12-pro": "4/21/2026, 10:15:17 PM",
+    "chromium-galaxy-s20-ultra": "4/21/2026, 10:26:57 PM",
+    "chromium-ipad-air": "4/21/2026, 10:38:36 PM",
+    "chromium-ipad-mini": "4/21/2026, 10:50:18 PM",
+    "chromium-ipad-pro": "4/21/2026, 11:01:32 PM"
+  },
+  "Dynamic-Financial-Report": {
+    "chromium-desktop": "4/21/2026, 9:52:37 PM",
+    "chromium-iphone-8": "4/21/2026, 10:03:57 PM",
+    "chromium-iphone-12-pro": "4/21/2026, 10:15:23 PM",
+    "chromium-galaxy-s20-ultra": "4/21/2026, 10:26:59 PM",
+    "chromium-ipad-air": "4/21/2026, 10:38:39 PM",
+    "chromium-ipad-mini": "4/21/2026, 10:50:19 PM",
+    "chromium-ipad-pro": "4/21/2026, 11:01:33 PM"
+  },
+  "Google-Analytics-Connector": {
+    "chromium-desktop": "4/21/2026, 9:52:38 PM",
+    "chromium-iphone-8": "4/21/2026, 10:03:58 PM",
+    "chromium-iphone-12-pro": "4/21/2026, 10:15:26 PM",
+    "chromium-galaxy-s20-ultra": "4/21/2026, 10:27:05 PM",
+    "chromium-ipad-air": "4/21/2026, 10:38:40 PM",
+    "chromium-ipad-mini": "4/21/2026, 10:50:31 PM",
+    "chromium-ipad-pro": "4/21/2026, 11:01:40 PM"
+  },
+  "Salesforce-CTI-Integration": {
+    "chromium-desktop": "4/21/2026, 9:52:48 PM",
+    "chromium-iphone-8": "4/21/2026, 10:04:05 PM",
+    "chromium-iphone-12-pro": "4/21/2026, 10:15:28 PM",
+    "chromium-galaxy-s20-ultra": "4/21/2026, 10:27:11 PM",
+    "chromium-ipad-air": "4/21/2026, 10:38:47 PM",
+    "chromium-ipad-mini": "4/21/2026, 10:50:39 PM",
+    "chromium-ipad-pro": "4/21/2026, 11:01:42 PM"
+  },
+  "SMS-Ninja": {
+    "chromium-desktop": "4/21/2026, 9:52:56 PM",
+    "chromium-iphone-8": "4/21/2026, 10:04:10 PM",
+    "chromium-iphone-12-pro": "4/21/2026, 10:15:37 PM",
+    "chromium-galaxy-s20-ultra": "4/21/2026, 10:27:19 PM",
+    "chromium-ipad-air": "4/21/2026, 10:38:59 PM",
+    "chromium-ipad-mini": "4/21/2026, 10:50:41 PM",
+    "chromium-ipad-pro": "4/21/2026, 11:02:00 PM"
+  },
+  "Minda-Ninja": {
+    "chromium-desktop": "4/21/2026, 3:16:50 PM"
+  },
+  "DF-Manager": {
+    "chromium-desktop": "4/21/2026, 3:17:19 PM"
+  },
+  "Case-Studies": {
+    "chromium-desktop": "4/21/2026, 9:53:16 PM",
+    "chromium-iphone-8": "4/21/2026, 10:04:41 PM",
+    "chromium-iphone-12-pro": "4/21/2026, 10:16:06 PM",
+    "chromium-galaxy-s20-ultra": "4/21/2026, 10:27:50 PM",
+    "chromium-ipad-air": "4/21/2026, 10:39:19 PM",
+    "chromium-ipad-mini": "4/21/2026, 10:51:10 PM",
+    "chromium-ipad-pro": "4/21/2026, 11:02:30 PM"
+  },
+  "Customer-Testimonials": {
+    "chromium-desktop": "4/21/2026, 9:53:29 PM",
+    "chromium-iphone-8": "4/21/2026, 10:04:50 PM",
+    "chromium-iphone-12-pro": "4/21/2026, 10:16:16 PM",
+    "chromium-galaxy-s20-ultra": "4/21/2026, 10:27:56 PM",
+    "chromium-ipad-air": "4/21/2026, 10:39:31 PM",
+    "chromium-ipad-mini": "4/21/2026, 10:51:18 PM",
+    "chromium-ipad-pro": "4/21/2026, 11:02:36 PM"
+  },
+  "Blog": {
+    "chromium-desktop": "4/21/2026, 9:53:30 PM",
+    "chromium-iphone-8": "4/21/2026, 10:04:51 PM",
+    "chromium-iphone-12-pro": "4/21/2026, 10:16:17 PM",
+    "chromium-galaxy-s20-ultra": "4/21/2026, 10:27:58 PM",
+    "chromium-ipad-air": "4/21/2026, 10:39:43 PM",
+    "chromium-ipad-mini": "4/21/2026, 10:51:22 PM",
+    "chromium-ipad-pro": "4/21/2026, 11:02:37 PM"
+  },
+  "Guides": {
+    "chromium-desktop": "4/21/2026, 9:53:32 PM",
+    "chromium-iphone-8": "4/21/2026, 10:04:53 PM",
+    "chromium-iphone-12-pro": "4/21/2026, 10:16:20 PM",
+    "chromium-galaxy-s20-ultra": "4/21/2026, 10:28:07 PM",
+    "chromium-ipad-air": "4/21/2026, 10:39:55 PM",
+    "chromium-ipad-mini": "4/21/2026, 10:51:24 PM",
+    "chromium-ipad-pro": "4/21/2026, 11:02:38 PM"
+  },
+  "Industries": {
+    "chromium-desktop": "4/21/2026, 9:53:57 PM",
+    "chromium-iphone-8": "4/21/2026, 10:04:57 PM",
+    "chromium-iphone-12-pro": "4/21/2026, 10:16:29 PM",
+    "chromium-galaxy-s20-ultra": "4/21/2026, 10:28:07 PM",
+    "chromium-ipad-air": "4/21/2026, 10:39:58 PM",
+    "chromium-ipad-mini": "4/21/2026, 10:51:26 PM",
+    "chromium-ipad-pro": "4/21/2026, 11:02:39 PM"
+  },
+  "Webinar": {
+    "chromium-desktop": "4/21/2026, 9:54:02 PM",
+    "chromium-iphone-8": "4/21/2026, 10:05:16 PM",
+    "chromium-iphone-12-pro": "4/21/2026, 10:16:40 PM",
+    "chromium-galaxy-s20-ultra": "4/21/2026, 10:28:25 PM",
+    "chromium-ipad-air": "4/21/2026, 10:40:02 PM",
+    "chromium-ipad-mini": "4/21/2026, 10:51:48 PM",
+    "chromium-ipad-pro": "4/21/2026, 11:03:09 PM"
+  },
+  "Press-Release": {
+    "chromium-desktop": "4/21/2026, 9:54:02 PM",
+    "chromium-iphone-8": "4/21/2026, 10:05:25 PM",
+    "chromium-iphone-12-pro": "4/21/2026, 10:16:50 PM",
+    "chromium-galaxy-s20-ultra": "4/21/2026, 10:28:33 PM",
+    "chromium-ipad-air": "4/21/2026, 10:40:12 PM",
+    "chromium-ipad-mini": "4/21/2026, 10:51:51 PM",
+    "chromium-ipad-pro": "4/21/2026, 11:03:14 PM"
+  },
+  "Events": {
+    "chromium-desktop": "4/21/2026, 9:54:04 PM",
+    "chromium-iphone-8": "4/21/2026, 10:05:26 PM",
+    "chromium-iphone-12-pro": "4/21/2026, 10:16:51 PM",
+    "chromium-galaxy-s20-ultra": "4/21/2026, 10:28:35 PM",
+    "chromium-ipad-air": "4/21/2026, 10:40:16 PM",
+    "chromium-ipad-mini": "4/21/2026, 10:51:54 PM",
+    "chromium-ipad-pro": "4/21/2026, 11:03:15 PM"
+  },
+  "Podcast": {
+    "chromium-desktop": "4/21/2026, 9:54:06 PM",
+    "chromium-iphone-8": "4/21/2026, 10:05:26 PM",
+    "chromium-iphone-12-pro": "4/21/2026, 10:16:56 PM",
+    "chromium-galaxy-s20-ultra": "4/21/2026, 10:28:38 PM",
+    "chromium-ipad-air": "4/21/2026, 10:40:21 PM",
+    "chromium-ipad-mini": "4/21/2026, 10:52:00 PM",
+    "chromium-ipad-pro": "4/21/2026, 11:03:19 PM"
+  },
+  "Contact": {
+    "chromium-desktop": "4/21/2026, 9:55:18 PM",
+    "chromium-iphone-8": "4/21/2026, 10:06:49 PM",
+    "chromium-iphone-12-pro": "4/21/2026, 10:18:14 PM",
+    "chromium-galaxy-s20-ultra": "4/21/2026, 10:29:50 PM",
+    "chromium-ipad-air": "4/21/2026, 10:41:33 PM",
+    "chromium-ipad-mini": "4/21/2026, 10:53:06 PM",
+    "chromium-ipad-pro": "4/21/2026, 11:04:24 PM"
+  },
+  "CSR-Initiatives": {
+    "chromium-desktop": "4/21/2026, 9:55:25 PM",
+    "chromium-iphone-8": "4/21/2026, 10:06:55 PM",
+    "chromium-iphone-12-pro": "4/21/2026, 10:18:23 PM",
+    "chromium-galaxy-s20-ultra": "4/21/2026, 10:29:51 PM",
+    "chromium-ipad-air": "4/21/2026, 10:41:42 PM",
+    "chromium-ipad-mini": "4/21/2026, 10:53:17 PM",
+    "chromium-ipad-pro": "4/21/2026, 11:04:36 PM"
+  },
+  "Privacy-Policy": {
+    "chromium-desktop": "4/21/2026, 9:55:27 PM",
+    "chromium-iphone-8": "4/21/2026, 10:06:55 PM",
+    "chromium-iphone-12-pro": "4/21/2026, 10:18:26 PM",
+    "chromium-galaxy-s20-ultra": "4/21/2026, 10:29:59 PM",
+    "chromium-ipad-air": "4/21/2026, 10:41:42 PM",
+    "chromium-ipad-mini": "4/21/2026, 10:53:20 PM",
+    "chromium-ipad-pro": "4/21/2026, 11:04:40 PM"
+  },
+  "Terms-and-Conditions": {
+    "chromium-desktop": "4/21/2026, 9:55:42 PM",
+    "chromium-iphone-8": "4/21/2026, 10:07:12 PM",
+    "chromium-iphone-12-pro": "4/21/2026, 10:18:44 PM",
+    "chromium-galaxy-s20-ultra": "4/21/2026, 10:30:28 PM",
+    "chromium-ipad-air": "4/21/2026, 10:41:51 PM",
+    "chromium-ipad-mini": "4/21/2026, 10:53:31 PM",
+    "chromium-ipad-pro": "4/21/2026, 11:04:52 PM"
+  },
+  "Cookie-Policy": {
+    "chromium-desktop": "4/21/2026, 9:55:48 PM",
+    "chromium-iphone-8": "4/21/2026, 10:07:14 PM",
+    "chromium-iphone-12-pro": "4/21/2026, 10:18:48 PM",
+    "chromium-galaxy-s20-ultra": "4/21/2026, 10:30:34 PM",
+    "chromium-ipad-air": "4/21/2026, 10:42:02 PM",
+    "chromium-ipad-mini": "4/21/2026, 10:53:35 PM",
+    "chromium-ipad-pro": "4/21/2026, 11:04:56 PM"
+  },
+  "Sitemap": {
+    "chromium-desktop": "4/21/2026, 9:55:54 PM",
+    "chromium-iphone-8": "4/21/2026, 10:07:18 PM",
+    "chromium-iphone-12-pro": "4/21/2026, 10:18:52 PM",
+    "chromium-galaxy-s20-ultra": "4/21/2026, 10:30:35 PM",
+    "chromium-ipad-air": "4/21/2026, 10:42:08 PM",
+    "chromium-ipad-mini": "4/21/2026, 10:53:51 PM",
+    "chromium-ipad-pro": "4/21/2026, 11:05:03 PM"
+  },
+  "Case-Study-Patient-Data-Visualization": {
+    "chromium-desktop": "4/21/2026, 9:54:30 PM",
+    "chromium-iphone-8": "4/21/2026, 10:05:33 PM",
+    "chromium-iphone-12-pro": "4/21/2026, 10:17:10 PM",
+    "chromium-galaxy-s20-ultra": "4/21/2026, 10:28:50 PM",
+    "chromium-ipad-air": "4/21/2026, 10:40:28 PM",
+    "chromium-ipad-mini": "4/21/2026, 10:52:04 PM",
+    "chromium-ipad-pro": "4/21/2026, 11:03:26 PM"
+  },
+  "Blog-Fine-Tuning-LLMs": {
+    "chromium-desktop": "4/21/2026, 9:54:32 PM",
+    "chromium-iphone-8": "4/21/2026, 10:05:45 PM",
+    "chromium-iphone-12-pro": "4/21/2026, 10:17:13 PM",
+    "chromium-galaxy-s20-ultra": "4/21/2026, 10:28:54 PM",
+    "chromium-ipad-air": "4/21/2026, 10:40:41 PM",
+    "chromium-ipad-mini": "4/21/2026, 10:52:14 PM",
+    "chromium-ipad-pro": "4/21/2026, 11:03:35 PM"
+  },
+  "Guide-Agentic-AI-Retail-Ecommerce": {
+    "chromium-desktop": "4/21/2026, 9:54:33 PM",
+    "chromium-iphone-8": "4/21/2026, 10:05:54 PM",
+    "chromium-iphone-12-pro": "4/21/2026, 10:17:20 PM",
+    "chromium-galaxy-s20-ultra": "4/21/2026, 10:29:00 PM",
+    "chromium-ipad-air": "4/21/2026, 10:40:42 PM",
+    "chromium-ipad-mini": "4/21/2026, 10:52:19 PM",
+    "chromium-ipad-pro": "4/21/2026, 11:03:42 PM"
+  },
+  "Industry-Odoo-Finance": {
+    "chromium-desktop": "4/21/2026, 9:54:42 PM",
+    "chromium-iphone-8": "4/21/2026, 10:06:06 PM",
+    "chromium-iphone-12-pro": "4/21/2026, 10:17:32 PM",
+    "chromium-galaxy-s20-ultra": "4/21/2026, 10:29:13 PM",
+    "chromium-ipad-air": "4/21/2026, 10:40:58 PM",
+    "chromium-ipad-mini": "4/21/2026, 10:52:39 PM",
+    "chromium-ipad-pro": "4/21/2026, 11:03:57 PM"
+  },
+  "Webinar-MuleSoft-Manufacturing": {
+    "chromium-desktop": "4/21/2026, 9:54:58 PM",
+    "chromium-iphone-8": "4/21/2026, 10:06:06 PM",
+    "chromium-iphone-12-pro": "4/21/2026, 10:17:43 PM",
+    "chromium-galaxy-s20-ultra": "4/21/2026, 10:29:23 PM",
+    "chromium-ipad-air": "4/21/2026, 10:40:59 PM",
+    "chromium-ipad-mini": "4/21/2026, 10:52:39 PM",
+    "chromium-ipad-pro": "4/21/2026, 11:03:58 PM"
+  },
+  "Press-Release-Agentic-AI-Hackathon": {
+    "chromium-desktop": "4/21/2026, 9:55:01 PM",
+    "chromium-iphone-8": "4/21/2026, 10:06:26 PM",
+    "chromium-iphone-12-pro": "4/21/2026, 10:17:53 PM",
+    "chromium-galaxy-s20-ultra": "4/21/2026, 10:29:30 PM",
+    "chromium-ipad-air": "4/21/2026, 10:41:15 PM",
+    "chromium-ipad-mini": "4/21/2026, 10:52:51 PM",
+    "chromium-ipad-pro": "4/21/2026, 11:04:12 PM"
+  },
+  "Event-Odoo-Experience": {
+    "chromium-desktop": "4/21/2026, 9:55:08 PM",
+    "chromium-iphone-8": "4/21/2026, 10:06:34 PM",
+    "chromium-iphone-12-pro": "4/21/2026, 10:18:06 PM",
+    "chromium-galaxy-s20-ultra": "4/21/2026, 10:29:37 PM",
+    "chromium-ipad-air": "4/21/2026, 10:41:17 PM",
+    "chromium-ipad-mini": "4/21/2026, 10:52:55 PM",
+    "chromium-ipad-pro": "4/21/2026, 11:04:14 PM"
+  },
+  "Mind_AI-Ninja": {
+    "chromium-desktop": "4/21/2026, 9:52:57 PM",
+    "chromium-iphone-8": "4/21/2026, 10:04:16 PM",
+    "chromium-iphone-12-pro": "4/21/2026, 10:15:42 PM",
+    "chromium-galaxy-s20-ultra": "4/21/2026, 10:27:21 PM",
+    "chromium-ipad-air": "4/21/2026, 10:39:02 PM",
+    "chromium-ipad-mini": "4/21/2026, 10:50:47 PM",
+    "chromium-ipad-pro": "4/21/2026, 11:02:03 PM"
+  },
+  "DFM": {
+    "chromium-desktop": "4/21/2026, 9:52:58 PM",
+    "chromium-iphone-8": "4/21/2026, 10:04:21 PM",
+    "chromium-iphone-12-pro": "4/21/2026, 10:15:47 PM",
+    "chromium-galaxy-s20-ultra": "4/21/2026, 10:27:34 PM",
+    "chromium-ipad-air": "4/21/2026, 10:39:11 PM",
+    "chromium-ipad-mini": "4/21/2026, 10:50:51 PM",
+    "chromium-ipad-pro": "4/21/2026, 11:02:04 PM"
   }
 }

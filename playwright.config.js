@@ -39,12 +39,13 @@ module.exports = defineConfig({
   // browser instances in parallel causes CPU/GPU contention which
   // produces slightly different rendering output between the baseline
   // capture run and the comparison run, leading to false failures.
-  fullyParallel: false,
-  workers: 2,
+  fullyParallel: true,
+  workers: 5,
 
   // Hard ceiling for any single test (navigation + warm-up + screenshot).
-  // Long pages on mobile can take 90s+ to fully load and screenshot.
-  timeout: 120_000,
+  // Heavy product pages with many images (e.g. Dashboard-Ninja-with-AI) can
+  // take 2-3 minutes for the three-pass load + volatility scan + screenshot.
+  timeout: 300_000,
 
   // Where Playwright writes raw per-test artifacts (failure screenshots,
   // traces). Excluded from git via .gitignore.

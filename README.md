@@ -272,3 +272,120 @@ Your system Node is too old. Run `nvm use 22` or install Node 18+.
     ├── webkit-desktop/
     └── LAST_UPDATED.json       # auto-updated timestamp of last baseline capture per page/project
 ```
+
+---
+
+## Usage — All Scenarios
+
+### Quick reference
+
+| Command | What it does |
+|---|---|
+| `npm run visual` | Visual regression — all devices, all endpoints |
+| `npm run interaction` | Interaction audit — all devices, all endpoints |
+| `npm run baseline` | Capture new golden baselines — all devices, all endpoints |
+| `npm run full` | Visual + interaction — all devices, all endpoints |
+| `npm run report` | Open visual diff HTML report |
+| `npm run report:interaction` | Open interaction audit HTML report |
+| `npm run test:ui` | Playwright UI dashboard (visual tests) |
+
+---
+
+### Filter by device
+
+```bash
+npm run visual -- chrome-desktop
+npm run visual -- chrome            # all Chromium projects (desktop + mobile + tablet)
+npm run visual -- firefox
+npm run visual -- safari
+npm run visual -- iphone-12
+npm run visual -- iphone-8
+npm run visual -- galaxy-s20
+npm run visual -- ipad-air
+npm run visual -- ipad-mini
+npm run visual -- ipad-pro
+```
+
+Same flags work for `interaction`, `baseline`, and `full`.
+
+---
+
+### Filter by endpoint group
+
+```bash
+npm run visual -- chrome-desktop homepage
+npm run visual -- chrome-desktop about-us
+npm run visual -- chrome-desktop services
+npm run visual -- chrome-desktop support-services
+npm run visual -- chrome-desktop products
+npm run visual -- chrome-desktop insights
+npm run visual -- chrome-desktop footer
+```
+
+---
+
+### Combined examples (device + group)
+
+```bash
+# Visual regression
+npm run visual -- chrome-desktop services
+npm run visual -- iphone-12 about-us
+npm run visual -- ipad-pro insights
+
+# Interaction audit
+npm run interaction -- chrome-desktop homepage
+npm run interaction -- iphone-12 about-us
+npm run interaction -- ipad-pro products
+
+# Update baseline
+npm run baseline -- chrome-desktop homepage
+npm run baseline -- chrome-desktop services
+npm run baseline -- iphone-12 about-us
+
+# Visual + interaction in one pass
+npm run full -- chrome-desktop
+npm run full -- chrome-desktop services
+npm run full -- iphone-12 about-us
+npm run full -- ipad-pro products
+```
+
+---
+
+### Available devices
+
+| Alias | Playwright project |
+|---|---|
+| `chrome-desktop` | chromium-desktop |
+| `chrome` | chromium-* (all Chromium) |
+| `firefox` | firefox-desktop |
+| `safari` / `webkit` | webkit-desktop |
+| `iphone-12` | chromium-iphone-12-pro |
+| `iphone-8` | chromium-iphone-8 |
+| `galaxy-s20` | chromium-galaxy-s20-ultra |
+| `ipad-air` | chromium-ipad-air |
+| `ipad-mini` | chromium-ipad-mini |
+| `ipad-pro` | chromium-ipad-pro |
+
+### Available groups
+
+`homepage` · `about-us` · `services` · `support-services` · `products` · `insights` · `footer`
+
+---
+
+### What the interaction audit checks
+
+| Element | Check performed |
+|---|---|
+| Buttons | Visible and not disabled |
+| Internal links | HTTP HEAD request — fail on 4xx/5xx |
+| External links | HTTP HEAD request — warn on 4xx (server may block HEAD), fail on 5xx/network error |
+| Anchor links | Target element exists in DOM |
+| `tel:` / `mailto:` links | Presence confirmed |
+| Text / textarea / number / tel inputs | Visible and not disabled. No text entered anywhere. |
+| Email inputs | **Skipped** — strict rule, no interaction |
+| CAPTCHA inputs | **Skipped** |
+| File inputs | Visible and not disabled. No file uploaded. |
+| Select dropdowns | Visible, enabled, has options |
+| Nav dropdowns | Hover trigger accessible, sub-links appear |
+| Carousel nav arrows | Visible and enabled |
+| Accordion triggers | Visible and not disabled |

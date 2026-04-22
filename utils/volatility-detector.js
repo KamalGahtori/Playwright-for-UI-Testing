@@ -409,6 +409,25 @@ async function hideWidgetsAndOverlays(page) {
       } catch {}
     }
 
+    // ── External scheduling embeds (TidyCal, Calendly) ──────────────
+    // These widgets fetch available time slots from an external API and
+    // render a calendar whose height varies with the number of slots returned.
+    // A different slot count between baseline and test run shifts everything
+    // below the widget, causing a full-page cascade diff.
+    // Hiding them collapses the container to 0px in both runs → stable layout.
+    for (const el of document.querySelectorAll(
+      'tidycal-embed, .tidycal-embed, [data-path*="tidycal"], ' +
+      '.calendly-inline-widget, .calendly-badge-widget, [data-url*="calendly"]'
+    )) {
+      stamp(el, `Scheduling embed: ${el.tagName}`);
+      // Also hide the nearest section/div wrapper if it only wraps this widget,
+      // so the collapsed empty container does not leave an unexpected gap.
+      const wrapper = el.closest('section, .section, [class*="booking"], [class*="schedule"]');
+      if (wrapper && wrapper !== document.body && wrapper.children.length <= 3) {
+        stamp(wrapper, `Scheduling embed wrapper: ${wrapper.tagName}.${(wrapper.className?.toString?.() || '').split(' ')[0]}`);
+      }
+    }
+
     // ── WhatsApp floating icons ───────────────────────────────────────
     // WhatsApp buttons are a common fixture on marketing sites. They float
     // in a corner and would fail tests if their position shifts between runs.

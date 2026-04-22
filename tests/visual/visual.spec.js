@@ -33,7 +33,7 @@ test.describe('Visual Integrity Audit', () => {
 
   for (const endpoint of endpoints) {
 
-    test(`[${endpoint.id}] Full-Page Visual Check`, async ({ page, preparePage, stabilizePage }) => {
+    test(`[${endpoint.group}][${endpoint.id}] Full-Page Visual Check`, async ({ page, preparePage, stabilizePage }) => {
 
       // ── Determine run mode ─────────────────────────────────────────
       // test.info().config.updateSnapshots reflects the --update-snapshots
@@ -83,12 +83,24 @@ test.describe('Visual Integrity Audit', () => {
         fs.writeFileSync(metadataPath, JSON.stringify(metadata, null, 2));
       }
 
+      // ── Snapshot name ──────────────────────────────────────────────
+      // Playwright creates subdirectories when toHaveScreenshot receives an
+      // array instead of a string. Child pages with a folder field use an
+      // array so their baselines land in: case-studies/Case-Study-xxx.png
+      // Top-level pages pass a plain string for the flat structure.
+      const snapshotName = endpoint.folder
+        ? [endpoint.folder, `${endpoint.id}.png`]
+        : `${endpoint.id}.png`;
+
       // ── Guard: baseline must exist before comparison mode runs ─────
       // Fail early with a clear message instead of letting Playwright
       // throw a cryptic "snapshot doesn't exist" error.
       await test.step('Verifying Baseline Exists', async () => {
         if (isUpdating) return; // skip check when capturing
-        const expectedPath = test.info().snapshotPath(`${endpoint.id}.png`);
+        // snapshotPath(...segments) accepts spread args to build a subpath.
+        const expectedPath = Array.isArray(snapshotName)
+          ? test.info().snapshotPath(...snapshotName)
+          : test.info().snapshotPath(snapshotName);
         if (!fs.existsSync(expectedPath)) {
           throw new Error(
             `\n\n🚨 BASELINE MISSING 🚨\n` +
@@ -163,7 +175,7 @@ test.describe('Visual Integrity Audit', () => {
 
       await test.step(screenshotLabel, async () => {
         try {
-          await expect(page).toHaveScreenshot(`${endpoint.id}.png`, {
+          await expect(page).toHaveScreenshot(snapshotName, {
             // Capture the entire document height in one image.
             // Playwright scrolls internally — no need to manage scroll position here.
             fullPage: true,
