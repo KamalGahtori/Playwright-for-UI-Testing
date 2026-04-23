@@ -1,22 +1,14 @@
 {
-  "name": "playwright_for_ui_testing",
+  "name": "playwright-ui-testing",
   "version": "1.0.0",
-  "description": "Data-Driven Visual Regression Testing Framework",
-  "main": "index.js",
+  "description": "Visual regression and interaction audit framework for ksolves.com",
   "scripts": {
-    "visual": "node scripts/run-tests.js visual",
-    "interaction": "node scripts/run-tests.js interaction",
-    "interaction:ui": "node scripts/run-tests.js ui",
-    "baseline": "node scripts/run-tests.js baseline",
-    "full": "node scripts/run-tests.js full",
-    "report": "npx playwright show-report",
-    "report:interaction": "npx playwright show-report interaction-report",
-    "test:ui": "npx playwright test tests/visual/ --ui",
-    "test:headed": "npx playwright test tests/visual/ --headed",
-    "test:debug": "npx playwright test tests/visual/ --debug"
+    "visual": "npx playwright test tests/visual/",
+    "baseline": "npx playwright test tests/visual/ --update-snapshots=all",
+    "interaction": "npx playwright test tests/interaction/ --config playwright.interaction.config.js",
+    "report:visual": "npx playwright show-report",
+    "report:interaction": "npx playwright show-report interaction-report"
   },
-  "keywords": [],
-  "author": "",
   "license": "ISC",
   "devDependencies": {
     "@playwright/test": "^1.59.1",

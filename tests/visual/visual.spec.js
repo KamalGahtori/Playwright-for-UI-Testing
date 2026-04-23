@@ -106,7 +106,7 @@ test.describe('Visual Integrity Audit', () => {
             `\n\n🚨 BASELINE MISSING 🚨\n` +
             `No golden baseline found for '${endpoint.id}' on project '${projectName}'.\n\n` +
             `ACTION REQUIRED:\n` +
-            `  npm run update:baseline -- -g "[${endpoint.id}]"\n`
+            `  npm run baseline -- --grep "${endpoint.id}"\n`
           );
         }
       });
@@ -202,7 +202,7 @@ test.describe('Visual Integrity Audit', () => {
             `\n\n❌ VISUAL MISMATCH DETECTED ❌\n` +
             `The live page for '${endpoint.id}' has changed visually.\n\n` +
             `ACTION: Run 'npm run report' to review the pixel diff.\n` +
-            `If the change is intentional, re-capture: npm run update:baseline -- -g "[${endpoint.id}]"\n`
+            `If the change is intentional, re-capture: npm run baseline -- --grep "${endpoint.id}"\n`
           );
         }
       });

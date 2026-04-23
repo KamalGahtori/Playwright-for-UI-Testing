@@ -1,199 +1,363 @@
 // tests/interaction/interaction.spec.js
 // ─────────────────────────────────────────────────────────────────────
-// Crawler-based Interaction Audit
+// Full-Site Interaction Audit — one test, Crawlee-powered crawl
 //
-// One test per endpoint. Each test:
-//   1. Sets up console-error collectors BEFORE navigation so JS errors
-//      thrown during page load and preparePage are captured.
-//   2. Navigates to the page.
-//   3. preparePage — full 3-pass load strategy (forces lazy assets,
-//                    waits for layout stability). stabilizePage is
-//                    intentionally NOT called so overlays and widgets
-//                    remain in place for the interaction audit.
-//   4. runInteractionAudit — crawler-based element scan + checks:
-//        · buttons  — visible, enabled, trial-click (non-form only)
-//        · links    — HEAD reachability (internal FAIL, external WARN)
-//        · inputs   — visible, enabled, has accessible label
-//        · selects  — enabled, has options
-//        · images   — no broken images, alt text present
-//        · iframes  — src valid, title attribute present
-//        · a11y     — accessible names on buttons/links, focusable-hidden
-//        · health   — JS console errors (benign third-party noise filtered)
-//        · nav-dropdown — hover-accessible
-//        · scroll   — sticky header visible after scroll, back-to-top
-//        · accordion-aria — aria-expanded toggles on click
-//        · popup    — opens, has enabled contents, closes via Escape
+// REPORT (open via: npm run report:interaction)
+//   audit-report.html  — self-contained SPA:
+//                        Index view → click URL → full-screen detail view
+//                        with inline screenshot. Warnings collapsible.
+//   crawl-summary.json — raw JSON
 //
-// FAILURE POLICY:
-//   Hard fail on: disabled buttons, disabled inputs, internal 4xx/5xx, broken images.
-//   Warn on: external 4xx, missing alt/label/title, console errors, scroll issues.
+// Run:  npm run interaction
+// View: npm run report:interaction → click test → Attachments → audit-report.html
 // ─────────────────────────────────────────────────────────────────────
 
-const { test, expect }       = require('../../utils/base-fixtures');
-const endpoints               = require('../../endpoints.config');
+'use strict';
+
+const { test }                = require('../../utils/base-fixtures');
 const { runInteractionAudit } = require('../../utils/interaction-engine');
+
+function buildHtmlReport(pages, stats) {
+  // PASS = no errors (warnings are informational, not blocking)
+  const passCount = pages.filter(p => p.fails.length === 0).length;
+  const failCount = pages.filter(p => p.fails.length  >  0).length;
+
+  // ── Index table rows ──────────────────────────────────────────────
+  const indexRows = pages.map((p, i) => {
+    const badge = p.fails.length
+      ? `<span class="badge fail">FAIL</span>`
+      : `<span class="badge pass">PASS</span>`;
+    return `<tr class="idx-row" onclick="showDetail(${i})" title="Click to view details">
+      <td>${badge}</td>
+      <td class="url-cell">${p.url}</td>
+      <td class="num ${p.fails.length ? 'red' : ''}">${p.fails.length || '—'}</td>
+      <td class="num ${p.warns.length ? 'orange' : ''}">${p.warns.length || '—'}</td>
+    </tr>`;
+  }).join('');
+
+  // ── Per-URL detail panels (pre-rendered, hidden — JS shows one at a time) ──
+  const detailPanels = pages.map((p, i) => {
+    const badge = p.fails.length
+      ? `<span class="badge fail">FAIL</span>`
+      : `<span class="badge pass">PASS</span>`;
+
+    const errorBlock = p.fails.length
+      ? `<div class="issue-block errors">
+          <div class="issue-title">&#10060; Errors — ${p.fails.length} found</div>
+          <ol class="issue-list">
+            ${p.fails.map(f => `
+            <li>
+              <span class="cat">${f.category}</span>
+              <strong>${escHtml(f.label)}</strong>
+              <span class="issue-detail">${escHtml(f.detail)}</span>
+            </li>`).join('')}
+          </ol>
+        </div>`
+      : `<div class="issue-block ok">&#10003; No errors on this page</div>`;
+
+    const warnBlock = p.warns.length
+      ? `<details class="issue-block warnings">
+          <summary class="issue-title warn-summary">
+            &#9888; Warnings — ${p.warns.length} found
+            <span class="expand-hint">(click to expand)</span>
+          </summary>
+          <ol class="issue-list">
+            ${p.warns.map(w => `
+            <li>
+              <span class="cat">${w.category}</span>
+              <strong>${escHtml(w.label)}</strong>
+              <span class="issue-detail">${escHtml(w.detail)}</span>
+            </li>`).join('')}
+          </ol>
+        </details>`
+      : `<div class="issue-block ok">&#10003; No warnings on this page</div>`;
+
+    const screenshot = p.screenshotBuffer
+      ? `<div class="screenshot-block">
+          <div class="screenshot-label">Screenshot — failures highlighted in red, warnings in orange</div>
+          <img class="screenshot-img" src="data:image/png;base64,${p.screenshotBuffer.toString('base64')}" alt="Screenshot" loading="lazy" />
+        </div>`
+      : '';
+
+    return `
+    <div id="panel-${i}" class="detail-panel" style="display:none">
+      <div class="detail-meta">
+        ${badge}
+        <a href="${p.url}" target="_blank" rel="noopener" class="detail-url">${p.url}</a>
+        <span class="check-counts">
+          <span class="cc fail-c">&#10060; ${p.counts.FAIL} errors</span>
+          <span class="cc warn-c">&#9888; ${p.counts.WARN} warnings</span>
+          <span class="cc pass-c">&#10003; ${p.counts.PASS} passed</span>
+          <span class="cc skip-c">&#8594; ${p.counts.SKIP} skipped</span>
+        </span>
+      </div>
+      ${errorBlock}
+      ${warnBlock}
+      ${screenshot}
+    </div>`;
+  }).join('');
+
+  // ── Full HTML ─────────────────────────────────────────────────────
+  return `<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Interaction Audit Report</title>
+<style>
+/* ── Reset & base ── */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;font-size:14px}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:#f0f2f5;color:#1a1a1a;line-height:1.6}
+
+/* ── Top bar ── */
+.topbar{background:#1e293b;color:#e2e8f0;padding:0 28px;height:52px;display:flex;align-items:center;gap:12px;position:sticky;top:0;z-index:200;box-shadow:0 2px 8px rgba(0,0,0,.35)}
+.topbar-title{font-size:1rem;font-weight:700;color:#fff;white-space:nowrap}
+.topbar-meta{font-size:0.75rem;color:#94a3b8;margin-left:auto;white-space:nowrap}
+#nav-controls{display:none;gap:8px;align-items:center;margin-left:auto}
+.btn{background:#334155;color:#e2e8f0;border:none;border-radius:5px;padding:5px 12px;font-size:0.78rem;cursor:pointer;white-space:nowrap}
+.btn:hover{background:#475569}
+.btn-back{background:#2563eb}
+.btn-back:hover{background:#1d4ed8}
+.nav-info{font-size:0.78rem;color:#94a3b8;white-space:nowrap}
+
+/* ── Main container ── */
+.container{max-width:1300px;margin:0 auto;padding:24px 20px}
+
+/* ── Summary ── */
+.summary-card{background:#fff;border-radius:10px;padding:22px 26px;margin-bottom:24px;box-shadow:0 1px 6px rgba(0,0,0,.08)}
+.card-title{font-size:0.95rem;font-weight:700;color:#1e293b;margin-bottom:16px;border-bottom:2px solid #f1f5f9;padding-bottom:10px}
+.stat-row{display:flex;gap:14px;flex-wrap:wrap;margin-bottom:22px}
+.stat-box{flex:1;min-width:100px;background:#f8fafc;border-radius:8px;padding:12px 16px;text-align:center;border:1px solid #e2e8f0}
+.stat-box .n{font-size:1.8rem;font-weight:800;line-height:1}
+.stat-box .l{font-size:0.68rem;text-transform:uppercase;letter-spacing:.7px;color:#64748b;margin-top:4px}
+.s-total .n{color:#2563eb} .s-pass .n{color:#16a34a} .s-fail .n{color:#dc2626}
+.s-efail .n{color:#dc2626} .s-ewarn .n{color:#d97706}
+
+/* ── Index table ── */
+.index-label{font-size:0.82rem;color:#64748b;margin-bottom:8px}
+table.url-index{width:100%;border-collapse:collapse}
+table.url-index th{text-align:left;font-size:0.7rem;text-transform:uppercase;letter-spacing:.6px;color:#64748b;padding:8px 12px;border-bottom:2px solid #e2e8f0}
+table.url-index td{padding:9px 12px;border-bottom:1px solid #f1f5f9;vertical-align:middle}
+.idx-row{cursor:pointer;transition:background .12s}
+.idx-row:hover td{background:#eff6ff}
+.url-cell{font-size:0.85rem;color:#1e40af;word-break:break-all}
+.num{text-align:center;font-weight:700;font-size:0.85rem;color:#94a3b8}
+.num.red{color:#dc2626} .num.orange{color:#d97706}
+
+/* ── Badges ── */
+.badge{display:inline-block;padding:2px 8px;border-radius:4px;font-size:0.68rem;font-weight:700;letter-spacing:.4px;white-space:nowrap}
+.badge.fail{background:#fee2e2;color:#991b1b}
+.badge.pass{background:#dcfce7;color:#166534}
+
+/* ── Detail panel ── */
+#detail-view{display:none}
+.detail-panel{background:#fff;border-radius:10px;padding:22px 26px;box-shadow:0 1px 6px rgba(0,0,0,.08)}
+.detail-meta{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:18px;padding-bottom:14px;border-bottom:2px solid #f1f5f9}
+.detail-url{color:#1e40af;text-decoration:none;font-size:0.9rem;font-weight:600;word-break:break-all;flex:1}
+.detail-url:hover{text-decoration:underline}
+.check-counts{display:flex;gap:14px;flex-wrap:wrap;font-size:0.78rem;font-weight:600;margin-left:auto}
+.cc{white-space:nowrap}
+.fail-c{color:#dc2626} .warn-c{color:#d97706} .pass-c{color:#16a34a} .skip-c{color:#64748b}
+
+/* ── Issue blocks ── */
+.issue-block{margin-bottom:14px;border-radius:7px;overflow:hidden}
+.issue-block.ok{font-size:0.82rem;color:#16a34a;padding:8px 12px;background:#f0fdf4;border-radius:7px}
+.issue-title{font-weight:700;font-size:0.88rem;padding:9px 14px;display:block}
+.issue-block.errors .issue-title{background:#fee2e2;color:#991b1b}
+.issue-block.warnings summary.issue-title{background:#fef3c7;color:#92400e;cursor:pointer;list-style:none}
+.issue-block.warnings summary.issue-title::-webkit-details-marker{display:none}
+.issue-block.warnings[open] .warn-summary::after{content:' ▲'}
+.issue-block.warnings:not([open]) .warn-summary::after{content:' ▼'}
+.expand-hint{font-size:0.72rem;font-weight:400;opacity:.7;margin-left:6px}
+.issue-list{list-style:decimal;padding:10px 14px 10px 32px;background:#fafafa;display:flex;flex-direction:column;gap:8px}
+.issue-list li{font-size:0.85rem;line-height:1.5}
+.issue-block.errors .issue-list{background:#fff5f5}
+.issue-block.warnings .issue-list{background:#fffbeb}
+.cat{display:inline-block;background:#f1f5f9;color:#475569;border-radius:3px;padding:1px 5px;font-size:0.72rem;font-weight:700;margin-right:5px;vertical-align:middle}
+.issue-detail{color:#64748b;font-size:0.8rem;margin-left:4px}
+
+/* ── Screenshot ── */
+.screenshot-block{margin-top:20px;padding-top:16px;border-top:1px solid #f1f5f9}
+.screenshot-label{font-size:0.78rem;color:#64748b;font-weight:600;margin-bottom:10px}
+.screenshot-img{max-width:100%;border:1px solid #e2e8f0;border-radius:6px;box-shadow:0 2px 8px rgba(0,0,0,.1);display:block}
+</style>
+</head>
+<body>
+
+<!-- ── Sticky top bar ───────────────────────────────────────────── -->
+<div class="topbar">
+  <span class="topbar-title" id="topbar-title">Interaction Audit Report</span>
+  <span class="topbar-meta" id="topbar-meta">${new Date().toLocaleString()} &nbsp;&middot;&nbsp; ${stats.runtimeSecs}s &nbsp;&middot;&nbsp; 1920&times;1080</span>
+  <div id="nav-controls">
+    <button class="btn btn-back" onclick="showIndex()">&#8592; Back to index</button>
+    <span class="nav-info" id="nav-info"></span>
+    <button class="btn" id="btn-prev" onclick="navigate(-1)">&#8592; Prev</button>
+    <button class="btn" id="btn-next" onclick="navigate(1)">Next &#8594;</button>
+  </div>
+</div>
+
+<!-- ── Index view ───────────────────────────────────────────────── -->
+<div id="index-view">
+  <div class="container">
+
+    <div class="summary-card">
+      <div class="card-title">Summary</div>
+      <div class="stat-row">
+        <div class="stat-box s-total"><div class="n">${stats.totalPages}</div><div class="l">Pages Tested</div></div>
+        <div class="stat-box s-pass"> <div class="n">${passCount}</div><div class="l">Pass</div></div>
+        <div class="stat-box s-fail"> <div class="n">${failCount}</div><div class="l">Fail</div></div>
+        <div class="stat-box s-efail"><div class="n">${stats.totalFails}</div><div class="l">Total Errors</div></div>
+        <div class="stat-box s-ewarn"><div class="n">${stats.totalWarns}</div><div class="l">Total Warnings</div></div>
+      </div>
+      <div class="index-label">Click any row to view full details, errors, warnings and screenshot for that page</div>
+      <table class="url-index">
+        <thead><tr><th>Status</th><th>URL</th><th style="text-align:center;width:80px">Errors</th><th style="text-align:center;width:90px">Warnings</th></tr></thead>
+        <tbody>${indexRows}</tbody>
+      </table>
+    </div>
+
+  </div>
+</div>
+
+<!-- ── Detail view (shared shell — panels swap in/out) ─────────── -->
+<div id="detail-view">
+  <div class="container">
+    ${detailPanels}
+  </div>
+</div>
+
+<script>
+var currentIdx = 0;
+var total = ${pages.length};
+
+function showDetail(idx) {
+  // Hide all panels
+  document.querySelectorAll('.detail-panel').forEach(function(p){ p.style.display='none'; });
+  // Show target panel
+  document.getElementById('panel-' + idx).style.display = 'block';
+  // Switch views
+  document.getElementById('index-view').style.display = 'none';
+  document.getElementById('detail-view').style.display = 'block';
+  // Update topbar
+  document.getElementById('nav-controls').style.display = 'flex';
+  document.getElementById('topbar-meta').style.display = 'none';
+  currentIdx = idx;
+  updateNav();
+  window.scrollTo(0, 0);
+}
+
+function showIndex() {
+  document.querySelectorAll('.detail-panel').forEach(function(p){ p.style.display='none'; });
+  document.getElementById('index-view').style.display = 'block';
+  document.getElementById('detail-view').style.display = 'none';
+  document.getElementById('nav-controls').style.display = 'none';
+  document.getElementById('topbar-meta').style.display = '';
+  document.getElementById('topbar-title').textContent = 'Interaction Audit Report';
+  window.scrollTo(0, 0);
+}
+
+function navigate(dir) {
+  var next = currentIdx + dir;
+  if (next >= 0 && next < total) showDetail(next);
+}
+
+function updateNav() {
+  var pages = ${JSON.stringify(pages.map(p => ({ url: p.url, fail: p.fails.length })))};
+  var p = pages[currentIdx];
+  document.getElementById('nav-info').textContent = 'Page ' + (currentIdx + 1) + ' of ' + total;
+  document.getElementById('btn-prev').disabled = currentIdx === 0;
+  document.getElementById('btn-next').disabled = currentIdx === total - 1;
+  document.getElementById('topbar-title').textContent = (p.fail ? '❌' : '✅') + ' ' + p.url;
+}
+</script>
+
+</body>
+</html>`;
+}
+
+function escHtml(str) {
+  return String(str)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;');
+}
 
 test.describe('Interaction Audit', () => {
 
-  for (const endpoint of endpoints) {
+  test('Full Site Crawl', async () => {
+    test.setTimeout(4 * 60 * 60 * 1000);
 
-    test(`[${endpoint.group}][${endpoint.id}] Interaction Audit`, async ({ page, preparePage }) => {
+    const baseUrl = process.env.BASE_URL;
+    if (!baseUrl) throw new Error('BASE_URL not set in .env — cannot run interaction audit');
 
-      const projectName = test.info().project.name;
+    const { pages, stats } = await runInteractionAudit(baseUrl, {});
 
-      // ── Navigate ───────────────────────────────────────────────────
-      await test.step(`Navigating to ${endpoint.path}`, async () => {
-        try {
-          const response = await page.goto(endpoint.path);
-          if (!response || response.status() >= 400) {
-            throw new Error(
-              `\n\n⚠️ NAVIGATION FAILURE ⚠️\n` +
-              `Could not reach: ${endpoint.path} (HTTP ${response?.status() ?? 'N/A'})\n`
-            );
-          }
-        } catch (err) {
-          if (err.message.includes('NAVIGATION FAILURE')) throw err;
-          throw new Error(
-            `\n\n⚠️ CONNECTION ERROR ⚠️\n` +
-            `Failed to connect to: ${endpoint.path}\n` +
-            `Error: ${err.message}\n`
-          );
-        }
-      });
-
-      // ── Phase 1: Full page warm-up ─────────────────────────────────
-      // Force-loads all lazy assets (WP Rocket data-lazy-src, IntersectionObserver).
-      // Ensures the spec's page is fully loaded for the highlighted-failure screenshot.
-      // stabilizePage is NOT called — overlays and widgets must stay in place.
-      await test.step('Preparing Page (Load All Assets)', async () => {
-        await preparePage();
-      });
-
-      // Capture the fully resolved URL after Playwright has applied baseURL
-      const fullUrl = page.url();
-
-      // ── Phase 2: Interaction Audit ─────────────────────────────────
-      // The Crawlee-powered engine navigates to fullUrl in its own browser context,
-      // collects console errors internally, and returns aggregated results.
-      // The spec's page remains at fullUrl for the highlighted-failure screenshot.
-      let auditResult;
-      await test.step('Running Interaction Audit', async () => {
-        auditResult = await runInteractionAudit(fullUrl, endpoint.id, {});
-      });
-
-      const { allResults, counts, fails, warns } = auditResult;
-
-      // ── Annotations (visible in HTML report) ──────────────────────
-      test.info().annotations.push({
-        type: 'Interaction Summary',
-        description: `PASS:${counts.PASS} FAIL:${counts.FAIL} WARN:${counts.WARN} SKIP:${counts.SKIP} | Project:${projectName}`,
-      });
-
-      if (warns.length) {
-        test.info().annotations.push({
-          type: 'Warnings',
-          description: warns.map(w => `[${w.category}] ${w.label}: ${w.detail}`).join(' | '),
-        });
-      }
-
-      if (fails.length) {
-        test.info().annotations.push({
-          type: 'Failures',
-          description: fails.map(f => `[${f.category}] ${f.label}: ${f.detail}`).join(' | '),
-        });
-      }
-
-      // ── Attach full audit results as JSON ──────────────────────────
-      await test.info().attach('audit-results.json', {
-        body: JSON.stringify({ summary: counts, fails, warns }, null, 2),
-        contentType: 'application/json',
-      });
-
-      // ── Highlight failing elements and capture screenshot ──────────
-      if (fails.length || warns.length) {
-        await test.step('Capturing Highlighted Failures Screenshot', async () => {
-          const found = await page.evaluate((items) => {
-            let scrolled = false;
-            let foundCount = 0;
-
-            for (const { category, label, href } of items) {
-              const color   = category === 'WARN' ? 'orange' : 'red';
-              const matches = [];
-
-              if (category.startsWith('link') && href) {
-                const el = document.querySelector(`a[href="${href}"]`);
-                if (el) matches.push(el);
-              } else if (category === 'button') {
-                for (const b of document.querySelectorAll('button, [role="button"]')) {
-                  if ((b.textContent || b.value || b.getAttribute('aria-label') || '').trim().startsWith(label.slice(0, 25))) {
-                    matches.push(b);
-                    break;
-                  }
-                }
-              } else if (category === 'input') {
-                const el = document.querySelector(
-                  `input[placeholder="${label}"], input[name="${label}"], textarea[placeholder="${label}"]`
-                );
-                if (el) matches.push(el);
-              } else if (category === 'select') {
-                const el = document.querySelector(`select[name="${label}"]`);
-                if (el) matches.push(el);
-              } else if (category === 'image') {
-                for (const img of document.querySelectorAll('img')) {
-                  if ((img.getAttribute('src') || '').includes(label.slice(0, 30))) {
-                    matches.push(img);
-                    break;
-                  }
-                }
-              } else if (category === 'iframe') {
-                for (const f of document.querySelectorAll('iframe')) {
-                  if ((f.getAttribute('src') || '').includes(label.slice(0, 30))) {
-                    matches.push(f);
-                    break;
-                  }
-                }
-              }
-
-              for (const el of matches) {
-                el.style.outline          = `4px solid ${color}`;
-                el.style.outlineOffset    = '3px';
-                el.style.backgroundColor  = color === 'red' ? 'rgba(255,0,0,0.15)' : 'rgba(255,165,0,0.15)';
-                foundCount++;
-                if (!scrolled) {
-                  el.scrollIntoView({ behavior: 'instant', block: 'center' });
-                  scrolled = true;
-                }
-              }
-            }
-            return foundCount;
-          }, [...fails.map(f => ({ ...f })), ...warns.map(w => ({ ...w }))]);
-
-          const viewportShot = await page.screenshot();
-          await test.info().attach('highlighted-failures-viewport.png', { body: viewportShot, contentType: 'image/png' });
-
-          const fullShot = await page.screenshot({ fullPage: true });
-          await test.info().attach('highlighted-failures-fullpage.png', { body: fullShot, contentType: 'image/png' });
-
-          if (found === 0) {
-            test.info().annotations.push({
-              type: 'Screenshot note',
-              description: 'Failing elements could not be located in the DOM at screenshot time — they may be inside a closed overlay or cross-origin iframe.',
-            });
-          }
-        });
-      }
-
-      // ── Assert ─────────────────────────────────────────────────────
-      if (fails.length) {
-        const failList = fails.map(f => `  ❌ [${f.category}] ${f.label} — ${f.detail}`).join('\n');
-        throw new Error(
-          `\n\n❌ INTERACTION FAILURES on [${endpoint.id}] (${projectName}) ❌\n` +
-          `${fails.length} failure(s) detected:\n${failList}\n\n` +
-          `Run 'npm run report:interaction' to review the highlighted screenshot.\n`
-        );
-      }
-
+    // ── Playwright annotations ────────────────────────────────────────
+    test.info().annotations.push({
+      type:        'Crawl Stats',
+      description: `${stats.totalPages} pages | ${stats.totalFails} errors | ${stats.totalWarns} warnings | ${stats.runtimeSecs}s`,
     });
-  }
+    test.info().annotations.push({
+      type:        'Report',
+      description: 'Open audit-report.html attachment below for the full interactive report (errors, warnings, screenshots per URL)',
+    });
+
+    // One annotation per crawled page
+    for (const p of pages) {
+      const icon = p.fails.length ? '❌' : p.warns.length ? '⚠️' : '✅';
+      test.info().annotations.push({
+        type:        `${icon} ${p.url}`,
+        description: `PASS:${p.counts.PASS}  FAIL:${p.counts.FAIL}  WARN:${p.counts.WARN}  SKIP:${p.counts.SKIP}`,
+      });
+    }
+
+    // Failure detail per failing page
+    for (const p of pages.filter(p => p.fails.length)) {
+      test.info().annotations.push({
+        type:        'Failures',
+        description: `[${p.url}] ` + p.fails.map(f => `[${f.category}] ${f.label}: ${f.detail}`).join(' | '),
+      });
+    }
+
+    // ── Self-contained HTML report (primary view) ────────────────────
+    await test.info().attach('audit-report.html', {
+      body:        buildHtmlReport(pages, stats),
+      contentType: 'text/html',
+    });
+
+    // ── Raw JSON for scripting / archiving ───────────────────────────
+    await test.info().attach('crawl-summary.json', {
+      body: JSON.stringify({
+        stats,
+        pages: pages.map(p => ({
+          url:    p.url,
+          counts: p.counts,
+          fails:  p.fails,
+          warns:  p.warns,
+        })),
+      }, null, 2),
+      contentType: 'application/json',
+    });
+
+    // ── Assert ───────────────────────────────────────────────────────
+    if (stats.totalFails > 0) {
+      const failList = pages
+        .filter(p => p.fails.length)
+        .map(p =>
+          `  ${p.url}\n` +
+          p.fails.map(f => `    ❌ [${f.category}] ${f.label} — ${f.detail}`).join('\n')
+        )
+        .join('\n');
+
+      throw new Error(
+        `\n\n❌ INTERACTION FAILURES — ${stats.totalFails} failure(s) across ` +
+        `${pages.filter(p => p.fails.length).length} page(s)\n\n` +
+        `${failList}\n\n` +
+        `Open audit-report.html in Playwright report → Attachments to review.\n`
+      );
+    }
+  });
 
 });

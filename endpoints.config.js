@@ -5,8 +5,8 @@
 //
 // HOW TO ADD A PAGE:
 //   1. Add a new object: { id: 'Page-Id', group: 'group', folder: 'folder', path: '/url-path' }
-//   2. Run: npm run baseline -- chrome-desktop [Page-Id]
-//   3. Run: npm run visual -- chrome-desktop [Page-Id]   (verify it passes)
+//   2. Run: npm run baseline -- --grep 'Page-Id'
+//   3. Run: npm run visual  -- --grep 'Page-Id'   (verify it passes)
 //
 // FIELDS:
 //   id     — Used as the screenshot filename and in test names.

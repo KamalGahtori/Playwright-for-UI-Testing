@@ -2,13 +2,15 @@
 node_modules/
 
 # ── Playwright generated artifacts (re-created on every run) ──────────
-# These folders are written by Playwright automatically.
-# Do NOT commit them — they change every run and contain no source truth.
-test-results/       # raw failure screenshots, traces, diffs
-playwright-report/  # HTML diff report
+test-results/
+playwright-report/
+interaction-results/
+interaction-report/
+
+# ── Crawlee runtime storage ───────────────────────────────────────────
+storage/
 
 # ── Environment secrets ───────────────────────────────────────────────
-# Copy .env.example → .env and set BASE_URL. Never commit .env.
 .env
 
 # ── OS / editor metadata ──────────────────────────────────────────────
@@ -18,9 +20,6 @@ Thumbs.db
 .idea/
 
 # ── Claude Code local settings ────────────────────────────────────────
-# The .claude/ folder holds machine-specific tool permissions (settings.local.json).
-# CLAUDE.md (project context) is in the repo root and IS committed — it is not
-# inside .claude/ and is unaffected by this rule.
 .claude/
 
 # ── Playwright browser cache ──────────────────────────────────────────
