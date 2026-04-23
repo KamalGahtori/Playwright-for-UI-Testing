@@ -1,0 +1,2775 @@
+{
+	"url": "https://www.ksolves.com/",
+	"endpointId": "Homepage",
+	"results": [
+		{
+			"category": "input",
+			"label": "ks_unknown_email",
+			"status": "SKIP",
+			"detail": "not visible"
+		},
+		{
+			"category": "input",
+			"label": "Full Name",
+			"status": "PASS",
+			"detail": "visible, enabled, labelled"
+		},
+		{
+			"category": "input",
+			"label": "Email Address",
+			"status": "PASS",
+			"detail": "visible, enabled, labelled"
+		},
+		{
+			"category": "input",
+			"label": "phone_number",
+			"status": "PASS",
+			"detail": "visible, enabled, labelled"
+		},
+		{
+			"category": "input",
+			"label": "Message",
+			"status": "PASS",
+			"detail": "visible, enabled, labelled"
+		},
+		{
+			"category": "input",
+			"label": "Type your answer",
+			"status": "WARN",
+			"detail": "no accessible label (missing <label for=\"\">, aria-label, or aria-labelledby)"
+		},
+		{
+			"category": "input",
+			"label": "Write your message here!",
+			"status": "SKIP",
+			"detail": "not visible"
+		},
+		{
+			"category": "input",
+			"label": "Enter Name",
+			"status": "PASS",
+			"detail": "visible, enabled, labelled"
+		},
+		{
+			"category": "input",
+			"label": "Enter Work Email",
+			"status": "PASS",
+			"detail": "visible, enabled, labelled"
+		},
+		{
+			"category": "input",
+			"label": "Type your answer",
+			"status": "WARN",
+			"detail": "no accessible label (missing <label for=\"\">, aria-label, or aria-labelledby)"
+		},
+		{
+			"category": "input",
+			"label": "Enter Full Name",
+			"status": "WARN",
+			"detail": "no accessible label (missing <label for=\"\">, aria-label, or aria-labelledby)"
+		},
+		{
+			"category": "input",
+			"label": "Company Email Address",
+			"status": "WARN",
+			"detail": "no accessible label (missing <label for=\"\">, aria-label, or aria-labelledby)"
+		},
+		{
+			"category": "input",
+			"label": "Message",
+			"status": "PASS",
+			"detail": "visible, enabled, labelled"
+		},
+		{
+			"category": "input",
+			"label": "Type your answer",
+			"status": "WARN",
+			"detail": "no accessible label (missing <label for=\"\">, aria-label, or aria-labelledby)"
+		},
+		{
+			"category": "input",
+			"label": "ks_unknown_email",
+			"status": "SKIP",
+			"detail": "not visible"
+		},
+		{
+			"category": "input",
+			"label": "Full Name",
+			"status": "PASS",
+			"detail": "visible, enabled, labelled"
+		},
+		{
+			"category": "input",
+			"label": "Email Address",
+			"status": "PASS",
+			"detail": "visible, enabled, labelled"
+		},
+		{
+			"category": "input",
+			"label": "phone_number",
+			"status": "PASS",
+			"detail": "visible, enabled, labelled"
+		},
+		{
+			"category": "input",
+			"label": "Message",
+			"status": "PASS",
+			"detail": "visible, enabled, labelled"
+		},
+		{
+			"category": "input",
+			"label": "Type your answer",
+			"status": "WARN",
+			"detail": "no accessible label (missing <label for=\"\">, aria-label, or aria-labelledby)"
+		},
+		{
+			"category": "input",
+			"label": "ks_unknown_email",
+			"status": "SKIP",
+			"detail": "not visible"
+		},
+		{
+			"category": "input",
+			"label": "Name",
+			"status": "PASS",
+			"detail": "visible, enabled, labelled"
+		},
+		{
+			"category": "input",
+			"label": "Enter your Email",
+			"status": "PASS",
+			"detail": "visible, enabled, labelled"
+		},
+		{
+			"category": "input",
+			"label": "Enter a message...",
+			"status": "PASS",
+			"detail": "visible, enabled, labelled"
+		},
+		{
+			"category": "input",
+			"label": "Type Your Answer",
+			"status": "WARN",
+			"detail": "no accessible label (missing <label for=\"\">, aria-label, or aria-labelledby)"
+		},
+		{
+			"category": "input",
+			"label": "ks_unknown_email",
+			"status": "SKIP",
+			"detail": "not visible"
+		},
+		{
+			"category": "input",
+			"label": "Full Name",
+			"status": "PASS",
+			"detail": "visible, enabled, labelled"
+		},
+		{
+			"category": "input",
+			"label": "Email Address",
+			"status": "PASS",
+			"detail": "visible, enabled, labelled"
+		},
+		{
+			"category": "input",
+			"label": "phone_number",
+			"status": "PASS",
+			"detail": "visible, enabled, labelled"
+		},
+		{
+			"category": "input",
+			"label": "Message",
+			"status": "PASS",
+			"detail": "visible, enabled, labelled"
+		},
+		{
+			"category": "input",
+			"label": "Type your answer",
+			"status": "WARN",
+			"detail": "no accessible label (missing <label for=\"\">, aria-label, or aria-labelledby)"
+		},
+		{
+			"category": "input",
+			"label": "ks_unknown_email",
+			"status": "SKIP",
+			"detail": "not visible"
+		},
+		{
+			"category": "input",
+			"label": "Full Name",
+			"status": "SKIP",
+			"detail": "not visible"
+		},
+		{
+			"category": "input",
+			"label": "Email Address",
+			"status": "SKIP",
+			"detail": "not visible"
+		},
+		{
+			"category": "input",
+			"label": "phone_number",
+			"status": "SKIP",
+			"detail": "not visible"
+		},
+		{
+			"category": "input",
+			"label": "Message",
+			"status": "SKIP",
+			"detail": "not visible"
+		},
+		{
+			"category": "input",
+			"label": "Type your answer",
+			"status": "SKIP",
+			"detail": "not visible"
+		},
+		{
+			"category": "input",
+			"label": "ks_unknown_email",
+			"status": "SKIP",
+			"detail": "not visible"
+		},
+		{
+			"category": "input",
+			"label": "Full Name",
+			"status": "SKIP",
+			"detail": "not visible"
+		},
+		{
+			"category": "input",
+			"label": "Email Address",
+			"status": "SKIP",
+			"detail": "not visible"
+		},
+		{
+			"category": "input",
+			"label": "phone_number",
+			"status": "SKIP",
+			"detail": "not visible"
+		},
+		{
+			"category": "input",
+			"label": "Message",
+			"status": "SKIP",
+			"detail": "not visible"
+		},
+		{
+			"category": "input",
+			"label": "Type your answer",
+			"status": "SKIP",
+			"detail": "not visible"
+		},
+		{
+			"category": "input",
+			"label": "ks_unknown_email",
+			"status": "SKIP",
+			"detail": "not visible"
+		},
+		{
+			"category": "input",
+			"label": "Full Name",
+			"status": "SKIP",
+			"detail": "not visible"
+		},
+		{
+			"category": "input",
+			"label": "Email Address",
+			"status": "SKIP",
+			"detail": "not visible"
+		},
+		{
+			"category": "input",
+			"label": "phone_number",
+			"status": "SKIP",
+			"detail": "not visible"
+		},
+		{
+			"category": "input",
+			"label": "Message",
+			"status": "SKIP",
+			"detail": "not visible"
+		},
+		{
+			"category": "input",
+			"label": "Type your answer",
+			"status": "SKIP",
+			"detail": "not visible"
+		},
+		{
+			"category": "input",
+			"label": "Full Name",
+			"status": "WARN",
+			"detail": "no accessible label (missing <label for=\"\">, aria-label, or aria-labelledby)"
+		},
+		{
+			"category": "input",
+			"label": "Email Address",
+			"status": "WARN",
+			"detail": "no accessible label (missing <label for=\"\">, aria-label, or aria-labelledby)"
+		},
+		{
+			"category": "input",
+			"label": "Contact Number",
+			"status": "PASS",
+			"detail": "visible, enabled, labelled"
+		},
+		{
+			"category": "input",
+			"label": "ks_unknown_email",
+			"status": "SKIP",
+			"detail": "not visible"
+		},
+		{
+			"category": "input",
+			"label": "Name",
+			"status": "SKIP",
+			"detail": "not visible"
+		},
+		{
+			"category": "input",
+			"label": "Email",
+			"status": "SKIP",
+			"detail": "not visible"
+		},
+		{
+			"category": "input",
+			"label": "Enter a message....",
+			"status": "SKIP",
+			"detail": "not visible"
+		},
+		{
+			"category": "input",
+			"label": "Type Your Answer",
+			"status": "SKIP",
+			"detail": "not visible"
+		},
+		{
+			"category": "select",
+			"label": "select",
+			"status": "PASS",
+			"detail": "81 options"
+		},
+		{
+			"category": "image",
+			"label": "https://www.ksolves.com/wp-content/uploads/2023/12/msg-line-icon-white",
+			"status": "PASS",
+			"detail": "alt=\"Mail Icon\""
+		},
+		{
+			"category": "image",
+			"label": "https://www.ksolves.com/wp-content/uploads/2023/12/phone_white.svg",
+			"status": "PASS",
+			"detail": "alt=\"Phone Icon\""
+		},
+		{
+			"category": "image",
+			"label": "https://www.ksolves.com/wp-content/uploads/2024/03/whatsaap-icon_small",
+			"status": "PASS",
+			"detail": "alt=\"investors\""
+		},
+		{
+			"category": "image",
+			"label": "https://www.ksolves.com/wp-content/uploads/2026/03/kslogo-ai.webp",
+			"status": "PASS",
+			"detail": "alt=\"Ksolves logo\""
+		},
+		{
+			"category": "image",
+			"label": "/wp-content/uploads/2026/04/ai-first.webp",
+			"status": "PASS",
+			"detail": "decorative (alt=\"\")"
+		},
+		{
+			"category": "image",
+			"label": "/wp-content/uploads/2026/04/billing-icon.svg",
+			"status": "PASS",
+			"detail": "alt=\"Ksolves InnovAItion\""
+		},
+		{
+			"category": "image",
+			"label": "/wp-content/uploads/2026/04/star.svg",
+			"status": "PASS",
+			"detail": "decorative (alt=\"\")"
+		},
+		{
+			"category": "image",
+			"label": "/wp-content/uploads/2026/04/billing-icon.svg",
+			"status": "PASS",
+			"detail": "alt=\"Ksolver\""
+		},
+		{
+			"category": "image",
+			"label": "/wp-content/uploads/2023/12/artificial-intelligence-ml.webp",
+			"status": "PASS",
+			"detail": "alt=\"Artificial Intelligence\""
+		},
+		{
+			"category": "image",
+			"label": "/wp-content/uploads/2024/01/generative-ai-image.webp",
+			"status": "PASS",
+			"detail": "alt=\"Generative AI\""
+		},
+		{
+			"category": "image",
+			"label": "/wp-content/uploads/2024/01/deep-learning-image.webp",
+			"status": "PASS",
+			"detail": "alt=\"Deep Learning\""
+		},
+		{
+			"category": "image",
+			"label": "/wp-content/uploads/2024/01/predictive-analysis-new.webp",
+			"status": "PASS",
+			"detail": "alt=\"Predictive Analysis\""
+		},
+		{
+			"category": "image",
+			"label": "/wp-content/uploads/2023/12/natural-processing.webp",
+			"status": "PASS",
+			"detail": "alt=\"Natural Processing\""
+		},
+		{
+			"category": "image",
+			"label": "/wp-content/uploads/2024/01/computer-vision-new.webp",
+			"status": "PASS",
+			"detail": "alt=\"Computer Vision\""
+		},
+		{
+			"category": "image",
+			"label": "/wp-content/uploads/2024/01/chevron-right.png",
+			"status": "PASS",
+			"detail": "alt=\"button right\""
+		},
+		{
+			"category": "image",
+			"label": "/wp-content/uploads/2025/12/agent-ai.svg",
+			"status": "PASS",
+			"detail": "alt=\"Microservices Tech\""
+		},
+		{
+			"category": "image",
+			"label": "/wp-content/uploads/2025/12/agent-1.svg",
+			"status": "PASS",
+			"detail": "alt=\"Containers, Docker, and Kubernetes\""
+		},
+		{
+			"category": "image",
+			"label": "/wp-content/uploads/2025/12/agent-2.svg",
+			"status": "PASS",
+			"detail": "alt=\"API Gateways\""
+		},
+		{
+			"category": "image",
+			"label": "/wp-content/uploads/2025/12/agent-3.svg",
+			"status": "PASS",
+			"detail": "alt=\"Messaging And Event Streaming\""
+		},
+		{
+			"category": "image",
+			"label": "/wp-content/uploads/2025/12/agent-4.svg",
+			"status": "PASS",
+			"detail": "alt=\"Serverless Architectures\""
+		},
+		{
+			"category": "image",
+			"label": "/wp-content/uploads/2025/12/agent-5.svg",
+			"status": "PASS",
+			"detail": "alt=\"Serverless Architectures\""
+		},
+		{
+			"category": "image",
+			"label": "data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewB",
+			"status": "PASS",
+			"detail": "alt=\"Big Data Tech\""
+		},
+		{
+			"category": "image",
+			"label": "data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewB",
+			"status": "PASS",
+			"detail": "alt=\"Apache Spark\""
+		},
+		{
+			"category": "image",
+			"label": "data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewB",
+			"status": "PASS",
+			"detail": "alt=\"Apache Kafka\""
+		},
+		{
+			"category": "image",
+			"label": "data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewB",
+			"status": "PASS",
+			"detail": "alt=\"Apache Cassandra\""
+		},
+		{
+			"category": "image",
+			"label": "data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewB",
+			"status": "PASS",
+			"detail": "alt=\"Apache Nifi\""
+		},
+		{
+			"category": "image",
+			"label": "data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewB",
+			"status": "PASS",
+			"detail": "alt=\"Apache Hadoop\""
+		},
+		{
+			"category": "image",
+			"label": "data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewB",
+			"status": "PASS",
+			"detail": "alt=\"button right\""
+		},
+		{
+			"category": "image",
+			"label": "data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewB",
+			"status": "PASS",
+			"detail": "alt=\"Big Data Tech\""
+		},
+		{
+			"category": "image",
+			"label": "data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewB",
+			"status": "PASS",
+			"detail": "alt=\"Apache Spark\""
+		},
+		{
+			"category": "image",
+			"label": "data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewB",
+			"status": "PASS",
+			"detail": "alt=\"Apache Kafka\""
+		},
+		{
+			"category": "image",
+			"label": "data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewB",
+			"status": "PASS",
+			"detail": "alt=\"Apache Cassandra\""
+		},
+		{
+			"category": "image",
+			"label": "data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewB",
+			"status": "PASS",
+			"detail": "alt=\"Apache Nifi\""
+		},
+		{
+			"category": "image",
+			"label": "data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewB",
+			"status": "PASS",
+			"detail": "alt=\"Apache Hadoop\""
+		},
+		{
+			"category": "image",
+			"label": "data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewB",
+			"status": "PASS",
+			"detail": "alt=\"button right\""
+		},
+		{
+			"category": "image",
+			"label": "data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewB",
+			"status": "PASS",
+			"detail": "alt=\"Salesforce Tech\""
+		},
+		{
+			"category": "image",
+			"label": "data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewB",
+			"status": "PASS",
+			"detail": "alt=\"Salesforce CPQ\""
+		},
+		{
+			"category": "image",
+			"label": "data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewB",
+			"status": "PASS",
+			"detail": "alt=\"salesforce-marketing\""
+		},
+		{
+			"category": "image",
+			"label": "data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewB",
+			"status": "PASS",
+			"detail": "alt=\"salesforce-sales-cloud\""
+		},
+		{
+			"category": "image",
+			"label": "data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewB",
+			"status": "PASS",
+			"detail": "alt=\"Salesforce-commerce\""
+		},
+		{
+			"category": "image",
+			"label": "data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewB",
+			"status": "PASS",
+			"detail": "alt=\"Einstein Sales Analytics\""
+		},
+		{
+			"category": "image",
+			"label": "data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewB",
+			"status": "PASS",
+			"detail": "alt=\"button right\""
+		},
+		{
+			"category": "image",
+			"label": "data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewB",
+			"status": "PASS",
+			"detail": "alt=\"DevOps Tech\""
+		},
+		{
+			"category": "image",
+			"label": "data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewB",
+			"status": "PASS",
+			"detail": "alt=\"Docker\""
+		},
+		{
+			"category": "image",
+			"label": "data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewB",
+			"status": "PASS",
+			"detail": "alt=\"Kubernetes\""
+		},
+		{
+			"category": "image",
+			"label": "data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewB",
+			"status": "PASS",
+			"detail": "alt=\"Azure\""
+		},
+		{
+			"category": "image",
+			"label": "data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewB",
+			"status": "PASS",
+			"detail": "alt=\"Data Visualization\""
+		},
+		{
+			"category": "image",
+			"label": "data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewB",
+			"status": "PASS",
+			"detail": "alt=\"App Monitoring\""
+		},
+		{
+			"category": "image",
+			"label": "data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewB",
+			"status": "PASS",
+			"detail": "alt=\"button right\""
+		},
+		{
+			"category": "image",
+			"label": "data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewB",
+			"status": "PASS",
+			"detail": "alt=\"Odoo Tech\""
+		},
+		{
+			"category": "image",
+			"label": "data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewB",
+			"status": "PASS",
+			"detail": "alt=\"Odoo Customization\""
+		},
+		{
+			"category": "image",
+			"label": "data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewB",
+			"status": "PASS",
+			"detail": "alt=\"Odoo Implementation\""
+		},
+		{
+			"category": "image",
+			"label": "data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewB",
+			"status": "PASS",
+			"detail": "alt=\"Odoo Integration\""
+		},
+		{
+			"category": "image",
+			"label": "data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewB",
+			"status": "PASS",
+			"detail": "alt=\"Odoo Migration\""
+		},
+		{
+			"category": "image",
+			"label": "data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewB",
+			"status": "PASS",
+			"detail": "alt=\"Odoo Consultancy\""
+		},
+		{
+			"category": "image",
+			"label": "data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewB",
+			"status": "PASS",
+			"detail": "alt=\"button right\""
+		},
+		{
+			"category": "image",
+			"label": "data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewB",
+			"status": "PASS",
+			"detail": "alt=\"Microservices Tech\""
+		},
+		{
+			"category": "image",
+			"label": "data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewB",
+			"status": "PASS",
+			"detail": "alt=\"Containers, Docker, and Kubernetes\""
+		},
+		{
+			"category": "image",
+			"label": "data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewB",
+			"status": "PASS",
+			"detail": "alt=\"API Gateways\""
+		},
+		{
+			"category": "image",
+			"label": "data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewB",
+			"status": "PASS",
+			"detail": "alt=\"Messaging And Event Streaming\""
+		},
+		{
+			"category": "image",
+			"label": "data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewB",
+			"status": "PASS",
+			"detail": "alt=\"Serverless Architectures\""
+		},
+		{
+			"category": "image",
+			"label": "data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewB",
+			"status": "PASS",
+			"detail": "alt=\"button right\""
+		},
+		{
+			"category": "image",
+			"label": "data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewB",
+			"status": "PASS",
+			"detail": "alt=\"Great Place To Work Badge\""
+		},
+		{
+			"category": "image",
+			"label": "data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewB",
+			"status": "PASS",
+			"detail": "alt=\"earth\""
+		},
+		{
+			"category": "image",
+			"label": "data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewB",
+			"status": "PASS",
+			"detail": "alt=\"CMMI\""
+		},
+		{
+			"category": "image",
+			"label": "data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewB",
+			"status": "PASS",
+			"detail": "alt=\"Red Hat\""
+		},
+		{
+			"category": "image",
+			"label": "data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewB",
+			"status": "PASS",
+			"detail": "alt=\"Publicly Listed On\""
+		},
+		{
+			"category": "image",
+			"label": "data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewB",
+			"status": "PASS",
+			"detail": "alt=\"Salesforce Summit(Platinum) Partner\""
+		},
+		{
+			"category": "image",
+			"label": "data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewB",
+			"status": "PASS",
+			"detail": "alt=\"Top Developers\""
+		},
+		{
+			"category": "image",
+			"label": "data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewB",
+			"status": "PASS",
+			"detail": "alt=\"Odoo Gold Partner\""
+		},
+		{
+			"category": "image",
+			"label": "data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewB",
+			"status": "PASS",
+			"detail": "alt=\"ISV Salesforce Partner\""
+		},
+		{
+			"category": "image",
+			"label": "data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewB",
+			"status": "PASS",
+			"detail": "alt=\"Top Salesforce Partner\""
+		},
+		{
+			"category": "image",
+			"label": "data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewB",
+			"status": "PASS",
+			"detail": "alt=\"arrow img\""
+		},
+		{
+			"category": "image",
+			"label": "data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewB",
+			"status": "PASS",
+			"detail": "alt=\"Why Your AI Data Pipeline Is More Valuable Than th\""
+		},
+		{
+			"category": "image",
+			"label": "data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewB",
+			"status": "PASS",
+			"detail": "alt=\"Blogs Image\""
+		},
+		{
+			"category": "image",
+			"label": "data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewB",
+			"status": "PASS",
+			"detail": "alt=\"Blogs Image\""
+		},
+		{
+			"category": "image",
+			"label": "\n          https://www.ksolves.com/wp-content/uploads/2024/01/right-ar",
+			"status": "PASS",
+			"detail": "alt=\"button right\""
+		},
+		{
+			"category": "image",
+			"label": "\n        https://www.ksolves.com/wp-content/uploads/2025/10/Award_odoo",
+			"status": "PASS",
+			"detail": "alt=\"News image\""
+		},
+		{
+			"category": "image",
+			"label": "data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewB",
+			"status": "PASS",
+			"detail": "alt=\"img\""
+		},
+		{
+			"category": "image",
+			"label": "data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewB",
+			"status": "PASS",
+			"detail": "alt=\"img\""
+		},
+		{
+			"category": "image",
+			"label": "data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewB",
+			"status": "PASS",
+			"detail": "alt=\"img\""
+		},
+		{
+			"category": "image",
+			"label": "data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewB",
+			"status": "PASS",
+			"detail": "alt=\"img\""
+		},
+		{
+			"category": "image",
+			"label": "data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewB",
+			"status": "PASS",
+			"detail": "alt=\"img\""
+		},
+		{
+			"category": "image",
+			"label": "data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewB",
+			"status": "PASS",
+			"detail": "alt=\"img\""
+		},
+		{
+			"category": "image",
+			"label": "data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewB",
+			"status": "PASS",
+			"detail": "alt=\"img\""
+		},
+		{
+			"category": "image",
+			"label": "https://www.ksolves.com/wp-content/uploads/2026/03/kslogo-ai.webp",
+			"status": "PASS",
+			"detail": "alt=\"Ksolves logo\""
+		},
+		{
+			"category": "image",
+			"label": "data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewB",
+			"status": "PASS",
+			"detail": "alt=\"phone\""
+		},
+		{
+			"category": "image",
+			"label": "data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewB",
+			"status": "PASS",
+			"detail": "alt=\"investors\""
+		},
+		{
+			"category": "image",
+			"label": "data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewB",
+			"status": "PASS",
+			"detail": "alt=\"mail\""
+		},
+		{
+			"category": "image",
+			"label": "data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewB",
+			"status": "PASS",
+			"detail": "alt=\"india gate\""
+		},
+		{
+			"category": "image",
+			"label": "data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewB",
+			"status": "PASS",
+			"detail": "alt=\"location\""
+		},
+		{
+			"category": "image",
+			"label": "data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewB",
+			"status": "PASS",
+			"detail": "alt=\"location\""
+		},
+		{
+			"category": "image",
+			"label": "data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewB",
+			"status": "PASS",
+			"detail": "alt=\"location\""
+		},
+		{
+			"category": "image",
+			"label": "data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewB",
+			"status": "PASS",
+			"detail": "alt=\"statue of liberty\""
+		},
+		{
+			"category": "image",
+			"label": "data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewB",
+			"status": "PASS",
+			"detail": "alt=\"usa\""
+		},
+		{
+			"category": "image",
+			"label": "data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewB",
+			"status": "PASS",
+			"detail": "alt=\"statue of liberty\""
+		},
+		{
+			"category": "image",
+			"label": "data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewB",
+			"status": "PASS",
+			"detail": "alt=\"usa\""
+		},
+		{
+			"category": "image",
+			"label": "data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewB",
+			"status": "PASS",
+			"detail": "alt=\"icons\""
+		},
+		{
+			"category": "image",
+			"label": "data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewB",
+			"status": "PASS",
+			"detail": "alt=\"icons\""
+		},
+		{
+			"category": "image",
+			"label": "data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewB",
+			"status": "PASS",
+			"detail": "alt=\"icons\""
+		},
+		{
+			"category": "image",
+			"label": "data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewB",
+			"status": "PASS",
+			"detail": "alt=\"icons\""
+		},
+		{
+			"category": "image",
+			"label": "data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewB",
+			"status": "PASS",
+			"detail": "alt=\"icons\""
+		},
+		{
+			"category": "image",
+			"label": "data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewB",
+			"status": "PASS",
+			"detail": "alt=\"icons\""
+		},
+		{
+			"category": "image",
+			"label": "data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewB",
+			"status": "PASS",
+			"detail": "alt=\"icon\""
+		},
+		{
+			"category": "image",
+			"label": "data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewB",
+			"status": "PASS",
+			"detail": "alt=\"Ksolves USP\""
+		},
+		{
+			"category": "image",
+			"label": "https://www.ksolves.com/wp-content/plugins/ds-cf7-math-captcha/assets/",
+			"status": "PASS",
+			"detail": "alt=\"dscf7_captcha_icon\""
+		},
+		{
+			"category": "image",
+			"label": "https://www.ksolves.com/wp-content/plugins/ds-cf7-math-captcha/assets/",
+			"status": "PASS",
+			"detail": "alt=\"dscf7_captcha_icon\""
+		},
+		{
+			"category": "image",
+			"label": "/wp-content/uploads/2025/06/salesblg.png",
+			"status": "PASS",
+			"detail": "alt=\"Salesforce\""
+		},
+		{
+			"category": "image",
+			"label": "/wp-content/uploads/2025/06/odoblg.png",
+			"status": "PASS",
+			"detail": "alt=\"odoo\""
+		},
+		{
+			"category": "image",
+			"label": "/wp-content/uploads/2025/06/redblg.png",
+			"status": "PASS",
+			"detail": "alt=\"Red\""
+		},
+		{
+			"category": "image",
+			"label": "/wp-content/uploads/2024/01/india-flag.jpeg",
+			"status": "PASS",
+			"detail": "alt=\"process icon\""
+		},
+		{
+			"category": "image",
+			"label": "/wp-content/uploads/2024/01/usa-flag.jpeg",
+			"status": "PASS",
+			"detail": "alt=\"process icon\""
+		},
+		{
+			"category": "image",
+			"label": "/wp-content/uploads/2026/01/useicon.webp",
+			"status": "PASS",
+			"detail": "alt=\"investors\""
+		},
+		{
+			"category": "image",
+			"label": "/wp-content/uploads/2024/01/whatsaap-icon-new.png",
+			"status": "PASS",
+			"detail": "alt=\"investors\""
+		},
+		{
+			"category": "image",
+			"label": "/wp-content/uploads/2024/12/mailicon.svg",
+			"status": "PASS",
+			"detail": "alt=\"process icon\""
+		},
+		{
+			"category": "image",
+			"label": "https://www.ksolves.com/wp-content/plugins/ks-auto-capture-form/assets",
+			"status": "PASS",
+			"detail": "alt=\"icon\""
+		},
+		{
+			"category": "image",
+			"label": "/wp-content/uploads/2025/11/odoo-transp-logo.svg",
+			"status": "PASS",
+			"detail": "alt=\"logo\""
+		},
+		{
+			"category": "image",
+			"label": "/wp-content/uploads/2025/11/odoo-best-25.png",
+			"status": "PASS",
+			"detail": "alt=\"logo\""
+		},
+		{
+			"category": "image",
+			"label": "https://www.ksolves.com/wp-content/plugins/ks-auto-capture-form/assets",
+			"status": "PASS",
+			"detail": "alt=\"icon\""
+		},
+		{
+			"category": "image",
+			"label": "/wp-content/uploads/2025/11/od-308.svg",
+			"status": "PASS",
+			"detail": "alt=\"odoo1\""
+		},
+		{
+			"category": "image",
+			"label": "/wp-content/uploads/2025/11/odo-veri.png",
+			"status": "PASS",
+			"detail": "alt=\"odoo1\""
+		},
+		{
+			"category": "image",
+			"label": "/wp-content/uploads/2025/11/od-306.svg",
+			"status": "PASS",
+			"detail": "alt=\"odoo1\""
+		},
+		{
+			"category": "image",
+			"label": "/wp-content/uploads/2025/11/od-305.svg",
+			"status": "PASS",
+			"detail": "alt=\"odoo1\""
+		},
+		{
+			"category": "image",
+			"label": "/wp-content/uploads/2025/11/larsen__toubro_logo.png",
+			"status": "PASS",
+			"detail": "alt=\"odoo1\""
+		},
+		{
+			"category": "image",
+			"label": "/wp-content/uploads/2025/11/NLG-logo.png",
+			"status": "PASS",
+			"detail": "alt=\"odoo1\""
+		},
+		{
+			"category": "image",
+			"label": "/wp-content/uploads/2025/11/od-302.png",
+			"status": "PASS",
+			"detail": "alt=\"odoo1\""
+		},
+		{
+			"category": "image",
+			"label": "/wp-content/uploads/2025/11/agli-icon1.png",
+			"status": "PASS",
+			"detail": "alt=\"odoo1\""
+		},
+		{
+			"category": "image",
+			"label": "https://www.ksolves.com/wp-content/uploads/2024/01/india-flag.jpeg",
+			"status": "PASS",
+			"detail": "alt=\"process icon\""
+		},
+		{
+			"category": "image",
+			"label": "https://www.ksolves.com/wp-content/uploads/2024/01/usa-flag.jpeg",
+			"status": "PASS",
+			"detail": "alt=\"process icon\""
+		},
+		{
+			"category": "image",
+			"label": "https://www.ksolves.com/wp-content/uploads/2026/01/useicon.webp",
+			"status": "PASS",
+			"detail": "alt=\"investors\""
+		},
+		{
+			"category": "image",
+			"label": "https://www.ksolves.com/wp-content/uploads/2024/01/whatsaap-icon-new.p",
+			"status": "PASS",
+			"detail": "alt=\"investors\""
+		},
+		{
+			"category": "image",
+			"label": "https://www.ksolves.com/wp-content/uploads/2024/12/mailicon.svg",
+			"status": "PASS",
+			"detail": "alt=\"process icon\""
+		},
+		{
+			"category": "image",
+			"label": "https://www.ksolves.com/wp-content/plugins/ks-auto-capture-form/assets",
+			"status": "PASS",
+			"detail": "alt=\"icon\""
+		},
+		{
+			"category": "image",
+			"label": "/wp-content/uploads/2024/01/india-flag.jpeg",
+			"status": "PASS",
+			"detail": "alt=\"process icon\""
+		},
+		{
+			"category": "image",
+			"label": "/wp-content/uploads/2024/01/usa-flag.jpeg",
+			"status": "PASS",
+			"detail": "alt=\"process icon\""
+		},
+		{
+			"category": "image",
+			"label": "/wp-content/uploads/2024/01/whatsaap-icon-new.png",
+			"status": "PASS",
+			"detail": "alt=\"investors\""
+		},
+		{
+			"category": "image",
+			"label": "/wp-content/uploads/2024/12/mailicon.svg",
+			"status": "PASS",
+			"detail": "alt=\"process icon\""
+		},
+		{
+			"category": "image",
+			"label": "/wp-content/uploads/2024/02/calendar-icon-1-1.svg",
+			"status": "PASS",
+			"detail": "alt=\"calendar icon\""
+		},
+		{
+			"category": "image",
+			"label": "/wp-content/uploads/2024/02/location-icon-1-1.svg",
+			"status": "PASS",
+			"detail": "alt=\"location icon\""
+		},
+		{
+			"category": "image",
+			"label": "/wp-content/uploads/2024/02/clock-icon.svg",
+			"status": "PASS",
+			"detail": "alt=\"clock icon\""
+		},
+		{
+			"category": "a11y",
+			"label": "https://www.ksolves.com/generative-ai",
+			"status": "WARN",
+			"detail": "link has no accessible name — add aria-label, title, or visible anchor text"
+		},
+		{
+			"category": "a11y",
+			"label": "https://www.ksolves.com/deep-learning",
+			"status": "WARN",
+			"detail": "link has no accessible name — add aria-label, title, or visible anchor text"
+		},
+		{
+			"category": "a11y",
+			"label": "https://www.ksolves.com/predictive-analysis",
+			"status": "WARN",
+			"detail": "link has no accessible name — add aria-label, title, or visible anchor text"
+		},
+		{
+			"category": "nav-dropdown",
+			"label": "navigation",
+			"status": "SKIP",
+			"detail": "no dropdown triggers found"
+		},
+		{
+			"category": "button",
+			"label": "<img\n                              alt=\"investors\" loading=\"lazy\" width=\"40\" hei",
+			"status": "PASS",
+			"detail": "clickable"
+		},
+		{
+			"category": "button",
+			"label": "<img\n                     alt=\"whatsapp\" loading=\"lazy\" width=\"60\" height=\"60\" \n",
+			"status": "SKIP",
+			"detail": "not visible"
+		},
+		{
+			"category": "button",
+			"label": "Mobile Menu",
+			"status": "SKIP",
+			"detail": "not visible"
+		},
+		{
+			"category": "button",
+			"label": "Let's Start",
+			"status": "SKIP",
+			"detail": "not visible"
+		},
+		{
+			"category": "button",
+			"label": "Contact\n                        Us",
+			"status": "PASS",
+			"detail": "clickable"
+		},
+		{
+			"category": "button",
+			"label": "Start a Project",
+			"status": "SKIP",
+			"detail": "not visible"
+		},
+		{
+			"category": "button",
+			"label": "Connect with Experts",
+			"status": "PASS",
+			"detail": "clickable"
+		},
+		{
+			"category": "button",
+			"label": "Submit",
+			"status": "PASS",
+			"detail": "visible & enabled (form button — not clicked)"
+		},
+		{
+			"category": "button",
+			"label": "Ksolves",
+			"status": "SKIP",
+			"detail": "not visible"
+		},
+		{
+			"category": "button",
+			"label": "(unlabelled)",
+			"status": "SKIP",
+			"detail": "not visible"
+		},
+		{
+			"category": "button",
+			"label": "(unlabelled)",
+			"status": "SKIP",
+			"detail": "not visible"
+		},
+		{
+			"category": "button",
+			"label": "(unlabelled)",
+			"status": "SKIP",
+			"detail": "not visible"
+		},
+		{
+			"category": "button",
+			"label": "Close",
+			"status": "SKIP",
+			"detail": "not visible"
+		},
+		{
+			"category": "button",
+			"label": "Watch Now",
+			"status": "SKIP",
+			"detail": "not visible"
+		},
+		{
+			"category": "button",
+			"label": "Close",
+			"status": "SKIP",
+			"detail": "not visible"
+		},
+		{
+			"category": "button",
+			"label": "Submit",
+			"status": "SKIP",
+			"detail": "not visible"
+		},
+		{
+			"category": "button",
+			"label": "Close",
+			"status": "SKIP",
+			"detail": "not visible"
+		},
+		{
+			"category": "button",
+			"label": "Submit",
+			"status": "SKIP",
+			"detail": "not visible"
+		},
+		{
+			"category": "button",
+			"label": "Close",
+			"status": "SKIP",
+			"detail": "not visible"
+		},
+		{
+			"category": "button",
+			"label": "Submit",
+			"status": "SKIP",
+			"detail": "not visible"
+		},
+		{
+			"category": "button",
+			"label": "Close",
+			"status": "SKIP",
+			"detail": "not visible"
+		},
+		{
+			"category": "button",
+			"label": "Submit",
+			"status": "SKIP",
+			"detail": "not visible"
+		},
+		{
+			"category": "button",
+			"label": "Close",
+			"status": "SKIP",
+			"detail": "not visible"
+		},
+		{
+			"category": "button",
+			"label": "Submit",
+			"status": "SKIP",
+			"detail": "not visible"
+		},
+		{
+			"category": "button",
+			"label": "Submit",
+			"status": "SKIP",
+			"detail": "not visible"
+		},
+		{
+			"category": "button",
+			"label": "Submit",
+			"status": "SKIP",
+			"detail": "not visible"
+		},
+		{
+			"category": "button",
+			"label": "Close",
+			"status": "SKIP",
+			"detail": "not visible"
+		},
+		{
+			"category": "button",
+			"label": "Submit",
+			"status": "SKIP",
+			"detail": "not visible"
+		},
+		{
+			"category": "button",
+			"label": "x",
+			"status": "SKIP",
+			"detail": "not visible"
+		},
+		{
+			"category": "button",
+			"label": "Got it!",
+			"status": "SKIP",
+			"detail": "not visible"
+		},
+		{
+			"category": "button",
+			"label": "Close",
+			"status": "SKIP",
+			"detail": "not visible"
+		},
+		{
+			"category": "button",
+			"label": "Connect With Our Experts",
+			"status": "SKIP",
+			"detail": "not visible"
+		},
+		{
+			"category": "button",
+			"label": "(unlabelled)",
+			"status": "SKIP",
+			"detail": "not visible"
+		},
+		{
+			"category": "link-mailto",
+			"label": "mailto:contact@ksolves.com",
+			"href": "mailto:contact@ksolves.com",
+			"status": "PASS",
+			"detail": "presence confirmed"
+		},
+		{
+			"category": "link-tel",
+			"label": "tel:+911800 121 0218",
+			"href": "tel:+911800 121 0218",
+			"status": "PASS",
+			"detail": "presence confirmed"
+		},
+		{
+			"category": "link-tel",
+			"label": "tel:+1 (646) 203-1075",
+			"href": "tel:+1 (646) 203-1075",
+			"status": "PASS",
+			"detail": "presence confirmed"
+		},
+		{
+			"category": "link-tel",
+			"label": "tel:+971 551395627",
+			"href": "tel:+971 551395627",
+			"status": "PASS",
+			"detail": "presence confirmed"
+		},
+		{
+			"category": "link-external",
+			"label": "https://api.whatsapp.com/send?phone=+918527471031&text=Hello, I Need Help!",
+			"href": "https://api.whatsapp.com/send?phone=+918527471031&text=Hello, I Need Help!",
+			"status": "PASS",
+			"detail": "HTTP 200"
+		},
+		{
+			"category": "link-internal",
+			"label": "https://www.ksolves.com/",
+			"href": "/",
+			"status": "PASS",
+			"detail": "HTTP 200"
+		},
+		{
+			"category": "link-internal",
+			"label": "https://www.ksolves.com/about-us-ksolves",
+			"href": "/about-us-ksolves",
+			"status": "SKIP",
+			"detail": "not visible"
+		},
+		{
+			"category": "link-internal",
+			"label": "https://www.ksolves.com/life-at-ksolves",
+			"href": "/life-at-ksolves",
+			"status": "SKIP",
+			"detail": "not visible"
+		},
+		{
+			"category": "link-internal",
+			"label": "https://www.ksolves.com/legacy-circle",
+			"href": "/legacy-circle",
+			"status": "SKIP",
+			"detail": "not visible"
+		},
+		{
+			"category": "link-internal",
+			"label": "https://www.ksolves.com/careers",
+			"href": "/careers",
+			"status": "SKIP",
+			"detail": "not visible"
+		},
+		{
+			"category": "link-internal",
+			"label": "https://www.ksolves.com/ai-ml-services",
+			"href": "https://www.ksolves.com/ai-ml-services",
+			"status": "SKIP",
+			"detail": "not visible"
+		},
+		{
+			"category": "link-internal",
+			"label": "https://www.ksolves.com/big-data-consulting-company",
+			"href": "https://www.ksolves.com/big-data-consulting-company",
+			"status": "SKIP",
+			"detail": "not visible"
+		},
+		{
+			"category": "link-internal",
+			"label": "https://www.ksolves.com/snowflake-consulting-services",
+			"href": "https://www.ksolves.com/snowflake-consulting-services",
+			"status": "SKIP",
+			"detail": "not visible"
+		},
+		{
+			"category": "link-internal",
+			"label": "https://www.ksolves.com/databricks-consulting-services",
+			"href": "https://www.ksolves.com/databricks-consulting-services",
+			"status": "SKIP",
+			"detail": "not visible"
+		},
+		{
+			"category": "link-internal",
+			"label": "https://www.ksolves.com/salesforce-services",
+			"href": "https://www.ksolves.com/salesforce-services",
+			"status": "SKIP",
+			"detail": "not visible"
+		},
+		{
+			"category": "link-internal",
+			"label": "https://www.ksolves.com/odoo-development-company",
+			"href": "/odoo-development-company",
+			"status": "SKIP",
+			"detail": "not visible"
+		},
+		{
+			"category": "link-internal",
+			"label": "https://www.ksolves.com/devops-consulting-services",
+			"href": "/devops-consulting-services",
+			"status": "SKIP",
+			"detail": "not visible"
+		},
+		{
+			"category": "link-internal",
+			"label": "https://www.ksolves.com/request-for-proposal",
+			"href": "/request-for-proposal",
+			"status": "SKIP",
+			"detail": "not visible"
+		},
+		{
+			"category": "link-internal",
+			"label": "https://www.ksolves.com/other-it-services",
+			"href": "/other-it-services",
+			"status": "SKIP",
+			"detail": "not visible"
+		},
+		{
+			"category": "link-internal",
+			"label": "https://www.ksolves.com/support-services",
+			"href": "/support-services",
+			"status": "PASS",
+			"detail": "HTTP 200"
+		},
+		{
+			"category": "link-internal",
+			"label": "https://www.ksolves.com/support-services/apache-nifi-support",
+			"href": "https://www.ksolves.com/support-services/apache-nifi-support",
+			"status": "SKIP",
+			"detail": "not visible"
+		},
+		{
+			"category": "link-internal",
+			"label": "https://www.ksolves.com/support-services/apache-cassandra-support",
+			"href": "https://www.ksolves.com/support-services/apache-cassandra-support",
+			"status": "SKIP",
+			"detail": "not visible"
+		},
+		{
+			"category": "link-internal",
+			"label": "https://www.ksolves.com/support-services/apache-kafka-support",
+			"href": "https://www.ksolves.com/support-services/apache-kafka-support",
+			"status": "SKIP",
+			"detail": "not visible"
+		},
+		{
+			"category": "link-internal",
+			"label": "https://www.ksolves.com/support-services/apache-spark-support",
+			"href": "https://www.ksolves.com/support-services/apache-spark-support",
+			"status": "SKIP",
+			"detail": "not visible"
+		},
+		{
+			"category": "link-internal",
+			"label": "https://www.ksolves.com/support-services/apache-hadoop-support",
+			"href": "https://www.ksolves.com/support-services/apache-hadoop-support",
+			"status": "SKIP",
+			"detail": "not visible"
+		},
+		{
+			"category": "link-internal",
+			"label": "https://www.ksolves.com/support-services/apache-druid-support",
+			"href": "https://www.ksolves.com/support-services/apache-druid-support",
+			"status": "SKIP",
+			"detail": "not visible"
+		},
+		{
+			"category": "link-internal",
+			"label": "https://www.ksolves.com/support-services/apache-pinot-support",
+			"href": "https://www.ksolves.com/support-services/apache-pinot-support",
+			"status": "SKIP",
+			"detail": "not visible"
+		},
+		{
+			"category": "link-internal",
+			"label": "https://www.ksolves.com/support-services/thanos-support",
+			"href": "https://www.ksolves.com/support-services/thanos-support",
+			"status": "SKIP",
+			"detail": "not visible"
+		},
+		{
+			"category": "link-internal",
+			"label": "https://www.ksolves.com/support-services/mongodb-support",
+			"href": "https://www.ksolves.com/support-services/mongodb-support",
+			"status": "SKIP",
+			"detail": "not visible"
+		},
+		{
+			"category": "link-internal",
+			"label": "https://www.ksolves.com/support-services/rook-ceph-support",
+			"href": "https://www.ksolves.com/support-services/rook-ceph-support",
+			"status": "SKIP",
+			"detail": "not visible"
+		},
+		{
+			"category": "link-internal",
+			"label": "https://www.ksolves.com/support-services/prometheus-enterprise-support",
+			"href": "https://www.ksolves.com/support-services/prometheus-enterprise-support",
+			"status": "SKIP",
+			"detail": "not visible"
+		},
+		{
+			"category": "link-internal",
+			"label": "https://www.ksolves.com/support-services/grafana-consulting",
+			"href": "https://www.ksolves.com/support-services/grafana-consulting",
+			"status": "SKIP",
+			"detail": "not visible"
+		},
+		{
+			"category": "link-internal",
+			"label": "https://www.ksolves.com/support-services/rabbitmq-consulting",
+			"href": "https://www.ksolves.com/support-services/rabbitmq-consulting",
+			"status": "SKIP",
+			"detail": "not visible"
+		},
+		{
+			"category": "link-internal",
+			"label": "https://www.ksolves.com/support-services/zookeeper-support",
+			"href": "https://www.ksolves.com/support-services/zookeeper-support",
+			"status": "SKIP",
+			"detail": "not visible"
+		},
+		{
+			"category": "link-internal",
+			"label": "https://www.ksolves.com/support-services/apache-hbase-support",
+			"href": "https://www.ksolves.com/support-services/apache-hbase-support",
+			"status": "SKIP",
+			"detail": "not visible"
+		},
+		{
+			"category": "link-internal",
+			"label": "https://www.ksolves.com/support-services/mysql-support",
+			"href": "https://www.ksolves.com/support-services/mysql-support",
+			"status": "SKIP",
+			"detail": "not visible"
+		},
+		{
+			"category": "link-internal",
+			"label": "https://www.ksolves.com/support-services/postresql-support",
+			"href": "https://www.ksolves.com/support-services/postresql-support",
+			"status": "SKIP",
+			"detail": "not visible"
+		},
+		{
+			"category": "link-internal",
+			"label": "https://www.ksolves.com/support-services/elasticsearch-support",
+			"href": "https://www.ksolves.com/support-services/elasticsearch-support",
+			"status": "SKIP",
+			"detail": "not visible"
+		},
+		{
+			"category": "link-internal",
+			"label": "https://www.ksolves.com/support-services/opensearch-support",
+			"href": "https://www.ksolves.com/support-services/opensearch-support",
+			"status": "SKIP",
+			"detail": "not visible"
+		},
+		{
+			"category": "link-internal",
+			"label": "https://www.ksolves.com/support-services/flink-support",
+			"href": "https://www.ksolves.com/support-services/flink-support",
+			"status": "SKIP",
+			"detail": "not visible"
+		},
+		{
+			"category": "link-internal",
+			"label": "https://www.ksolves.com/support-services/apache-airflow",
+			"href": "https://www.ksolves.com/support-services/apache-airflow",
+			"status": "SKIP",
+			"detail": "not visible"
+		},
+		{
+			"category": "link-internal",
+			"label": "https://www.ksolves.com/support-services/ambari-consulting-support",
+			"href": "https://www.ksolves.com/support-services/ambari-consulting-support",
+			"status": "SKIP",
+			"detail": "not visible"
+		},
+		{
+			"category": "link-internal",
+			"label": "https://www.ksolves.com/support-services/bigtop-consulting-support",
+			"href": "https://www.ksolves.com/support-services/bigtop-consulting-support",
+			"status": "SKIP",
+			"detail": "not visible"
+		},
+		{
+			"category": "link-internal",
+			"label": "https://www.ksolves.com/support-services/apache-streamsets-consulting",
+			"href": "https://www.ksolves.com/support-services/apache-streamsets-consulting",
+			"status": "SKIP",
+			"detail": "not visible"
+		},
+		{
+			"category": "link-internal",
+			"label": "https://www.ksolves.com/support-services/clickhouse",
+			"href": "https://www.ksolves.com/support-services/clickhouse",
+			"status": "SKIP",
+			"detail": "not visible"
+		},
+		{
+			"category": "link-internal",
+			"label": "https://www.ksolves.com/support-services/trino-consulting",
+			"href": "https://www.ksolves.com/support-services/trino-consulting",
+			"status": "SKIP",
+			"detail": "not visible"
+		},
+		{
+			"category": "link-internal",
+			"label": "https://www.ksolves.com/support-services/apache-hive",
+			"href": "https://www.ksolves.com/support-services/apache-hive",
+			"status": "SKIP",
+			"detail": "not visible"
+		},
+		{
+			"category": "link-internal",
+			"label": "https://www.ksolves.com/support-services/apache-drill",
+			"href": "https://www.ksolves.com/support-services/apache-drill",
+			"status": "SKIP",
+			"detail": "not visible"
+		},
+		{
+			"category": "link-internal",
+			"label": "https://www.ksolves.com/support-services/apache-tez",
+			"href": "https://www.ksolves.com/support-services/apache-tez",
+			"status": "SKIP",
+			"detail": "not visible"
+		},
+		{
+			"category": "link-internal",
+			"label": "https://www.ksolves.com/support-services/apache-superset",
+			"href": "https://www.ksolves.com/support-services/apache-superset",
+			"status": "SKIP",
+			"detail": "not visible"
+		},
+		{
+			"category": "link-internal",
+			"label": "https://www.ksolves.com/support-services/dremio",
+			"href": "https://www.ksolves.com/support-services/dremio",
+			"status": "SKIP",
+			"detail": "not visible"
+		},
+		{
+			"category": "link-internal",
+			"label": "https://www.ksolves.com/support-services/apache-iceberg",
+			"href": "https://www.ksolves.com/support-services/apache-iceberg",
+			"status": "SKIP",
+			"detail": "not visible"
+		},
+		{
+			"category": "link-internal",
+			"label": "https://www.ksolves.com/support-services/delta-lake",
+			"href": "https://www.ksolves.com/support-services/delta-lake",
+			"status": "SKIP",
+			"detail": "not visible"
+		},
+		{
+			"category": "link-internal",
+			"label": "https://www.ksolves.com/support-services/starburst-consulting",
+			"href": "https://www.ksolves.com/support-services/starburst-consulting",
+			"status": "SKIP",
+			"detail": "not visible"
+		},
+		{
+			"category": "link-internal",
+			"label": "https://www.ksolves.com/support-services/starrocks-consulting",
+			"href": "https://www.ksolves.com/support-services/starrocks-consulting",
+			"status": "SKIP",
+			"detail": "not visible"
+		},
+		{
+			"category": "link-internal",
+			"label": "https://www.ksolves.com/support-services/hudi-consulting",
+			"href": "https://www.ksolves.com/support-services/hudi-consulting",
+			"status": "SKIP",
+			"detail": "not visible"
+		},
+		{
+			"category": "link-internal",
+			"label": "https://www.ksolves.com/dashboard-ninja-with-ai",
+			"href": "https://www.ksolves.com/dashboard-ninja-with-ai",
+			"status": "SKIP",
+			"detail": "not visible"
+		},
+		{
+			"category": "link-external",
+			"label": "https://ksolvescloud.com/",
+			"href": "https://ksolvescloud.com/",
+			"status": "SKIP",
+			"detail": "not visible"
+		},
+		{
+			"category": "link-internal",
+			"label": "https://www.ksolves.com/access-manager-ninja",
+			"href": "https://www.ksolves.com/access-manager-ninja",
+			"status": "SKIP",
+			"detail": "not visible"
+		},
+		{
+			"category": "link-internal",
+			"label": "https://www.ksolves.com/hotel-management",
+			"href": "https://www.ksolves.com/hotel-management",
+			"status": "SKIP",
+			"detail": "not visible"
+		},
+		{
+			"category": "link-internal",
+			"label": "https://www.ksolves.com/reportmate",
+			"href": "https://www.ksolves.com/reportmate",
+			"status": "SKIP",
+			"detail": "not visible"
+		},
+		{
+			"category": "link-external",
+			"label": "https://store.ksolves.com/shop/product/advanced-dashboard-ninja-with-ai-v-18.0",
+			"href": "https://store.ksolves.com/shop/product/advanced-dashboard-ninja-with-ai-v-18.0",
+			"status": "SKIP",
+			"detail": "not visible"
+		},
+		{
+			"category": "link-external",
+			"label": "https://store.ksolves.com/shop/odoo-apps/odoo-woocommerce-connector-106",
+			"href": "https://store.ksolves.com/shop/odoo-apps/odoo-woocommerce-connector-106",
+			"status": "SKIP",
+			"detail": "not visible"
+		},
+		{
+			"category": "link-external",
+			"label": "https://store.ksolves.com/shop/odoo-apps/dynamic-financial-report-103",
+			"href": "https://store.ksolves.com/shop/odoo-apps/dynamic-financial-report-103",
+			"status": "SKIP",
+			"detail": "not visible"
+		},
+		{
+			"category": "link-external",
+			"label": "https://store.ksolves.com",
+			"href": "https://store.ksolves.com",
+			"status": "SKIP",
+			"detail": "not visible"
+		},
+		{
+			"category": "link-external",
+			"label": "https://www.smsninja.app/",
+			"href": "https://www.smsninja.app/",
+			"status": "SKIP",
+			"detail": "not visible"
+		},
+		{
+			"category": "link-internal",
+			"label": "https://www.ksolves.com/google-analytics-connector",
+			"href": "/google-analytics-connector",
+			"status": "SKIP",
+			"detail": "not visible"
+		},
+		{
+			"category": "link-internal",
+			"label": "https://www.ksolves.com/salesforce-cti-integration",
+			"href": "/salesforce-cti-integration",
+			"status": "SKIP",
+			"detail": "not visible"
+		},
+		{
+			"category": "link-internal",
+			"label": "https://www.ksolves.com/mindaininja",
+			"href": "/mindaininja",
+			"status": "SKIP",
+			"detail": "not visible"
+		},
+		{
+			"category": "link-external",
+			"label": "http://www.dfmanager.com/",
+			"href": "http://www.dfmanager.com/",
+			"status": "SKIP",
+			"detail": "not visible"
+		},
+		{
+			"category": "link-internal",
+			"label": "https://www.ksolves.com/insights",
+			"href": "/insights",
+			"status": "PASS",
+			"detail": "HTTP 200"
+		},
+		{
+			"category": "link-internal",
+			"label": "https://www.ksolves.com/case-studies",
+			"href": "/case-studies",
+			"status": "SKIP",
+			"detail": "not visible"
+		},
+		{
+			"category": "link-internal",
+			"label": "https://www.ksolves.com/customer-testimonials",
+			"href": "/customer-testimonials",
+			"status": "SKIP",
+			"detail": "not visible"
+		},
+		{
+			"category": "link-internal",
+			"label": "https://www.ksolves.com/blog",
+			"href": "/blog",
+			"status": "SKIP",
+			"detail": "not visible"
+		},
+		{
+			"category": "link-internal",
+			"label": "https://www.ksolves.com/guides",
+			"href": "/guides",
+			"status": "SKIP",
+			"detail": "not visible"
+		},
+		{
+			"category": "link-internal",
+			"label": "https://www.ksolves.com/industries",
+			"href": "/industries",
+			"status": "SKIP",
+			"detail": "not visible"
+		},
+		{
+			"category": "link-internal",
+			"label": "https://www.ksolves.com/webinar",
+			"href": "/webinar",
+			"status": "SKIP",
+			"detail": "not visible"
+		},
+		{
+			"category": "link-internal",
+			"label": "https://www.ksolves.com/press-release",
+			"href": "/press-release",
+			"status": "SKIP",
+			"detail": "not visible"
+		},
+		{
+			"category": "link-internal",
+			"label": "https://www.ksolves.com/events",
+			"href": "/events",
+			"status": "SKIP",
+			"detail": "not visible"
+		},
+		{
+			"category": "link-internal",
+			"label": "https://www.ksolves.com/podcast",
+			"href": "/podcast",
+			"status": "SKIP",
+			"detail": "not visible"
+		},
+		{
+			"category": "link-internal",
+			"label": "https://www.ksolves.com/investors",
+			"href": "/investors",
+			"status": "PASS",
+			"detail": "HTTP 200"
+		},
+		{
+			"category": "link-external",
+			"label": "https://zoom.us/webinar/register/WN_UC9ajElZQN27y2Up8UFZ3Q",
+			"href": "https://zoom.us/webinar/register/WN_UC9ajElZQN27y2Up8UFZ3Q",
+			"status": "SKIP",
+			"detail": "not visible"
+		},
+		{
+			"category": "link-external",
+			"label": "https://www.dfmanager.com/nifi-automation-with-agentic-ai",
+			"href": "https://www.dfmanager.com/nifi-automation-with-agentic-ai",
+			"status": "SKIP",
+			"detail": "not visible"
+		},
+		{
+			"category": "link-internal",
+			"label": "https://www.ksolves.com/generative-ai",
+			"href": "/generative-ai",
+			"status": "PASS",
+			"detail": "HTTP 200"
+		},
+		{
+			"category": "link-internal",
+			"label": "https://www.ksolves.com/deep-learning",
+			"href": "/deep-learning",
+			"status": "PASS",
+			"detail": "HTTP 200"
+		},
+		{
+			"category": "link-internal",
+			"label": "https://www.ksolves.com/predictive-analysis",
+			"href": "/predictive-analysis",
+			"status": "PASS",
+			"detail": "HTTP 200"
+		},
+		{
+			"category": "link-internal",
+			"label": "https://www.ksolves.com/natural-language-processing",
+			"href": "/natural-language-processing",
+			"status": "PASS",
+			"detail": "HTTP 200"
+		},
+		{
+			"category": "link-internal",
+			"label": "https://www.ksolves.com/computer-vision",
+			"href": "/computer-vision",
+			"status": "PASS",
+			"detail": "HTTP 200"
+		},
+		{
+			"category": "link-internal",
+			"label": "https://www.ksolves.com/agentic-ai-consulting",
+			"href": "https://www.ksolves.com/agentic-ai-consulting",
+			"status": "PASS",
+			"detail": "HTTP 200"
+		},
+		{
+			"category": "link-internal",
+			"label": "https://www.ksolves.com/apache-spark-development-company",
+			"href": "/apache-spark-development-company",
+			"status": "PASS",
+			"detail": "HTTP 200"
+		},
+		{
+			"category": "link-internal",
+			"label": "https://www.ksolves.com/apache-kafka-development-company",
+			"href": "/apache-kafka-development-company",
+			"status": "PASS",
+			"detail": "HTTP 200"
+		},
+		{
+			"category": "link-internal",
+			"label": "https://www.ksolves.com/apache-cassandra-development-company",
+			"href": "/apache-cassandra-development-company",
+			"status": "PASS",
+			"detail": "HTTP 200"
+		},
+		{
+			"category": "link-internal",
+			"label": "https://www.ksolves.com/apache-nifi-development-company",
+			"href": "/apache-nifi-development-company",
+			"status": "PASS",
+			"detail": "HTTP 200"
+		},
+		{
+			"category": "link-internal",
+			"label": "https://www.ksolves.com/apache-hadoop-development-company",
+			"href": "/apache-hadoop-development-company",
+			"status": "PASS",
+			"detail": "HTTP 200"
+		},
+		{
+			"category": "link-internal",
+			"label": "https://www.ksolves.com/apache-nifi-upgrade",
+			"href": "https://www.ksolves.com/apache-nifi-upgrade",
+			"status": "PASS",
+			"detail": "HTTP 200"
+		},
+		{
+			"category": "link-internal",
+			"label": "https://www.ksolves.com/guides/apache-nifi",
+			"href": "https://www.ksolves.com/guides/apache-nifi",
+			"status": "PASS",
+			"detail": "HTTP 200"
+		},
+		{
+			"category": "link-internal",
+			"label": "https://www.ksolves.com/salesforce-cpq",
+			"href": "/salesforce-cpq",
+			"status": "PASS",
+			"detail": "HTTP 200"
+		},
+		{
+			"category": "link-internal",
+			"label": "https://www.ksolves.com/salesforce-marketing-cloud",
+			"href": "/salesforce-marketing-cloud",
+			"status": "PASS",
+			"detail": "HTTP 200"
+		},
+		{
+			"category": "link-internal",
+			"label": "https://www.ksolves.com/salesforce-sales-cloud",
+			"href": "/salesforce-sales-cloud",
+			"status": "PASS",
+			"detail": "HTTP 200"
+		},
+		{
+			"category": "link-internal",
+			"label": "https://www.ksolves.com/salesforce-commerce-cloud",
+			"href": "/salesforce-commerce-cloud",
+			"status": "PASS",
+			"detail": "HTTP 200"
+		},
+		{
+			"category": "link-internal",
+			"label": "https://www.ksolves.com/salesforce-einstein-analytics",
+			"href": "/salesforce-einstein-analytics",
+			"status": "PASS",
+			"detail": "HTTP 200"
+		},
+		{
+			"category": "link-internal",
+			"label": "https://www.ksolves.com/salesforce-professional-services",
+			"href": "/salesforce-professional-services",
+			"status": "PASS",
+			"detail": "HTTP 200"
+		},
+		{
+			"category": "link-internal",
+			"label": "https://www.ksolves.com/odoo-erp-customization-services",
+			"href": "https://www.ksolves.com/odoo-erp-customization-services",
+			"status": "PASS",
+			"detail": "HTTP 200"
+		},
+		{
+			"category": "link-internal",
+			"label": "https://www.ksolves.com/odoo-erp-implementation-services",
+			"href": "https://www.ksolves.com/odoo-erp-implementation-services",
+			"status": "PASS",
+			"detail": "HTTP 200"
+		},
+		{
+			"category": "link-internal",
+			"label": "https://www.ksolves.com/odoo-integration-services",
+			"href": "https://www.ksolves.com/odoo-integration-services",
+			"status": "PASS",
+			"detail": "HTTP 200"
+		},
+		{
+			"category": "link-internal",
+			"label": "https://www.ksolves.com/odoo-migration-services",
+			"href": "https://www.ksolves.com/odoo-migration-services",
+			"status": "PASS",
+			"detail": "HTTP 200"
+		},
+		{
+			"category": "link-internal",
+			"label": "https://www.ksolves.com/odoo-consulting-services",
+			"href": "https://www.ksolves.com/odoo-consulting-services",
+			"status": "PASS",
+			"detail": "HTTP 200"
+		},
+		{
+			"category": "link-internal",
+			"label": "https://www.ksolves.com/magento-development-company",
+			"href": "/magento-development-company",
+			"status": "SKIP",
+			"detail": "not visible"
+		},
+		{
+			"category": "link-internal",
+			"label": "https://www.ksolves.com/magento-development-company#website-development",
+			"href": "/magento-development-company#website-development",
+			"status": "SKIP",
+			"detail": "not visible"
+		},
+		{
+			"category": "link-internal",
+			"label": "https://www.ksolves.com/magento-development-company#mobile-app-development",
+			"href": "/magento-development-company#mobile-app-development",
+			"status": "SKIP",
+			"detail": "not visible"
+		},
+		{
+			"category": "link-internal",
+			"label": "https://www.ksolves.com/magento-development-company#support",
+			"href": "/magento-development-company#support",
+			"status": "SKIP",
+			"detail": "not visible"
+		},
+		{
+			"category": "link-internal",
+			"label": "https://www.ksolves.com/magento-development-company#migration",
+			"href": "/magento-development-company#migration",
+			"status": "SKIP",
+			"detail": "not visible"
+		},
+		{
+			"category": "link-internal",
+			"label": "https://www.ksolves.com/magento-development-company#integration",
+			"href": "/magento-development-company#integration",
+			"status": "SKIP",
+			"detail": "not visible"
+		},
+		{
+			"category": "link-internal",
+			"label": "https://www.ksolves.com/microservices-architecture-development-company",
+			"href": "/microservices-architecture-development-company",
+			"status": "PASS",
+			"detail": "HTTP 200"
+		},
+		{
+			"category": "link-internal",
+			"label": "https://www.ksolves.com/press-release/ksolves-wins-best-erp-implementation-partn",
+			"href": "https://www.ksolves.com/press-release/ksolves-wins-best-erp-implementation-partner-odoo-india-2025-award",
+			"status": "SKIP",
+			"detail": "not visible"
+		},
+		{
+			"category": "link-external",
+			"label": "https://www.linkedin.com/feed/update/urn:li:activity:7308496467579592704",
+			"href": "https://www.linkedin.com/feed/update/urn:li:activity:7308496467579592704",
+			"status": "SKIP",
+			"detail": "not visible"
+		},
+		{
+			"category": "link-internal",
+			"label": "https://www.ksolves.com/blog/ksolves/ksolves-win-deloitte-technology-fast-50-ind",
+			"href": "https://www.ksolves.com/blog/ksolves/ksolves-win-deloitte-technology-fast-50-india-2024-award-in-data-ai-tech",
+			"status": "SKIP",
+			"detail": "not visible"
+		},
+		{
+			"category": "link-internal",
+			"label": "https://www.ksolves.com/blog/ksolves/et-msme-awards-2023",
+			"href": "https://www.ksolves.com/blog/ksolves/et-msme-awards-2023",
+			"status": "SKIP",
+			"detail": "not visible"
+		},
+		{
+			"category": "link-external",
+			"label": "https://www.dnb.co.in/events/business-enterprises-of-tomorrow/awards.aspx",
+			"href": "https://www.dnb.co.in/events/business-enterprises-of-tomorrow/awards.aspx",
+			"status": "SKIP",
+			"detail": "not visible"
+		},
+		{
+			"category": "link-internal",
+			"label": "https://www.ksolves.com/case-studies/telecommunication",
+			"href": "/case-studies/telecommunication",
+			"status": "SKIP",
+			"detail": "not visible"
+		},
+		{
+			"category": "link-internal",
+			"label": "https://www.ksolves.com/case-studies/healthcare",
+			"href": "/case-studies/healthcare",
+			"status": "SKIP",
+			"detail": "not visible"
+		},
+		{
+			"category": "link-internal",
+			"label": "https://www.ksolves.com/case-studies/e-commerce",
+			"href": "/case-studies/e-commerce",
+			"status": "SKIP",
+			"detail": "not visible"
+		},
+		{
+			"category": "link-internal",
+			"label": "https://www.ksolves.com/case-studies/erp/",
+			"href": "/case-studies/erp/",
+			"status": "SKIP",
+			"detail": "not visible"
+		},
+		{
+			"category": "link-internal",
+			"label": "https://www.ksolves.com/case-studies/entertainment/",
+			"href": "/case-studies/entertainment/",
+			"status": "SKIP",
+			"detail": "not visible"
+		},
+		{
+			"category": "link-internal",
+			"label": "https://www.ksolves.com/case-studies/finance",
+			"href": "/case-studies/finance",
+			"status": "SKIP",
+			"detail": "not visible"
+		},
+		{
+			"category": "link-internal",
+			"label": "https://www.ksolves.com/case-studies/manufacturing/",
+			"href": "/case-studies/manufacturing/",
+			"status": "SKIP",
+			"detail": "not visible"
+		},
+		{
+			"category": "link-internal",
+			"label": "https://www.ksolves.com/case-studies/information-technology/",
+			"href": "/case-studies/information-technology/",
+			"status": "SKIP",
+			"detail": "not visible"
+		},
+		{
+			"category": "link-internal",
+			"label": "https://www.ksolves.com/case-studies/material-handling",
+			"href": "/case-studies/material-handling",
+			"status": "SKIP",
+			"detail": "not visible"
+		},
+		{
+			"category": "link-internal",
+			"label": "https://www.ksolves.com/case-studies/retail/",
+			"href": "/case-studies/retail/",
+			"status": "SKIP",
+			"detail": "not visible"
+		},
+		{
+			"category": "link-internal",
+			"label": "https://www.ksolves.com/blog/category/artificial-intelligence",
+			"href": "https://www.ksolves.com/blog/category/artificial-intelligence",
+			"status": "PASS",
+			"detail": "HTTP 200"
+		},
+		{
+			"category": "link-internal",
+			"label": "https://www.ksolves.com/blog/artificial-intelligence/why-your-ai-data-pipeline-i",
+			"href": "https://www.ksolves.com/blog/artificial-intelligence/why-your-ai-data-pipeline-is-more-valuable-than-the-model-itself",
+			"status": "PASS",
+			"detail": "HTTP 200"
+		},
+		{
+			"category": "link-internal",
+			"label": "https://www.ksolves.com/blog/category/salesforce",
+			"href": "https://www.ksolves.com/blog/category/salesforce",
+			"status": "PASS",
+			"detail": "HTTP 200"
+		},
+		{
+			"category": "link-internal",
+			"label": "https://www.ksolves.com/blog/salesforce/vs-clio-for-law-firms",
+			"href": "https://www.ksolves.com/blog/salesforce/vs-clio-for-law-firms",
+			"status": "PASS",
+			"detail": "HTTP 200"
+		},
+		{
+			"category": "link-internal",
+			"label": "https://www.ksolves.com/blog/category/big-data",
+			"href": "https://www.ksolves.com/blog/category/big-data",
+			"status": "PASS",
+			"detail": "HTTP 200"
+		},
+		{
+			"category": "link-internal",
+			"label": "https://www.ksolves.com/blog/category/big-data/spark",
+			"href": "https://www.ksolves.com/blog/category/big-data/spark",
+			"status": "PASS",
+			"detail": "HTTP 200"
+		},
+		{
+			"category": "link-internal",
+			"label": "https://www.ksolves.com/blog/big-data/spark/compare-with-pyspark",
+			"href": "https://www.ksolves.com/blog/big-data/spark/compare-with-pyspark",
+			"status": "PASS",
+			"detail": "HTTP 200"
+		},
+		{
+			"category": "link-internal",
+			"label": "https://www.ksolves.com/press-release/agentic-ai-hackathon-2026",
+			"href": "https://www.ksolves.com/press-release/agentic-ai-hackathon-2026",
+			"status": "PASS",
+			"detail": "HTTP 200"
+		},
+		{
+			"category": "link-internal",
+			"label": "https://www.ksolves.com/press-release/ksolves-becomes-storeconnect-implementatio",
+			"href": "https://www.ksolves.com/press-release/ksolves-becomes-storeconnect-implementation-partner",
+			"status": "PASS",
+			"detail": "HTTP 200"
+		},
+		{
+			"category": "link-internal",
+			"label": "https://www.ksolves.com/press-release/ksolves-becomes-an-official-databricks-par",
+			"href": "https://www.ksolves.com/press-release/ksolves-becomes-an-official-databricks-partner",
+			"status": "PASS",
+			"detail": "HTTP 200"
+		},
+		{
+			"category": "link-internal",
+			"label": "https://www.ksolves.com/press-release/salesforce-summit-partner-status-achieved-",
+			"href": "https://www.ksolves.com/press-release/salesforce-summit-partner-status-achieved-3rd-time",
+			"status": "PASS",
+			"detail": "HTTP 200"
+		},
+		{
+			"category": "link-internal",
+			"label": "https://www.ksolves.com/press-release/next-gen-odoo-saas-toolkit-launched",
+			"href": "https://www.ksolves.com/press-release/next-gen-odoo-saas-toolkit-launched",
+			"status": "PASS",
+			"detail": "HTTP 200"
+		},
+		{
+			"category": "link-external",
+			"label": "https://www.greatplacetowork.in/great/company/ksolves-india-limited",
+			"href": "https://www.greatplacetowork.in/great/company/ksolves-india-limited",
+			"status": "PASS",
+			"detail": "HTTP 200"
+		},
+		{
+			"category": "link-internal",
+			"label": "https://www.ksolves.com/press-release/meet-ksolves-agentforce-world-tour-2026",
+			"href": "https://www.ksolves.com/press-release/meet-ksolves-agentforce-world-tour-2026",
+			"status": "PASS",
+			"detail": "HTTP 200"
+		},
+		{
+			"category": "link-internal",
+			"label": "https://www.ksolves.com/press-release/top-salesforce-consultant-retail-industry-",
+			"href": "https://www.ksolves.com/press-release/top-salesforce-consultant-retail-industry-recognition",
+			"status": "PASS",
+			"detail": "HTTP 200"
+		},
+		{
+			"category": "link-internal",
+			"label": "https://www.ksolves.com/press-release/nominated-best-odoo-partner-2025-award",
+			"href": "/press-release/nominated-best-odoo-partner-2025-award",
+			"status": "PASS",
+			"detail": "HTTP 200"
+		},
+		{
+			"category": "link-internal",
+			"label": "https://www.ksolves.com/blog/ksolves/forceperformers-top-salesforce-consulting-f",
+			"href": "/blog/ksolves/forceperformers-top-salesforce-consulting-firm-australia-award",
+			"status": "PASS",
+			"detail": "HTTP 200"
+		},
+		{
+			"category": "link-internal",
+			"label": "https://www.ksolves.com/blog/ksolves/nasscom-impact-award-2025-for-growth-leader",
+			"href": "/blog/ksolves/nasscom-impact-award-2025-for-growth-leadership",
+			"status": "PASS",
+			"detail": "HTTP 200"
+		},
+		{
+			"category": "link-external",
+			"label": "https://linkedin.com/feed/update/urn:li:activity:7308496467579592704",
+			"href": "https://linkedin.com/feed/update/urn:li:activity:7308496467579592704",
+			"status": "SKIP",
+			"detail": "social media — known to block automated requests"
+		},
+		{
+			"category": "link-external",
+			"label": "https://linkedin.com/feed/update/urn:li:activity:7301249327048404992",
+			"href": "https://linkedin.com/feed/update/urn:li:activity:7301249327048404992",
+			"status": "SKIP",
+			"detail": "social media — known to block automated requests"
+		},
+		{
+			"category": "link-internal",
+			"label": "https://www.ksolves.com/blog/ksolves/ksolves-india-limited-soars-to-new-heights-",
+			"href": "/blog/ksolves/ksolves-india-limited-soars-to-new-heights-bags-deloitte-technology-fast-50-india-2024-award-in-data-ai-tech",
+			"status": "PASS",
+			"detail": "HTTP 200"
+		},
+		{
+			"category": "link-internal",
+			"label": "https://www.ksolves.com/events/dreamforce",
+			"href": "https://www.ksolves.com/events/dreamforce",
+			"status": "PASS",
+			"detail": "HTTP 200"
+		},
+		{
+			"category": "link-internal",
+			"label": "https://www.ksolves.com/events/odoo-community-days-usa-canada",
+			"href": "https://www.ksolves.com/events/odoo-community-days-usa-canada",
+			"status": "PASS",
+			"detail": "HTTP 200"
+		},
+		{
+			"category": "link-external",
+			"label": "https://www.equitybulls.com/category.php?id=329536",
+			"href": "https://www.equitybulls.com/category.php?id=329536",
+			"status": "PASS",
+			"detail": "HTTP 200"
+		},
+		{
+			"category": "link-internal",
+			"label": "https://www.ksolves.com/events/global-ai-show",
+			"href": "https://www.ksolves.com/events/global-ai-show",
+			"status": "PASS",
+			"detail": "HTTP 200"
+		},
+		{
+			"category": "link-internal",
+			"label": "https://www.ksolves.com/events/odoo-community-days-india-2024",
+			"href": "https://www.ksolves.com/events/odoo-community-days-india-2024",
+			"status": "PASS",
+			"detail": "HTTP 200"
+		},
+		{
+			"category": "link-internal",
+			"label": "https://www.ksolves.com/events/odoo-experience",
+			"href": "https://www.ksolves.com/events/odoo-experience",
+			"status": "PASS",
+			"detail": "HTTP 200"
+		},
+		{
+			"category": "link-internal",
+			"label": "https://www.ksolves.com/salesforce-summit-partner",
+			"href": "https://www.ksolves.com/salesforce-summit-partner",
+			"status": "PASS",
+			"detail": "HTTP 200"
+		},
+		{
+			"category": "link-internal",
+			"label": "https://www.ksolves.com/salesforce-crest-partner",
+			"href": "/salesforce-crest-partner",
+			"status": "PASS",
+			"detail": "HTTP 200"
+		},
+		{
+			"category": "link-external",
+			"label": "https://appexchange.salesforce.com/appxListingDetail?listingId=a0N4V00000IedYQUA",
+			"href": "https://appexchange.salesforce.com/appxListingDetail?listingId=a0N4V00000IedYQUAZ",
+			"status": "PASS",
+			"detail": "HTTP 200"
+		},
+		{
+			"category": "link-internal",
+			"label": "https://www.ksolves.com/blog/general/ksolves-bags-the-nasscom-sme-growth-leaders",
+			"href": "/blog/general/ksolves-bags-the-nasscom-sme-growth-leadership-award-2023-a-story-of-innovation-and-dedication",
+			"status": "PASS",
+			"detail": "HTTP 200"
+		},
+		{
+			"category": "link-mailto",
+			"label": "mailto:sales@ksolves.com",
+			"href": "mailto:sales@ksolves.com",
+			"status": "PASS",
+			"detail": "presence confirmed"
+		},
+		{
+			"category": "link-external",
+			"label": "https://store.ksolves.com/",
+			"href": "https://store.ksolves.com/",
+			"status": "PASS",
+			"detail": "HTTP 200"
+		},
+		{
+			"category": "link-internal",
+			"label": "https://www.ksolves.com/csr-initiatives",
+			"href": "/csr-initiatives",
+			"status": "PASS",
+			"detail": "HTTP 200"
+		},
+		{
+			"category": "link-internal",
+			"label": "https://www.ksolves.com/sitemap",
+			"href": "/sitemap",
+			"status": "PASS",
+			"detail": "HTTP 200"
+		},
+		{
+			"category": "link-internal",
+			"label": "https://www.ksolves.com/contact",
+			"href": "/contact",
+			"status": "PASS",
+			"detail": "HTTP 200"
+		},
+		{
+			"category": "link-external",
+			"label": "https://maps.app.goo.gl/4Vkd9wDo3AyKVhPu5",
+			"href": "https://maps.app.goo.gl/4Vkd9wDo3AyKVhPu5",
+			"status": "SKIP",
+			"detail": "not visible"
+		},
+		{
+			"category": "link-external",
+			"label": "https://maps.app.goo.gl/R24HDprG5mhMvSsy8",
+			"href": "https://maps.app.goo.gl/R24HDprG5mhMvSsy8",
+			"status": "SKIP",
+			"detail": "not visible"
+		},
+		{
+			"category": "link-external",
+			"label": "https://maps.app.goo.gl/dLuv6cVma9RDiYLQA",
+			"href": "https://maps.app.goo.gl/dLuv6cVma9RDiYLQA",
+			"status": "SKIP",
+			"detail": "not visible"
+		},
+		{
+			"category": "link-external",
+			"label": "https://maps.app.goo.gl/NS7LP6TEhz2zy2AFA",
+			"href": "https://maps.app.goo.gl/NS7LP6TEhz2zy2AFA",
+			"status": "SKIP",
+			"detail": "not visible"
+		},
+		{
+			"category": "link-external",
+			"label": "https://maps.app.goo.gl/rbhGaorxxahvkX9c9",
+			"href": "https://maps.app.goo.gl/rbhGaorxxahvkX9c9",
+			"status": "SKIP",
+			"detail": "not visible"
+		},
+		{
+			"category": "link-external",
+			"label": "https://www.facebook.com/people/Ksolves/100063995947513/",
+			"href": "https://www.facebook.com/people/Ksolves/100063995947513/",
+			"status": "SKIP",
+			"detail": "social media — known to block automated requests"
+		},
+		{
+			"category": "link-external",
+			"label": "https://twitter.com/_Ksolves",
+			"href": "https://twitter.com/_Ksolves",
+			"status": "SKIP",
+			"detail": "social media — known to block automated requests"
+		},
+		{
+			"category": "link-external",
+			"label": "https://www.instagram.com/_ksolves/",
+			"href": "https://www.instagram.com/_ksolves/",
+			"status": "SKIP",
+			"detail": "social media — known to block automated requests"
+		},
+		{
+			"category": "link-external",
+			"label": "https://www.linkedin.com/company/ksolves",
+			"href": "https://www.linkedin.com/company/ksolves",
+			"status": "SKIP",
+			"detail": "social media — known to block automated requests"
+		},
+		{
+			"category": "link-external",
+			"label": "https://www.youtube.com/channel/UCplv9V47g9VidekGN6Wp1ew",
+			"href": "https://www.youtube.com/channel/UCplv9V47g9VidekGN6Wp1ew",
+			"status": "SKIP",
+			"detail": "social media — known to block automated requests"
+		},
+		{
+			"category": "link-external",
+			"label": "https://in.pinterest.com/ksolvesindialimited/",
+			"href": "https://in.pinterest.com/ksolvesindialimited/",
+			"status": "SKIP",
+			"detail": "social media — known to block automated requests"
+		},
+		{
+			"category": "link-internal",
+			"label": "https://www.ksolves.com/privacy-policy",
+			"href": "https://www.ksolves.com/privacy-policy",
+			"status": "PASS",
+			"detail": "HTTP 200"
+		},
+		{
+			"category": "link-internal",
+			"label": "https://www.ksolves.com/terms-and-conditions",
+			"href": "https://www.ksolves.com/terms-and-conditions",
+			"status": "PASS",
+			"detail": "HTTP 200"
+		},
+		{
+			"category": "link-tel",
+			"label": "tel:+91 18001210218",
+			"href": "tel:+91 18001210218",
+			"status": "PASS",
+			"detail": "presence confirmed"
+		},
+		{
+			"category": "link-tel",
+			"label": "tel:+9118001210218",
+			"href": "tel:+9118001210218",
+			"status": "PASS",
+			"detail": "presence confirmed"
+		},
+		{
+			"category": "link-tel",
+			"label": "tel:+1(646)203-1075",
+			"href": "tel:+1(646)203-1075",
+			"status": "PASS",
+			"detail": "presence confirmed"
+		},
+		{
+			"category": "link-internal",
+			"label": "https://www.ksolves.com/cookie-policy",
+			"href": "https://www.ksolves.com/cookie-policy",
+			"status": "SKIP",
+			"detail": "not visible"
+		},
+		{
+			"category": "link-external",
+			"label": "https://dfmanager.com/",
+			"href": "https://dfmanager.com/",
+			"status": "SKIP",
+			"detail": "not visible"
+		},
+		{
+			"category": "scroll",
+			"label": "sticky header",
+			"status": "PASS",
+			"detail": "remains visible in viewport after scrolling 60% down the page"
+		},
+		{
+			"category": "accordion-aria",
+			"label": "accordions",
+			"status": "SKIP",
+			"detail": "no aria-expanded accordion triggers found"
+		},
+		{
+			"category": "popup-button",
+			"label": "[popup:\"Contact\n                        Us\"] x",
+			"status": "PASS",
+			"detail": "visible & enabled"
+		},
+		{
+			"category": "popup-button",
+			"label": "[popup:\"Contact\n                        Us\"] Got it!",
+			"status": "PASS",
+			"detail": "visible & enabled"
+		},
+		{
+			"category": "popup-link",
+			"label": "[popup:\"Contact\n                        Us\"] https://www.ksolves.com/cookie-policy",
+			"href": "https://www.ksolves.com/cookie-policy",
+			"status": "PASS",
+			"detail": "HTTP 200"
+		},
+		{
+			"category": "popup-link",
+			"label": "[popup:\"Contact\n                        Us\"] https://www.ksolves.com/terms-and-conditions",
+			"href": "https://www.ksolves.com/terms-and-conditions",
+			"status": "PASS",
+			"detail": "HTTP 200"
+		},
+		{
+			"category": "popup-link",
+			"label": "[popup:\"Contact\n                        Us\"] https://www.ksolves.com/privacy-policy",
+			"href": "https://www.ksolves.com/privacy-policy",
+			"status": "PASS",
+			"detail": "HTTP 200"
+		},
+		{
+			"category": "popup-button",
+			"label": "[popup:\"Connect with Experts\"] x",
+			"status": "PASS",
+			"detail": "visible & enabled"
+		},
+		{
+			"category": "popup-button",
+			"label": "[popup:\"Connect with Experts\"] Got it!",
+			"status": "PASS",
+			"detail": "visible & enabled"
+		},
+		{
+			"category": "popup-link",
+			"label": "[popup:\"Connect with Experts\"] https://www.ksolves.com/cookie-policy",
+			"href": "https://www.ksolves.com/cookie-policy",
+			"status": "PASS",
+			"detail": "HTTP 200"
+		},
+		{
+			"category": "popup-link",
+			"label": "[popup:\"Connect with Experts\"] https://www.ksolves.com/terms-and-conditions",
+			"href": "https://www.ksolves.com/terms-and-conditions",
+			"status": "PASS",
+			"detail": "HTTP 200"
+		},
+		{
+			"category": "popup-link",
+			"label": "[popup:\"Connect with Experts\"] https://www.ksolves.com/privacy-policy",
+			"href": "https://www.ksolves.com/privacy-policy",
+			"status": "PASS",
+			"detail": "HTTP 200"
+		}
+	]
+}

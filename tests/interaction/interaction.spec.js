@@ -1,29 +1,32 @@
 // tests/interaction/interaction.spec.js
 // ─────────────────────────────────────────────────────────────────────
-// Interaction Audit
+// Crawler-based Interaction Audit
 //
 // One test per endpoint. Each test:
-//   1. Navigates to the page.
-//   2. preparePage — full 3-pass load strategy (forces all lazy assets,
-//                    waits for layout stability). No stabilizePage —
-//                    overlays and widgets are intentionally left in place
-//                    so they are checked as interactive elements.
-//   3. runInteractionAudit — dynamic element scan + accessibility checks:
-//        buttons visible & enabled | links reachable (HEAD) |
-//        inputs visible & enabled (no text entry anywhere) |
-//        selects enabled | nav dropdowns hover-accessible |
-//        carousel nav buttons visible | accordions enabled
-//
-// WHAT IS CHECKED:
-//   Every interactive element discovered at runtime. Zero hardcoded selectors.
-//
-// WHAT IS SKIPPED (never interacted with):
-//   Email fields, captcha inputs, file inputs, hidden/password inputs.
-//   No text is entered anywhere on any page.
+//   1. Sets up console-error collectors BEFORE navigation so JS errors
+//      thrown during page load and preparePage are captured.
+//   2. Navigates to the page.
+//   3. preparePage — full 3-pass load strategy (forces lazy assets,
+//                    waits for layout stability). stabilizePage is
+//                    intentionally NOT called so overlays and widgets
+//                    remain in place for the interaction audit.
+//   4. runInteractionAudit — crawler-based element scan + checks:
+//        · buttons  — visible, enabled, trial-click (non-form only)
+//        · links    — HEAD reachability (internal FAIL, external WARN)
+//        · inputs   — visible, enabled, has accessible label
+//        · selects  — enabled, has options
+//        · images   — no broken images, alt text present
+//        · iframes  — src valid, title attribute present
+//        · a11y     — accessible names on buttons/links, focusable-hidden
+//        · health   — JS console errors (benign third-party noise filtered)
+//        · nav-dropdown — hover-accessible
+//        · scroll   — sticky header visible after scroll, back-to-top
+//        · accordion-aria — aria-expanded toggles on click
+//        · popup    — opens, has enabled contents, closes via Escape
 //
 // FAILURE POLICY:
-//   Hard fail on: disabled buttons, inaccessible inputs, internal link errors (4xx/5xx).
-//   Warn on: external link 4xx (server may block HEAD), carousel nav not visible.
+//   Hard fail on: disabled buttons, disabled inputs, internal 4xx/5xx, broken images.
+//   Warn on: external 4xx, missing alt/label/title, console errors, scroll issues.
 // ─────────────────────────────────────────────────────────────────────
 
 const { test, expect }       = require('../../utils/base-fixtures');
@@ -59,17 +62,23 @@ test.describe('Interaction Audit', () => {
       });
 
       // ── Phase 1: Full page warm-up ─────────────────────────────────
-      // Force-loads all lazy assets (WP Rocket data-lazy-src, IntersectionObserver,
-      // content-visibility overrides). Ensures carousel JS has initialised
-      // before the element scan runs.
+      // Force-loads all lazy assets (WP Rocket data-lazy-src, IntersectionObserver).
+      // Ensures the spec's page is fully loaded for the highlighted-failure screenshot.
+      // stabilizePage is NOT called — overlays and widgets must stay in place.
       await test.step('Preparing Page (Load All Assets)', async () => {
         await preparePage();
       });
 
+      // Capture the fully resolved URL after Playwright has applied baseURL
+      const fullUrl = page.url();
+
       // ── Phase 2: Interaction Audit ─────────────────────────────────
+      // The Crawlee-powered engine navigates to fullUrl in its own browser context,
+      // collects console errors internally, and returns aggregated results.
+      // The spec's page remains at fullUrl for the highlighted-failure screenshot.
       let auditResult;
       await test.step('Running Interaction Audit', async () => {
-        auditResult = await runInteractionAudit(page, endpoint.id);
+        auditResult = await runInteractionAudit(fullUrl, endpoint.id, {});
       });
 
       const { allResults, counts, fails, warns } = auditResult;
@@ -103,13 +112,12 @@ test.describe('Interaction Audit', () => {
       // ── Highlight failing elements and capture screenshot ──────────
       if (fails.length || warns.length) {
         await test.step('Capturing Highlighted Failures Screenshot', async () => {
-          // Highlight every matching element; scroll the first one into view so
-          // it appears in the viewport-level screenshot.
           const found = await page.evaluate((items) => {
             let scrolled = false;
             let foundCount = 0;
+
             for (const { category, label, href } of items) {
-              const color = category === 'WARN' ? 'orange' : 'red';
+              const color   = category === 'WARN' ? 'orange' : 'red';
               const matches = [];
 
               if (category.startsWith('link') && href) {
@@ -119,21 +127,37 @@ test.describe('Interaction Audit', () => {
                 for (const b of document.querySelectorAll('button, [role="button"]')) {
                   if ((b.textContent || b.value || b.getAttribute('aria-label') || '').trim().startsWith(label.slice(0, 25))) {
                     matches.push(b);
-                    break; // highlight only the first DOM match per failure entry
+                    break;
                   }
                 }
               } else if (category === 'input') {
-                const el = document.querySelector(`input[placeholder="${label}"], input[name="${label}"], textarea[placeholder="${label}"]`);
+                const el = document.querySelector(
+                  `input[placeholder="${label}"], input[name="${label}"], textarea[placeholder="${label}"]`
+                );
                 if (el) matches.push(el);
               } else if (category === 'select') {
                 const el = document.querySelector(`select[name="${label}"]`);
                 if (el) matches.push(el);
+              } else if (category === 'image') {
+                for (const img of document.querySelectorAll('img')) {
+                  if ((img.getAttribute('src') || '').includes(label.slice(0, 30))) {
+                    matches.push(img);
+                    break;
+                  }
+                }
+              } else if (category === 'iframe') {
+                for (const f of document.querySelectorAll('iframe')) {
+                  if ((f.getAttribute('src') || '').includes(label.slice(0, 30))) {
+                    matches.push(f);
+                    break;
+                  }
+                }
               }
 
               for (const el of matches) {
-                el.style.outline = `4px solid ${color}`;
-                el.style.outlineOffset = '3px';
-                el.style.backgroundColor = color === 'red' ? 'rgba(255,0,0,0.15)' : 'rgba(255,165,0,0.15)';
+                el.style.outline          = `4px solid ${color}`;
+                el.style.outlineOffset    = '3px';
+                el.style.backgroundColor  = color === 'red' ? 'rgba(255,0,0,0.15)' : 'rgba(255,165,0,0.15)';
                 foundCount++;
                 if (!scrolled) {
                   el.scrollIntoView({ behavior: 'instant', block: 'center' });
@@ -142,21 +166,15 @@ test.describe('Interaction Audit', () => {
               }
             }
             return foundCount;
-          }, [...fails.map(f => ({ ...f, category: f.category })), ...warns.map(w => ({ ...w }))]);
+          }, [...fails.map(f => ({ ...f })), ...warns.map(w => ({ ...w }))]);
 
-          // Viewport screenshot — taken after scrollIntoView so the first
-          // highlighted element is centred and clearly visible.
           const viewportShot = await page.screenshot();
           await test.info().attach('highlighted-failures-viewport.png', { body: viewportShot, contentType: 'image/png' });
 
-          // Full-page screenshot for overall context.
           const fullShot = await page.screenshot({ fullPage: true });
           await test.info().attach('highlighted-failures-fullpage.png', { body: fullShot, contentType: 'image/png' });
 
           if (found === 0) {
-            // Elements couldn't be located in the DOM at screenshot time (e.g. inside
-            // a closed overlay). Attach a plain viewport capture so there is still
-            // something to review.
             test.info().annotations.push({
               type: 'Screenshot note',
               description: 'Failing elements could not be located in the DOM at screenshot time — they may be inside a closed overlay or cross-origin iframe.',
@@ -171,7 +189,7 @@ test.describe('Interaction Audit', () => {
         throw new Error(
           `\n\n❌ INTERACTION FAILURES on [${endpoint.id}] (${projectName}) ❌\n` +
           `${fails.length} failure(s) detected:\n${failList}\n\n` +
-          `Run 'npm run report' to review the highlighted screenshot.\n`
+          `Run 'npm run report:interaction' to review the highlighted screenshot.\n`
         );
       }
 
