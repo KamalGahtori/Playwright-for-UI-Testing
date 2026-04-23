@@ -11,6 +11,7 @@
     "full":                "node scripts/run-tests.js full",
     "report":              "npx playwright show-report",
     "report:interaction":  "npx playwright show-report interaction-report",
+    "report:interaction":  "npx playwright show-report interaction-report",
     "test:ui":             "npx playwright test tests/visual/ --ui",
     "test:headed":         "npx playwright test tests/visual/ --headed",
     "test:debug":          "npx playwright test tests/visual/ --debug"

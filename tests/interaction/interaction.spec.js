@@ -103,31 +103,65 @@ test.describe('Interaction Audit', () => {
       // ── Highlight failing elements and capture screenshot ──────────
       if (fails.length || warns.length) {
         await test.step('Capturing Highlighted Failures Screenshot', async () => {
-          await page.evaluate((items) => {
+          // Highlight every matching element; scroll the first one into view so
+          // it appears in the viewport-level screenshot.
+          const found = await page.evaluate((items) => {
+            let scrolled = false;
+            let foundCount = 0;
             for (const { category, label, href } of items) {
               const color = category === 'WARN' ? 'orange' : 'red';
-              let el = null;
+              const matches = [];
+
               if (category.startsWith('link') && href) {
-                el = document.querySelector(`a[href="${href}"]`);
+                const el = document.querySelector(`a[href="${href}"]`);
+                if (el) matches.push(el);
               } else if (category === 'button') {
                 for (const b of document.querySelectorAll('button, [role="button"]')) {
-                  if ((b.textContent || b.value || b.getAttribute('aria-label') || '').trim().startsWith(label.slice(0, 25))) { el = b; break; }
+                  if ((b.textContent || b.value || b.getAttribute('aria-label') || '').trim().startsWith(label.slice(0, 25))) {
+                    matches.push(b);
+                    break; // highlight only the first DOM match per failure entry
+                  }
                 }
               } else if (category === 'input') {
-                el = document.querySelector(`input[placeholder="${label}"], input[name="${label}"], textarea[placeholder="${label}"]`);
+                const el = document.querySelector(`input[placeholder="${label}"], input[name="${label}"], textarea[placeholder="${label}"]`);
+                if (el) matches.push(el);
               } else if (category === 'select') {
-                el = document.querySelector(`select[name="${label}"]`);
+                const el = document.querySelector(`select[name="${label}"]`);
+                if (el) matches.push(el);
               }
-              if (el) {
+
+              for (const el of matches) {
                 el.style.outline = `4px solid ${color}`;
                 el.style.outlineOffset = '3px';
                 el.style.backgroundColor = color === 'red' ? 'rgba(255,0,0,0.15)' : 'rgba(255,165,0,0.15)';
+                foundCount++;
+                if (!scrolled) {
+                  el.scrollIntoView({ behavior: 'instant', block: 'center' });
+                  scrolled = true;
+                }
               }
             }
+            return foundCount;
           }, [...fails.map(f => ({ ...f, category: f.category })), ...warns.map(w => ({ ...w }))]);
 
-          const screenshot = await page.screenshot({ fullPage: true });
-          await test.info().attach('highlighted-failures.png', { body: screenshot, contentType: 'image/png' });
+          // Viewport screenshot — taken after scrollIntoView so the first
+          // highlighted element is centred and clearly visible.
+          const viewportShot = await page.screenshot();
+          await test.info().attach('highlighted-failures-viewport.png', { body: viewportShot, contentType: 'image/png' });
+
+          // Full-page screenshot for overall context.
+          const fullShot = await page.screenshot({ fullPage: true });
+          await test.info().attach('highlighted-failures-fullpage.png', { body: fullShot, contentType: 'image/png' });
+
+          if (found === 0) {
+            // Elements couldn't be located in the DOM at screenshot time (e.g. inside
+            // a closed overlay). Attach a plain viewport capture so there is still
+            // something to review.
+            test.info().annotations.push({
+              type: 'Screenshot note',
+              description: 'Failing elements could not be located in the DOM at screenshot time — they may be inside a closed overlay or cross-origin iframe.',
+            });
+          }
         });
       }
 

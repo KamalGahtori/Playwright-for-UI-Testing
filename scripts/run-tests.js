@@ -89,7 +89,7 @@ try {
       break;
 
     case 'interaction':
-      run(`npx playwright test tests/interaction/${flags} ${extra}`);
+      run(`PLAYWRIGHT_HTML_OUTPUT_DIR=interaction-report npx playwright test tests/interaction/${flags} ${extra}`);
       break;
 
     case 'baseline':
@@ -98,7 +98,7 @@ try {
 
     case 'full':
       run(`npx playwright test tests/visual/${flags} ${extra}`);
-      run(`npx playwright test tests/interaction/${flags} ${extra}`);
+      run(`PLAYWRIGHT_HTML_OUTPUT_DIR=interaction-report npx playwright test tests/interaction/${flags} ${extra}`);
       break;
 
     case 'ui':
