@@ -14,8 +14,15 @@
 
 'use strict';
 
+const fs   = require('fs');
+const path = require('path');
 const { test }                = require('../../utils/base-fixtures');
 const { runInteractionAudit } = require('../../utils/interaction-engine');
+
+// Written incrementally during the crawl — survives Ctrl+C
+const RESULTS_FILE  = path.resolve(__dirname, '../../interaction-results/partial-results.json');
+// Written at the end of afterEach — opened directly by npm run report:interaction
+const REPORT_FILE   = path.resolve(__dirname, '../../interaction-results/audit-report.html');
 
 function buildHtmlReport(pages, stats) {
   // PASS = no errors (warnings are informational, not blocking)
@@ -24,10 +31,11 @@ function buildHtmlReport(pages, stats) {
 
   // ── Index table rows ──────────────────────────────────────────────
   const indexRows = pages.map((p, i) => {
+    const status = p.fails.length ? 'fail' : 'pass';
     const badge = p.fails.length
       ? `<span class="badge fail">FAIL</span>`
       : `<span class="badge pass">PASS</span>`;
-    return `<tr class="idx-row" onclick="showDetail(${i})" title="Click to view details">
+    return `<tr class="idx-row" data-status="${status}" onclick="showDetail(${i})" title="Click to view details">
       <td>${badge}</td>
       <td class="url-cell">${p.url}</td>
       <td class="num ${p.fails.length ? 'red' : ''}">${p.fails.length || '—'}</td>
@@ -50,6 +58,7 @@ function buildHtmlReport(pages, stats) {
               <span class="cat">${f.category}</span>
               <strong>${escHtml(f.label)}</strong>
               <span class="issue-detail">${escHtml(f.detail)}</span>
+              ${f.impact ? `<span class="impact">${escHtml(f.impact)}</span>` : ''}
             </li>`).join('')}
           </ol>
         </div>`
@@ -67,6 +76,7 @@ function buildHtmlReport(pages, stats) {
               <span class="cat">${w.category}</span>
               <strong>${escHtml(w.label)}</strong>
               <span class="issue-detail">${escHtml(w.detail)}</span>
+              ${w.impact ? `<span class="impact">${escHtml(w.impact)}</span>` : ''}
             </li>`).join('')}
           </ol>
         </details>`
@@ -74,9 +84,17 @@ function buildHtmlReport(pages, stats) {
 
     const screenshot = p.screenshotBuffer
       ? `<div class="screenshot-block">
-          <div class="screenshot-label">Screenshot — failures highlighted in red, warnings in orange</div>
+          <div class="screenshot-label">Full-page screenshot — failures highlighted in red, warnings in orange</div>
           <img class="screenshot-img" src="data:image/png;base64,${p.screenshotBuffer.toString('base64')}" alt="Screenshot" loading="lazy" />
         </div>`
+      : '';
+
+    const popupBlock = (p.popupScreenshots && p.popupScreenshots.length)
+      ? p.popupScreenshots.map(ps => `
+        <div class="screenshot-block">
+          <div class="screenshot-label">Popup screenshot — "${escHtml(ps.label)}" — failures highlighted in red</div>
+          <img class="screenshot-img" src="data:image/png;base64,${ps.buffer.toString('base64')}" alt="Popup screenshot" loading="lazy" />
+        </div>`).join('')
       : '';
 
     return `
@@ -94,6 +112,7 @@ function buildHtmlReport(pages, stats) {
       ${errorBlock}
       ${warnBlock}
       ${screenshot}
+      ${popupBlock}
     </div>`;
   }).join('');
 
@@ -132,7 +151,12 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;b
 .stat-box .n{font-size:1.8rem;font-weight:800;line-height:1}
 .stat-box .l{font-size:0.68rem;text-transform:uppercase;letter-spacing:.7px;color:#64748b;margin-top:4px}
 .s-total .n{color:#2563eb} .s-pass .n{color:#16a34a} .s-fail .n{color:#dc2626}
-.s-efail .n{color:#dc2626} .s-ewarn .n{color:#d97706}
+.s-efail .n{color:#dc2626} .s-ewarn .n{color:#d97706} .s-time .n{color:#6366f1}
+.stat-box.filterable{cursor:pointer;user-select:none;transition:transform .12s,box-shadow .12s}
+.stat-box.filterable:hover{transform:translateY(-2px);box-shadow:0 4px 14px rgba(0,0,0,.14)}
+.s-total.active{outline:3px solid #2563eb;outline-offset:-1px}
+.s-pass.active{outline:3px solid #16a34a;outline-offset:-1px}
+.s-fail.active{outline:3px solid #dc2626;outline-offset:-1px}
 
 /* ── Index table ── */
 .index-label{font-size:0.82rem;color:#64748b;margin-bottom:8px}
@@ -176,6 +200,8 @@ table.url-index td{padding:9px 12px;border-bottom:1px solid #f1f5f9;vertical-ali
 .issue-block.warnings .issue-list{background:#fffbeb}
 .cat{display:inline-block;background:#f1f5f9;color:#475569;border-radius:3px;padding:1px 5px;font-size:0.72rem;font-weight:700;margin-right:5px;vertical-align:middle}
 .issue-detail{color:#64748b;font-size:0.8rem;margin-left:4px}
+.impact{font-style:italic;font-size:0.74rem;color:#64748b;margin-left:6px}
+.impact::before{content:'· ';color:#c0ccd8}
 
 /* ── Screenshot ── */
 .screenshot-block{margin-top:20px;padding-top:16px;border-top:1px solid #f1f5f9}
@@ -204,11 +230,12 @@ table.url-index td{padding:9px 12px;border-bottom:1px solid #f1f5f9;vertical-ali
     <div class="summary-card">
       <div class="card-title">Summary</div>
       <div class="stat-row">
-        <div class="stat-box s-total"><div class="n">${stats.totalPages}</div><div class="l">Pages Tested</div></div>
-        <div class="stat-box s-pass"> <div class="n">${passCount}</div><div class="l">Pass</div></div>
-        <div class="stat-box s-fail"> <div class="n">${failCount}</div><div class="l">Fail</div></div>
+        <div class="stat-box s-total filterable" data-filter="all"  onclick="filterTable('all')"  title="Show all pages"><div class="n">${stats.totalPages}</div><div class="l">Pages Tested</div></div>
+        <div class="stat-box s-pass  filterable" data-filter="pass" onclick="filterTable('pass')" title="Show passing pages only"><div class="n">${passCount}</div><div class="l">Pass</div></div>
+        <div class="stat-box s-fail  filterable" data-filter="fail" onclick="filterTable('fail')" title="Show failing pages only"><div class="n">${failCount}</div><div class="l">Fail</div></div>
         <div class="stat-box s-efail"><div class="n">${stats.totalFails}</div><div class="l">Total Errors</div></div>
         <div class="stat-box s-ewarn"><div class="n">${stats.totalWarns}</div><div class="l">Total Warnings</div></div>
+        <div class="stat-box s-time"><div class="n">${stats.runtimeSecs}s</div><div class="l">Runtime</div></div>
       </div>
       <div class="index-label">Click any row to view full details, errors, warnings and screenshot for that page</div>
       <table class="url-index">
@@ -231,6 +258,16 @@ table.url-index td{padding:9px 12px;border-bottom:1px solid #f1f5f9;vertical-ali
 var currentIdx = 0;
 var total = ${pages.length};
 
+function filterTable(type) {
+  document.querySelectorAll('.idx-row').forEach(function(row) {
+    var s = row.getAttribute('data-status');
+    row.style.display = (type === 'all' || s === type) ? '' : 'none';
+  });
+  document.querySelectorAll('.stat-box.filterable').forEach(function(b) {
+    b.classList.toggle('active', b.getAttribute('data-filter') === type);
+  });
+}
+
 function showDetail(idx) {
   // Hide all panels
   document.querySelectorAll('.detail-panel').forEach(function(p){ p.style.display='none'; });
@@ -248,6 +285,7 @@ function showDetail(idx) {
 }
 
 function showIndex() {
+  filterTable('all');
   document.querySelectorAll('.detail-panel').forEach(function(p){ p.style.display='none'; });
   document.getElementById('index-view').style.display = 'block';
   document.getElementById('detail-view').style.display = 'none';
@@ -286,25 +324,118 @@ function escHtml(str) {
 
 test.describe('Interaction Audit', () => {
 
+  // Set by the test body on normal completion; null if interrupted mid-crawl
+  let _crawlResult = null;
+
+  // ── afterEach: attach the report regardless of how the test ended ──
+  // Playwright runs afterEach even after Ctrl+C, so partial results written
+  // to RESULTS_FILE by the engine are picked up here and still get a report.
+  test.afterEach(async ({}, testInfo) => {
+    let pages, stats;
+
+    if (_crawlResult) {
+      // Normal completion — use in-memory results (buffers already Buffer objects)
+      ({ pages, stats } = _crawlResult);
+    } else if (fs.existsSync(RESULTS_FILE)) {
+      // Interrupted — deserialise partial results from disk
+      try {
+        const raw = JSON.parse(fs.readFileSync(RESULTS_FILE, 'utf8'));
+        pages = raw.map(p => ({
+          ...p,
+          screenshotBuffer: p.screenshotBuffer ? Buffer.from(p.screenshotBuffer, 'base64') : null,
+          popupScreenshots: (p.popupScreenshots || []).map(ps => ({
+            label:  ps.label,
+            buffer: ps.buffer ? Buffer.from(ps.buffer, 'base64') : null,
+          })),
+        }));
+        stats = {
+          totalPages:   pages.length,
+          totalFails:   pages.reduce((s, p) => s + p.fails.length, 0),
+          totalWarns:   pages.reduce((s, p) => s + p.warns.length, 0),
+          runtimeSecs:  '(interrupted)',
+          crawlerStats: {},
+        };
+      } catch { return; }
+    } else {
+      return; // nothing crawled yet
+    }
+
+    if (pages.length === 0) return;
+
+    // Write HTML report directly to disk — keeps Playwright report small and renderable
+    fs.mkdirSync(path.dirname(REPORT_FILE), { recursive: true });
+    fs.writeFileSync(REPORT_FILE, buildHtmlReport(pages, stats));
+
+    await testInfo.attach('crawl-summary.json', {
+      body: JSON.stringify({
+        stats,
+        pages: pages.map(p => ({ url: p.url, counts: p.counts, fails: p.fails, warns: p.warns })),
+      }, null, 2),
+      contentType: 'application/json',
+    });
+
+    for (const p of pages) {
+      for (const ps of (p.popupScreenshots || [])) {
+        if (!ps.buffer) continue;
+        const slug = p.url.replace(/https?:\/\/[^/]+/, '').replace(/[^a-zA-Z0-9/_-]+/g, '-').replace(/^-|-$/g, '') || 'home';
+        const lbl  = ps.label.slice(0, 20).replace(/[^a-zA-Z0-9_-]+/g, '-').replace(/^-|-$/g, '');
+        await testInfo.attach(`popup-${slug}-${lbl}.png`, { body: ps.buffer, contentType: 'image/png' });
+      }
+    }
+
+    // Remove the partial-results file — report is now in the Playwright artefact
+    try { fs.unlinkSync(RESULTS_FILE); } catch { /* already gone or never written */ }
+
+    _crawlResult = null;
+  });
+
   test('Full Site Crawl', async () => {
     test.setTimeout(4 * 60 * 60 * 1000);
+    _crawlResult = null;
 
     const baseUrl = process.env.BASE_URL;
     if (!baseUrl) throw new Error('BASE_URL not set in .env — cannot run interaction audit');
 
-    const { pages, stats } = await runInteractionAudit(baseUrl, {});
+    // Crawl mode selection via CRAWL_ENDPOINTS env var:
+    //   unset                 → full-site crawl from BASE_URL (default)
+    //   CRAWL_ENDPOINTS=true  → visit every endpoint from endpoints.config.js
+    //   CRAWL_ENDPOINTS=/a,/b → visit only those specific paths (comma-separated)
+    const CRAWL_ENDPOINTS = process.env.CRAWL_ENDPOINTS;
+    let startInput = baseUrl;
+    let crawlMode  = true;
+
+    if (CRAWL_ENDPOINTS) {
+      const allEndpoints = require('../../endpoints.config.js');
+      const base = baseUrl.replace(/\/$/, '');
+      if (CRAWL_ENDPOINTS === 'true' || CRAWL_ENDPOINTS === 'all') {
+        startInput = allEndpoints.map(e => e.path.startsWith('http') ? e.path : base + e.path);
+      } else {
+        startInput = CRAWL_ENDPOINTS.split(',').map(p => {
+          p = p.trim();
+          return p.startsWith('http') ? p : base + p;
+        });
+      }
+      crawlMode = false;
+    }
+
+    const { pages, stats } = await runInteractionAudit(startInput, { crawl: crawlMode, resultsFile: RESULTS_FILE });
+
+    // Store for afterEach (normal path)
+    _crawlResult = { pages, stats };
 
     // ── Playwright annotations ────────────────────────────────────────
+    const modeStr = crawlMode
+      ? 'full-site crawl'
+      : `${Array.isArray(startInput) ? startInput.length : 1} endpoint(s) from config`;
     test.info().annotations.push({
       type:        'Crawl Stats',
-      description: `${stats.totalPages} pages | ${stats.totalFails} errors | ${stats.totalWarns} warnings | ${stats.runtimeSecs}s`,
+      description: `${stats.totalPages} pages | ${stats.totalFails} errors | ${stats.totalWarns} warnings | ${stats.runtimeSecs}s | ${modeStr}`,
     });
     test.info().annotations.push({
       type:        'Report',
       description: 'Open audit-report.html attachment below for the full interactive report (errors, warnings, screenshots per URL)',
     });
 
-    // One annotation per crawled page
     for (const p of pages) {
       const icon = p.fails.length ? '❌' : p.warns.length ? '⚠️' : '✅';
       test.info().annotations.push({
@@ -313,33 +444,12 @@ test.describe('Interaction Audit', () => {
       });
     }
 
-    // Failure detail per failing page
     for (const p of pages.filter(p => p.fails.length)) {
       test.info().annotations.push({
         type:        'Failures',
         description: `[${p.url}] ` + p.fails.map(f => `[${f.category}] ${f.label}: ${f.detail}`).join(' | '),
       });
     }
-
-    // ── Self-contained HTML report (primary view) ────────────────────
-    await test.info().attach('audit-report.html', {
-      body:        buildHtmlReport(pages, stats),
-      contentType: 'text/html',
-    });
-
-    // ── Raw JSON for scripting / archiving ───────────────────────────
-    await test.info().attach('crawl-summary.json', {
-      body: JSON.stringify({
-        stats,
-        pages: pages.map(p => ({
-          url:    p.url,
-          counts: p.counts,
-          fails:  p.fails,
-          warns:  p.warns,
-        })),
-      }, null, 2),
-      contentType: 'application/json',
-    });
 
     // ── Assert ───────────────────────────────────────────────────────
     if (stats.totalFails > 0) {

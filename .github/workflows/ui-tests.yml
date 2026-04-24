@@ -1,0 +1,99 @@
+name: UI Tests — Visual & Interaction
+
+# ── Triggers ────────────────────────────────────────────────────────────────
+on:
+  workflow_dispatch:   # Run manually from the GitHub Actions tab at any time
+
+  # ── Daily schedule (DISABLED — uncomment the 3 lines below to activate) ──
+  # schedule:
+  #   - cron: '30 4 * * *'  # 10:00 AM IST (UTC+5:30) every day
+  # ─────────────────────────────────────────────────────────────────────────
+
+# ── Environment ─────────────────────────────────────────────────────────────
+# BASE_URL must be stored as a GitHub Actions secret.
+# Go to: Repository → Settings → Secrets and variables → Actions → New secret
+# Name: BASE_URL   Value: https://www.ksolves.com/
+env:
+  NODE_VERSION: '22'
+
+# ── Job ─────────────────────────────────────────────────────────────────────
+# Single job — visual first, interaction second.
+# Using one job keeps setup steps (checkout, install, browser download) shared
+# and guarantees the interaction suite never starts until visual is fully done.
+jobs:
+  ui-tests:
+    name: Visual → Interaction
+    runs-on: ubuntu-latest
+
+    # Cap at 5 hours: visual suite ~45–90 min + interaction suite up to 4 hr.
+    # GitHub Actions default timeout is 6 hours; this keeps it explicit and tidy.
+    timeout-minutes: 300
+
+    steps:
+
+      # ── Checkout ────────────────────────────────────────────────────────
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # ── Node.js ─────────────────────────────────────────────────────────
+      - name: Set up Node.js ${{ env.NODE_VERSION }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      # ── Dependencies ────────────────────────────────────────────────────
+      - name: Install Node dependencies
+        run: npm ci
+
+      # Install Chromium only — Firefox and WebKit are commented out in
+      # playwright.config.js, so downloading all three wastes ~5 minutes.
+      - name: Install Playwright browser (Chromium)
+        run: npx playwright install chromium --with-deps
+
+      # ── Visual regression suite ─────────────────────────────────────────
+      - name: Run visual regression tests
+        env:
+          BASE_URL: ${{ secrets.BASE_URL }}
+        run: |
+          npm run visual -- --workers=2
+        # workers=2 reasoning:
+        #   • GitHub-hosted runners have 2 vCPUs.
+        #   • The target site is a live production server — more than 2 concurrent
+        #     full-page screenshot sessions risk slow responses that cause layout
+        #     shifts, timing variance, and flaky pixel diffs.
+        #   • 2 workers gives ~50% speed gain over sequential while staying safe.
+
+      # Upload even if tests fail — the HTML report is most valuable when
+      # tests fail, because it contains the pixel diff and failure detail.
+      - name: Upload visual test report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: visual-report-${{ github.run_number }}
+          path: playwright-report/
+          retention-days: 30
+          # To view: download the zip → unzip → open index.html in any browser.
+          # The report is a fully self-contained SPA — no server needed.
+
+      # ── Interaction audit suite ─────────────────────────────────────────
+      # always() ensures the interaction audit runs even when visual tests fail.
+      # The two suites are independent — a visual regression must not block an
+      # interaction audit that might catch broken buttons or dead links.
+      - name: Run interaction audit
+        if: always()
+        env:
+          BASE_URL: ${{ secrets.BASE_URL }}
+        run: npm run interaction
+        # workers=1 is already set in playwright.interaction.config.js.
+        # The interaction suite runs one Crawlee crawl in a single test —
+        # no parallelism is possible or needed here.
+
+      - name: Upload interaction audit report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: interaction-report-${{ github.run_number }}
+          path: interaction-report/
+          retention-days: 30
+          # To view: download the zip → unzip → open index.html in any browser.

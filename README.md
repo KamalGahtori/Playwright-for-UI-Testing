@@ -24,7 +24,7 @@ nvm install 22
 nvm use 22
 ```
 
-> The `.nvmrc` file pins Node to v22 — running `nvm use` inside this folder selects it automatically.
+> The project requires Node.js v22 or higher.
 
 ---
 
@@ -82,7 +82,8 @@ Always run `npm run baseline` first when adding a new page or device.
 ### Interaction — full-site element health audit
 
 ```bash
-npm run interaction    # crawls from BASE_URL, audits every page found
+npm run interaction                  # full crawl from BASE_URL, audits every discovered page
+npm run interaction:endpoints        # audit only the pages listed in endpoints.config.js
 ```
 
 ### Reports — open results in browser
@@ -141,7 +142,6 @@ The interaction suite discovers pages automatically by crawling — no config ch
 ├── playwright.interaction.config.js  # interaction suite config (4-hour timeout, Crawlee)
 ├── endpoints.config.js               # page registry for visual tests
 ├── .env.example                      # environment template — copy to .env
-├── .nvmrc                            # pins Node to v22
 │
 ├── tests/
 │   ├── visual/visual.spec.js              # visual regression suite
@@ -175,5 +175,4 @@ The interaction suite discovers pages automatically by crawling — no config ch
 | `❌ VISUAL MISMATCH` | Run `npm run report` — decide if it's a bug or an approved change |
 | `⚠️ NAVIGATION FAILURE` | Check `BASE_URL` in `.env`, verify the path in `endpoints.config.js` |
 | `⚠️ CONNECTION ERROR` | Check internet / VPN |
-| Node version error | Run `nvm use` in the project folder |
-| Only a few pages crawled | Raise `MAX_PAGES` in `utils/interaction-engine.js` |
+| Node version error | Ensure Node.js v22+ is installed (`node -v`) |

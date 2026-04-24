@@ -34,6 +34,7 @@ test.describe('Visual Integrity Audit', () => {
   for (const endpoint of endpoints) {
 
     test(`[${endpoint.group}][${endpoint.id}] Full-Page Visual Check`, async ({ page, preparePage, stabilizePage }) => {
+      const testStart = Date.now();
 
       // ── Determine run mode ─────────────────────────────────────────
       // test.info().config.updateSnapshots reflects the --update-snapshots
@@ -172,6 +173,11 @@ test.describe('Visual Integrity Audit', () => {
       const screenshotLabel = isUpdating
         ? `Capturing Golden Baseline [${endpoint.id}]`
         : `Comparing [${endpoint.id}] Against Baseline`;
+
+      test.info().annotations.push({
+        type: 'Test Runtime',
+        description: `${Math.round((Date.now() - testStart) / 1000)}s`,
+      });
 
       await test.step(screenshotLabel, async () => {
         try {

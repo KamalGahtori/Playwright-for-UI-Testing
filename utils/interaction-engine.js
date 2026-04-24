@@ -10,9 +10,9 @@
 // the context of every page that contains that link.
 //
 // CRAWLEE SETTINGS:
-//   maxRequestsPerCrawl: MAX_PAGES (5 for testing, raise once stable)
+//   maxRequestsPerCrawl: MAX_PAGES (300 — adjustable via MAX_PAGES constant)
 //   maxConcurrency:      1  — one page at a time, no server load
-//   maxRequestRetries:   1  — retry once, then mark failed
+//   maxRequestRetries:   0  — no retries; failed pages go to failedRequestHandler
 //   No depth limit       — follows links at any depth
 //
 // FAILURE POLICY:
@@ -39,8 +39,10 @@
 process.env.APIFY_LOG_LEVEL = 'ERROR';
 
 const { PlaywrightCrawler, Configuration, MemoryStorage } = require('crawlee');
+const fs   = require('fs');
+const path = require('path');
 
-const MAX_PAGES = 5; // raise to 300-500 once tests are stable; 20 for broader testing
+const MAX_PAGES = 300;
 const MAX_CONCURRENCY = 1;   // no server load — one page at a time
 const LINK_CONCURRENCY = 5;   // concurrent HEAD requests within one page
 
@@ -262,8 +264,8 @@ function checkInputs(inputs) {
   return inputs.map(i => {
     if (i.skip) return { category: 'input', label: i.label, status: 'SKIP', detail: i.skipReason };
     if (!i.visible) return { category: 'input', label: i.label, status: 'SKIP', detail: 'not visible' };
-    if (i.disabled) return { category: 'input', label: i.label, status: 'FAIL', detail: 'disabled/readonly' };
-    if (!i.hasLabel) return { category: 'input', label: i.label, status: 'WARN', detail: 'no accessible label (missing <label for="">, aria-label, or aria-labelledby)' };
+    if (i.disabled) return { category: 'input', label: i.label, status: 'FAIL', detail: 'disabled/readonly', impact: 'User cannot enter data in this field' };
+    if (!i.hasLabel) return { category: 'input', label: i.label, status: 'WARN', detail: 'no accessible label (missing <label for="">, aria-label, or aria-labelledby)', impact: 'Screen readers cannot identify this field' };
     return { category: 'input', label: i.label, status: 'PASS', detail: 'visible, enabled, labelled' };
   });
 }
@@ -274,6 +276,7 @@ function checkSelects(selects) {
     label: s.label,
     status: s.disabled || s.optionCount === 0 ? 'FAIL' : 'PASS',
     detail: s.disabled ? 'disabled' : s.optionCount === 0 ? 'no options' : `${s.optionCount} options`,
+    impact: (s.disabled || s.optionCount === 0) ? 'User cannot make a selection from this dropdown' : '',
   }));
 }
 
@@ -283,6 +286,7 @@ function checkAccordions(accordions) {
     label: a.label,
     status: a.disabled ? 'FAIL' : 'PASS',
     detail: a.disabled ? 'disabled' : 'visible & enabled',
+    impact: a.disabled ? 'User cannot expand or collapse this section' : '',
   }));
 }
 
@@ -292,6 +296,7 @@ function checkCarouselNavs(navs) {
     label: n.label,
     status: !n.visible ? 'WARN' : n.disabled ? 'WARN' : 'PASS',
     detail: !n.visible ? 'not visible' : n.disabled ? 'disabled' : 'visible & enabled',
+    impact: (!n.visible || n.disabled) ? 'Users cannot navigate the carousel manually' : '',
   }));
 }
 
@@ -302,12 +307,14 @@ function checkImages(images) {
       label: img.src.slice(0, 70) || '(no src)',
       status: 'FAIL',
       detail: 'broken — img.complete is true but naturalHeight and naturalWidth are 0',
+      impact: 'Image fails to load — blank space shown to users',
     };
     if (img.alt === null) return {
       category: 'image',
       label: img.src.slice(0, 70) || '(no src)',
       status: 'WARN',
       detail: 'missing alt attribute — add alt="" for decorative images, descriptive text for informative ones',
+      impact: 'Screen readers skip or misdescribe this image',
     };
     return {
       category: 'image',
@@ -322,8 +329,8 @@ function checkIframes(iframes) {
   return iframes
     .filter(f => f.visible)
     .map(f => {
-      if (!f.src) return { category: 'iframe', label: '(no src)', status: 'WARN', detail: 'iframe has no src attribute' };
-      if (!f.title) return { category: 'iframe', label: f.src.slice(0, 70), status: 'WARN', detail: 'missing title attribute (required for screen readers)' };
+      if (!f.src) return { category: 'iframe', label: '(no src)', status: 'WARN', detail: 'iframe has no src attribute', impact: 'Embedded content will not display' };
+      if (!f.title) return { category: 'iframe', label: f.src.slice(0, 70), status: 'WARN', detail: 'missing title attribute (required for screen readers)', impact: 'Screen readers cannot describe this embedded content' };
       return { category: 'iframe', label: f.src.slice(0, 70), status: 'PASS', detail: `title="${f.title.slice(0, 50)}"` };
     });
 }
@@ -335,18 +342,21 @@ function checkAccessibilityItems(issues) {
       label: `<${issue.tag}> "${issue.cls}"`,
       status: 'WARN',
       detail: 'button has no accessible name — add aria-label, title, or visible text',
+      impact: 'Screen readers announce this button as unlabelled',
     };
     if (issue.type === 'link-no-name') return {
       category: 'a11y',
       label: issue.href.slice(0, 70),
       status: 'WARN',
       detail: 'link has no accessible name — add aria-label, title, or visible anchor text',
+      impact: "Screen readers and search engines cannot identify this link's destination",
     };
     if (issue.type === 'focusable-hidden') return {
       category: 'a11y',
       label: `<${issue.tag}> "${issue.cls}"`,
       status: 'WARN',
       detail: 'element is in tab order but visually hidden (visibility:hidden / display:none / opacity:0)',
+      impact: 'Keyboard users can Tab onto an invisible element',
     };
     return { category: 'a11y', label: issue.type, status: 'WARN', detail: 'accessibility issue detected' };
   });
@@ -362,6 +372,7 @@ function checkConsoleErrors(errors) {
     label: 'Console errors',
     status: 'WARN',
     detail: `${relevant.length} JS error(s): ${relevant[0].slice(0, 120)}${relevant.length > 1 ? ` (+${relevant.length - 1} more)` : ''}`,
+    impact: 'JavaScript errors may break page functionality',
   }];
 }
 
@@ -375,10 +386,17 @@ async function checkButtonsClickable(page, buttons) {
 
   for (const b of buttons) {
     const label = b.label || '(unlabelled)';
-    if (b.skip)     { results.push({ category: 'button', label, status: 'SKIP', detail: 'captcha-adjacent' }); continue; }
+    if (b.skip) { results.push({ category: 'button', label, status: 'SKIP', detail: 'captcha-adjacent' }); continue; }
     if (!b.visible) { results.push({ category: 'button', label, status: 'SKIP', detail: 'not visible' }); continue; }
-    if (b.disabled) { results.push({ category: 'button', label, status: 'FAIL', detail: 'disabled attribute set' }); continue; }
-    if (b.inForm)   {
+    if (b.disabled) {
+      if (b.inForm) {
+        results.push({ category: 'button', label, status: 'WARN', detail: 'disabled — form validation pending (likely enables after required fields are filled)', impact: 'Button may enable after required form fields are completed' });
+      } else {
+        results.push({ category: 'button', label, status: 'FAIL', detail: 'disabled attribute set', impact: 'User cannot click this button' });
+      }
+      continue;
+    }
+    if (b.inForm) {
       results.push({ category: 'button', label, status: 'PASS', detail: 'visible & enabled (form button — not clicked)' });
       continue;
     }
@@ -386,7 +404,7 @@ async function checkButtonsClickable(page, buttons) {
     const locator = page.locator(SEL).nth(b.idx);
     try {
       // Scroll into view first so sticky headers don't obscure the element
-      await locator.scrollIntoViewIfNeeded({ timeout: 3000 }).catch(() => {});
+      await locator.scrollIntoViewIfNeeded({ timeout: 3000 }).catch(() => { });
       await page.waitForTimeout(150); // let any scroll-triggered animations settle
       await locator.click({ trial: true, timeout: 8000 });
       results.push({ category: 'button', label, status: 'PASS', detail: 'clickable' });
@@ -399,10 +417,13 @@ async function checkButtonsClickable(page, buttons) {
       results.push({
         category: 'button',
         label,
-        status:  isTimeout ? 'WARN' : 'FAIL',
-        detail:  isTimeout
+        status: isTimeout ? 'WARN' : 'FAIL',
+        detail: isTimeout
           ? `click trial timed out — may be obscured by overlay or animation; verify manually`
           : `not clickable: ${msg.slice(0, 80)}`,
+        impact: isTimeout
+          ? 'Button may be blocked by an overlay or animation'
+          : 'User cannot interact with this button',
       });
     }
   }
@@ -435,6 +456,7 @@ async function checkLinks(page, links, headCache) {
       category: `link-${link.type}`, label: link.abs.slice(0, 80),
       href: link.href, status: 'WARN',
       detail: 'social media — blocked on corporate networks, verify manually',
+      impact: 'Cannot verify automatically — social platforms block automated checks',
     };
 
     if (link.type === 'anchor') {
@@ -443,6 +465,7 @@ async function checkLinks(page, links, headCache) {
         category: 'link-anchor', label: link.href, href: link.href,
         status: exists ? 'PASS' : 'FAIL',
         detail: exists ? 'target found' : 'anchor target missing in DOM',
+        impact: exists ? '' : 'Anchor link scrolls to a target that does not exist',
       };
     }
 
@@ -457,25 +480,28 @@ async function checkLinks(page, links, headCache) {
       const resp = await page.request.fetch(link.abs, { method: 'HEAD', timeout: 12000 });
       const s = resp.status();
 
-      let status, detail;
+      let status, detail, impact;
       if (s === 429) {
         status = 'WARN';
         detail = 'HTTP 429 rate-limited — verify manually';
+        impact = 'Rate-limited during test — link likely works for real users';
       } else if (s < 400) {
         status = 'PASS';
         detail = `HTTP ${s}`;
+        impact = '';
       } else {
         // All broken links FAIL — internal and external alike (social media handled above)
         status = 'FAIL';
         detail = `HTTP ${s}`;
+        impact = 'Link is broken — users land on an error or not-found page';
       }
 
-      const result = { status, detail };
+      const result = { status, detail, impact };
       headCache.set(link.abs, result);
       return { category: `link-${link.type}`, label: link.abs.slice(0, 80), href: link.href, ...result };
 
     } catch (err) {
-      const result = { status: 'FAIL', detail: `network error: ${err.message.slice(0, 80)}` };
+      const result = { status: 'FAIL', detail: `network error: ${err.message.slice(0, 80)}`, impact: 'Link is unreachable — connection or DNS failure' };
       headCache.set(link.abs, result);
       return { category: `link-${link.type}`, label: link.abs.slice(0, 80), href: link.href, ...result };
     }
@@ -509,7 +535,7 @@ async function checkNavDropdowns(page) {
       await page.waitForTimeout(250);
       results.push({ category: 'nav-dropdown', label, status: 'PASS', detail: 'hover trigger accessible' });
     } catch {
-      results.push({ category: 'nav-dropdown', label, status: 'WARN', detail: 'hover failed' });
+      results.push({ category: 'nav-dropdown', label, status: 'WARN', detail: 'hover failed', impact: 'Dropdown menu items may be unreachable by mouse users' });
     }
   }
 
@@ -564,7 +590,7 @@ async function checkScrollBehavior(page) {
     if (inViewport === true) {
       results.push({ category: 'scroll', label: 'sticky header', status: 'PASS', detail: 'remains visible after scrolling 60% down' });
     } else if (inViewport === false) {
-      results.push({ category: 'scroll', label: 'sticky header', status: 'WARN', detail: 'header not in viewport after scrolling' });
+      results.push({ category: 'scroll', label: 'sticky header', status: 'WARN', detail: 'header not in viewport after scrolling', impact: 'Navigation disappears mid-page after scrolling' });
     }
   }
 
@@ -582,6 +608,7 @@ async function checkScrollBehavior(page) {
       category: 'scroll', label: 'back-to-top button',
       status: visible ? 'PASS' : 'WARN',
       detail: visible ? 'visible after scrolling' : 'element exists but not visible at 60% scroll depth',
+      impact: visible ? '' : 'Back-to-top button exists but is hidden when needed',
     });
   }
 
@@ -619,9 +646,9 @@ async function auditAccordions(page) {
       const after = await el.getAttribute('aria-expanded');
 
       if (before === null) {
-        results.push({ category: 'accordion-aria', label, status: 'WARN', detail: 'clicked but no aria-expanded — screen readers cannot announce the state change' });
+        results.push({ category: 'accordion-aria', label, status: 'WARN', detail: 'clicked but no aria-expanded — screen readers cannot announce the state change', impact: 'Screen readers cannot announce open/closed state' });
       } else if (after === before) {
-        results.push({ category: 'accordion-aria', label, status: 'WARN', detail: `aria-expanded stayed "${before}" after click — toggle may not be working` });
+        results.push({ category: 'accordion-aria', label, status: 'WARN', detail: `aria-expanded stayed "${before}" after click — toggle may not be working`, impact: 'Screen readers report incorrect accordion state to users' });
       } else {
         results.push({ category: 'accordion-aria', label, status: 'PASS', detail: `aria-expanded: ${before} → ${after}` });
       }
@@ -629,7 +656,7 @@ async function auditAccordions(page) {
       await el.click({ timeout: 3000 }).catch(() => { });
       await page.waitForTimeout(300);
     } catch (err) {
-      results.push({ category: 'accordion-aria', label, status: 'WARN', detail: `click failed: ${err.message.slice(0, 60)}` });
+      results.push({ category: 'accordion-aria', label, status: 'WARN', detail: `click failed: ${err.message.slice(0, 60)}`, impact: 'Accordion may not be operable for keyboard users' });
     }
   }
 
@@ -663,6 +690,7 @@ async function countVisiblePopups(page) {
 
 async function auditCtaPopups(page) {
   const results = [];
+  const popupScreenshots = [];
 
   await page.keyboard.press('Escape');
   await page.waitForTimeout(300);
@@ -703,35 +731,52 @@ async function auditCtaPopups(page) {
       await page.locator(BTN_SEL).nth(b.idx).click({ timeout: 3000 });
     } catch { continue; }
 
-    await page.waitForTimeout(800);
+    let _pageClosed = false;
+    try {
+      await page.waitForTimeout(800);
+    } catch (err) {
+      if (/closed|destroyed|Target/i.test(String(err.message))) { _pageClosed = true; }
+    }
+    if (_pageClosed) break;
 
     if (page.url() !== urlBefore) {
-      await page.goBack();
-      await page.waitForLoadState('domcontentloaded');
-      await page.waitForTimeout(500);
+      try {
+        await page.goBack();
+        await page.waitForLoadState('domcontentloaded');
+        await page.waitForTimeout(500);
+      } catch { break; }
       continue;
     }
 
-    const popupAfter = await countVisiblePopups(page);
+    let popupAfter;
+    try { popupAfter = await countVisiblePopups(page); } catch { break; }
     if (popupAfter <= popupBefore) {
-      await page.keyboard.press('Escape');
-      await page.waitForTimeout(200);
+      try { await page.keyboard.press('Escape'); await page.waitForTimeout(200); } catch { break; }
       continue;
     }
 
     const popup = page.locator(POPUP_SEL).filter({ visible: true }).last();
-    const popupBtns = popup.locator('button, [role="button"]').filter({ visible: true });
+    const thisPopupResults = [];
 
+    const popupBtns = popup.locator('button, [role="button"]').filter({ visible: true });
     for (let i = 0, n = await popupBtns.count(); i < n; i++) {
       const el = popupBtns.nth(i);
       const lbl = ((await el.textContent()) || (await el.getAttribute('aria-label')) || '').trim().slice(0, 80) || '(unlabelled)';
-      const dis = await el.evaluate(e => e.disabled || e.getAttribute('aria-disabled') === 'true');
-      results.push({
-        category: 'popup-button',
-        label: `[popup:"${btnLabel}"] ${lbl}`,
-        status: dis ? 'FAIL' : 'PASS',
-        detail: dis ? 'disabled' : 'visible & enabled',
-      });
+      const { dis, isFormSubmit } = await el.evaluate(e => ({
+        dis: e.disabled || e.getAttribute('aria-disabled') === 'true',
+        isFormSubmit: e.type === 'submit' || e.closest('form') !== null,
+      }));
+      if (dis && isFormSubmit) {
+        thisPopupResults.push({ category: 'popup-button', label: `[popup:"${btnLabel}"] ${lbl}`, status: 'SKIP', detail: 'form submit — disabled until required fields are filled' });
+      } else {
+        thisPopupResults.push({
+          category: 'popup-button',
+          label: `[popup:"${btnLabel}"] ${lbl}`,
+          status: dis ? 'FAIL' : 'PASS',
+          detail: dis ? 'disabled' : 'visible & enabled',
+          impact: dis ? 'User cannot click this button inside the popup' : '',
+        });
+      }
     }
 
     const popupInputs = popup.locator('input, textarea').filter({ visible: true });
@@ -742,11 +787,12 @@ async function auditCtaPopups(page) {
       const ph = (await el.getAttribute('placeholder')) || (await el.getAttribute('name')) || type;
       if (/what\s+is\s+\d/i.test(ph)) continue;
       const dis = await el.evaluate(e => e.disabled || e.readOnly);
-      results.push({
+      thisPopupResults.push({
         category: 'popup-input',
         label: `[popup:"${btnLabel}"] ${ph.slice(0, 60)}`,
         status: dis ? 'FAIL' : 'PASS',
         detail: dis ? 'disabled/readonly' : 'visible & enabled',
+        impact: dis ? 'User cannot fill this field inside the popup' : '',
       });
     }
 
@@ -757,7 +803,7 @@ async function auditCtaPopups(page) {
       const href = (await el.getAttribute('href')) || '';
       if (!href || href === '#' || href.startsWith('javascript:')) continue;
       if (href.startsWith('mailto:') || href.startsWith('tel:')) {
-        results.push({ category: 'popup-link', label: `[popup:"${btnLabel}"] ${href}`, href, status: 'PASS', detail: 'presence confirmed' });
+        thisPopupResults.push({ category: 'popup-link', label: `[popup:"${btnLabel}"] ${href}`, href, status: 'PASS', detail: 'presence confirmed' });
         continue;
       }
       const abs = href.startsWith('//') ? `${new URL(page.url()).protocol}${href}`
@@ -765,28 +811,59 @@ async function auditCtaPopups(page) {
           : href.includes(':') ? href
             : `${origin}/${href}`;
       if (isSocialMedia(abs)) {
-        results.push({ category: 'popup-link', label: `[popup:"${btnLabel}"] ${abs.slice(0, 60)}`, href, status: 'WARN', detail: 'social media — blocked on corporate networks' });
+        thisPopupResults.push({ category: 'popup-link', label: `[popup:"${btnLabel}"] ${abs.slice(0, 60)}`, href, status: 'WARN', detail: 'social media — blocked on corporate networks', impact: 'Cannot verify automatically — social platforms block automated checks' });
         continue;
       }
       try {
         const resp = await page.request.fetch(abs, { method: 'HEAD', timeout: 8000 });
         const s = resp.status();
-        results.push({ category: 'popup-link', label: `[popup:"${btnLabel}"] ${abs.slice(0, 60)}`, href, status: s < 400 ? 'PASS' : 'FAIL', detail: `HTTP ${s}` });
+        thisPopupResults.push({ category: 'popup-link', label: `[popup:"${btnLabel}"] ${abs.slice(0, 60)}`, href, status: s < 400 ? 'PASS' : 'FAIL', detail: `HTTP ${s}`, impact: s < 400 ? '' : 'Link inside popup leads to an error page' });
       } catch (err) {
-        results.push({ category: 'popup-link', label: `[popup:"${btnLabel}"] ${abs.slice(0, 60)}`, href, status: 'FAIL', detail: `network error: ${err.message.slice(0, 60)}` });
+        thisPopupResults.push({ category: 'popup-link', label: `[popup:"${btnLabel}"] ${abs.slice(0, 60)}`, href, status: 'FAIL', detail: `network error: ${err.message.slice(0, 60)}`, impact: 'Popup link is unreachable — connection or DNS failure' });
       }
     }
 
-    await page.keyboard.press('Escape');
-    await page.waitForTimeout(400);
-    if (await countVisiblePopups(page) > 0) {
-      const closeBtn = popup.locator('button').filter({ hasText: /^(close|×|✕|✖|dismiss)$/i }).first();
-      if (await closeBtn.count() > 0) await closeBtn.click({ timeout: 2000 }).catch(() => { });
-      await page.waitForTimeout(300);
-    }
+    // Always screenshot the popup — highlight FAILs red, WARNs yellow
+    try {
+      const popupFails = thisPopupResults.filter(r => r.status === 'FAIL');
+      const popupWarnHrefs = thisPopupResults.filter(r => r.status === 'WARN').map(r => r.href).filter(Boolean);
+      await page.evaluate(({ hasFails, warnHrefs }) => {
+        const SEL = '[role="dialog"],[role="alertdialog"],.modal,.popup,.lightbox,[class*="-modal"],[class*="-popup"],[class*="-overlay"]';
+        for (const p of document.querySelectorAll(SEL)) {
+          const r = p.getBoundingClientRect(), s = getComputedStyle(p);
+          if (r.width <= 50 || r.height <= 50 || s.display === 'none' || s.visibility === 'hidden') continue;
+          if (hasFails) {
+            p.querySelectorAll('button:disabled,[aria-disabled="true"]').forEach(el => {
+              el.style.outline = '4px solid red'; el.style.backgroundColor = 'rgba(255,0,0,0.15)';
+            });
+            p.querySelectorAll('input:disabled,textarea:disabled').forEach(el => {
+              el.style.outline = '4px solid red'; el.style.backgroundColor = 'rgba(255,0,0,0.15)';
+            });
+          }
+          for (const href of warnHrefs) {
+            const a = p.querySelector(`a[href="${href}"]`);
+            if (a) { a.style.outline = '4px solid orange'; a.style.backgroundColor = 'rgba(255,165,0,0.15)'; }
+          }
+        }
+      }, { hasFails: popupFails.length > 0, warnHrefs: popupWarnHrefs });
+      const popupBuf = await page.screenshot({ fullPage: false });
+      popupScreenshots.push({ label: btnLabel, buffer: popupBuf });
+    } catch { }
+
+    results.push(...thisPopupResults);
+
+    try {
+      await page.keyboard.press('Escape');
+      await page.waitForTimeout(400);
+      if (await countVisiblePopups(page) > 0) {
+        const closeBtn = popup.locator('button').filter({ hasText: /^(close|×|✕|✖|dismiss)$/i }).first();
+        if (await closeBtn.count() > 0) await closeBtn.click({ timeout: 2000 }).catch(() => { });
+        await page.waitForTimeout(300);
+      }
+    } catch { break; }
   }
 
-  return results;
+  return { results, popupScreenshots };
 }
 
 
@@ -794,13 +871,14 @@ async function auditCtaPopups(page) {
 // Highlight failing elements on the live page, then screenshot
 // ─────────────────────────────────────────────────────────────────────
 async function highlightAndScreenshot(page, fails, warns) {
-  const items = [...fails, ...warns];
+  const items = [
+    ...fails.map(f => ({ ...f, _isWarn: false })),
+    ...warns.map(w => ({ ...w, _isWarn: true })),
+  ];
   await page.evaluate((items) => {
     let scrolled = false;
-    for (const { category, label, href } of items) {
-      const isWarn = !['button', 'input', 'select', 'image', 'iframe', 'popup-button', 'popup-input', 'popup-link'].includes(category) ||
-        ['a11y', 'health', 'scroll', 'nav-dropdown', 'accordion-aria', 'carousel'].includes(category);
-      const c = isWarn ? 'orange' : 'red';
+    for (const { category, label, href, _isWarn } of items) {
+      const c = _isWarn ? 'orange' : 'red';
       const matches = [];
 
       if (category.startsWith('link') && href) {
@@ -839,7 +917,7 @@ async function highlightAndScreenshot(page, fails, warns) {
     }
   }, items);
 
-  return page.screenshot({ fullPage: false });
+  return page.screenshot({ fullPage: true });
 }
 
 
@@ -860,8 +938,10 @@ function summarisePage(results) {
 // ─────────────────────────────────────────────────────────────────────
 // Main entry point
 // ─────────────────────────────────────────────────────────────────────
-async function runInteractionAudit(startUrl, _options = {}) {
-  const origin = (() => { try { return new URL(startUrl).origin; } catch { return ''; } })();
+async function runInteractionAudit(startUrlsOrUrl, options = {}) {
+  const startUrls = Array.isArray(startUrlsOrUrl) ? startUrlsOrUrl : [startUrlsOrUrl];
+  const doCrawl = options.crawl !== false;
+  const origin = (() => { try { return new URL(startUrls[0]).origin; } catch { return ''; } })();
 
   // Shared HEAD cache — each unique URL HEAD-requested at most once across all pages
   const headCache = new Map();
@@ -869,10 +949,30 @@ async function runInteractionAudit(startUrl, _options = {}) {
   // Per-page results — accumulated by requestHandler via closure
   const pages = [];
 
+  // Write partial results to disk after every page so Ctrl+C still yields a report
+  const { resultsFile } = options;
+  function savePartial() {
+    if (!resultsFile) return;
+    try {
+      fs.mkdirSync(path.dirname(resultsFile), { recursive: true });
+      fs.writeFileSync(resultsFile, JSON.stringify(pages.map(p => ({
+        url:    p.url,
+        counts: p.counts,
+        fails:  p.fails,
+        warns:  p.warns,
+        screenshotBuffer: p.screenshotBuffer ? p.screenshotBuffer.toString('base64') : null,
+        popupScreenshots: (p.popupScreenshots || []).map(ps => ({
+          label:  ps.label,
+          buffer: ps.buffer ? ps.buffer.toString('base64') : null,
+        })),
+      })), null, 2));
+    } catch { /* non-fatal */ }
+  }
+
   const crawleeConfig = new Configuration({ storageClient: new MemoryStorage() });
 
   const crawler = new PlaywrightCrawler({
-    maxRequestsPerCrawl: MAX_PAGES,
+    maxRequestsPerCrawl: doCrawl ? MAX_PAGES : startUrls.length,
     maxConcurrency: MAX_CONCURRENCY,
     maxRequestRetries: 0,
     headless: true,
@@ -913,7 +1013,7 @@ async function runInteractionAudit(startUrl, _options = {}) {
 
       const scrollResults = await checkScrollBehavior(page);
       const accordionResults = await auditAccordions(page);
-      const popupResults = await auditCtaPopups(page);
+      const { results: popupResults, popupScreenshots } = await auditCtaPopups(page);
 
       const allPageResults = [
         ...syncResults, ...navResults, ...buttonResults,
@@ -930,14 +1030,15 @@ async function runInteractionAudit(startUrl, _options = {}) {
         } catch { /* non-fatal — audit results still stored */ }
       }
 
-      pages.push({ url: request.url, counts, fails, warns, screenshotBuffer });
+      pages.push({ url: request.url, counts, fails, warns, screenshotBuffer, popupScreenshots });
+      savePartial();
 
       // Console summary
       const icon = fails.length ? '❌' : warns.length ? '⚠️' : '✅';
       console.log(`${icon} [${fails.length}F/${warns.length}W] ${request.url}`);
 
       // Enqueue internal links only — Crawlee deduplicates automatically
-      if (origin) {
+      if (doCrawl && origin) {
         await enqueueLinks({ globs: [`${origin}/**`] }).catch(() => { });
       }
     },
@@ -951,17 +1052,20 @@ async function runInteractionAudit(startUrl, _options = {}) {
           label: 'Page load failure',
           status: 'FAIL',
           detail: `Navigation failed: ${(error?.message || '').slice(0, 80)}`,
+          impact: 'Page fails to load entirely — all content unavailable',
         }],
         warns: [],
         screenshotBuffer: null,
+        popupScreenshots: [],
       });
+      savePartial();
       console.log(`❌ [nav-fail] ${request.url}`);
     },
 
   }, crawleeConfig);
 
   const t0 = Date.now();
-  await crawler.run([startUrl]);
+  await crawler.run(startUrls);
   const runtimeSecs = Math.round((Date.now() - t0) / 1000);
   const crawlerStats = crawler.stats.toJSON();
 

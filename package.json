@@ -3,11 +3,12 @@
   "version": "1.0.0",
   "description": "Visual regression and interaction audit framework for ksolves.com",
   "scripts": {
-    "visual": "npx playwright test tests/visual/",
-    "baseline": "npx playwright test tests/visual/ --update-snapshots=all",
-    "interaction": "npx playwright test tests/interaction/ --config playwright.interaction.config.js",
+    "visual": "rm -rf test-results playwright-report && npx playwright test tests/visual/",
+    "baseline": "rm -rf test-results playwright-report && npx playwright test tests/visual/ --update-snapshots=all",
+    "interaction": "rm -rf interaction-results interaction-report storage && npx playwright test tests/interaction/ --config playwright.interaction.config.js",
+    "interaction:endpoints": "rm -rf interaction-results interaction-report storage && CRAWL_ENDPOINTS=true npx playwright test tests/interaction/ --config playwright.interaction.config.js",
     "report:visual": "npx playwright show-report",
-    "report:interaction": "npx playwright show-report interaction-report"
+    "report:interaction": "open interaction-results/audit-report.html"
   },
   "license": "ISC",
   "devDependencies": {

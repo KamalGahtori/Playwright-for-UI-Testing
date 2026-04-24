@@ -28,7 +28,6 @@ Playwright-for-UI-Testing/
 ├── playwright.interaction.config.js  # interaction suite config (4hr timeout, 1 worker, Crawlee)
 ├── endpoints.config.js               # page registry for visual tests — only file to edit to add pages
 ├── .env / .env.example               # BASE_URL only (not committed)
-├── .nvmrc                            # pins Node to v22
 │
 ├── tests/
 │   ├── visual/visual.spec.js              # one test per endpoint: prepare → stabilise → screenshot
@@ -99,15 +98,15 @@ Single `fullPage: true` screenshot per page. Mask applied via Playwright's built
 
 ### Report
 
-Self-contained HTML SPA (`audit-report.html`) attached to the Playwright test result. Index view → click URL → detail view with errors, collapsible warnings, inline screenshot. Also attaches `crawl-summary.json`.
+Self-contained HTML SPA written to `interaction-results/audit-report.html` (opened via `npm run report:interaction`). Index view → click URL → detail view with errors, collapsible warnings, inline screenshot. `crawl-summary.json` is attached to the Playwright report. Popup screenshots are also attached to the Playwright report. If the crawl is interrupted mid-run, partial results are recovered from `interaction-results/partial-results.json` so the report still shows pages already audited.
 
 ### FAIL / WARN / SKIP policy
 
 | Status | Conditions |
 |---|---|
-| **FAIL** | Button `disabled` attribute · broken link 4xx/5xx (non-social) · broken image · disabled input · empty/disabled select · navigation failure · popup with disabled elements |
+| **FAIL** | Button `disabled` attribute (non-form) · broken link 4xx/5xx (non-social) · broken image · disabled input · empty/disabled select · navigation failure · popup with disabled non-form-submit elements |
 | **WARN** | Click trial timeout (animation/overlay, not genuinely broken) · missing alt/label/title · no accessible name · focusable-hidden · console errors · nav hover fail · sticky header gone · accordion aria stuck · back-to-top not visible · social media link · HTTP 429 |
-| **SKIP** | Captcha elements · hidden elements · form submit buttons |
+| **SKIP** | Captcha elements · hidden elements · form submit buttons (both standalone and inside popups — disabled until form is filled) |
 
 ---
 
@@ -118,8 +117,11 @@ Self-contained HTML SPA (`audit-report.html`) attached to the Playwright test re
 | `npm run visual` | Run visual tests for all pages and active devices |
 | `npm run baseline` | Capture / update golden baselines for all active devices |
 | `npm run interaction` | Full-site interaction audit (Crawlee crawl from `BASE_URL`) |
-| `npm run report` | Open visual HTML report |
-| `npm run report:interaction` | Open interaction HTML report |
+| `npm run interaction:endpoints` | Interaction audit over all endpoints in `endpoints.config.js` (no crawl) |
+| `npm run report:visual` | Open visual HTML report |
+| `npm run report:interaction` | Open `interaction-results/audit-report.html` directly in browser |
+
+Each run wipes its own output folder first — `test-results/` and `playwright-report/` for visual, `interaction-results/` and `interaction-report/` for interaction.
 
 **Filtering visual tests** — `--grep` passthrough works for both `visual` and `baseline`:
 
@@ -155,7 +157,7 @@ cp .env.example .env
 # Set BASE_URL=https://www.ksolves.com/
 ```
 
-Requires Node.js v22+. Run `nvm use` if the system Node is older.
+Requires Node.js v22+.
 
 ---
 
@@ -225,9 +227,9 @@ Do NOT add `if (document.querySelector(sel))` guards. They must be added uncondi
 
 Never switch to viewport-chunk scrolling.
 
-### 7. Sequential execution (visual)
+### 7. Parallel execution (visual)
 
-`fullyParallel: false`, `workers: 2`. Parallel execution introduces timing differences.
+`fullyParallel: true`, `workers: 5`. Tests run in parallel for speed. Each test runs its own full page preparation pipeline so timing is self-contained per test.
 
 ### 8. Tolerance bands
 
@@ -257,7 +259,7 @@ Never switch to viewport-chunk scrolling.
 
 ### 11. Interaction engine constraints
 
-- `maxRequestRetries: 0` — retries count against `maxRequestsPerCrawl` and reduce effective page count
+- `maxRequestRetries: 0` — retries would consume `maxRequestsPerCrawl` budget; failed pages go straight to `failedRequestHandler`
 - `maxConcurrency: 1` — no server load
 - Viewport must be set via `page.setViewportSize({ width: 1920, height: 1080 })` inside `requestHandler` — Crawlee ignores Playwright config viewport
 - No text entered in any field — inputs are checked for visibility/enabled state only

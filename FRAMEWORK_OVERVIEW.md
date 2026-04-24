@@ -83,7 +83,7 @@ Without automation, every time a developer makes a change — a CSS tweak, a plu
 | **Playwright** | `^1.59` | Browser automation, screenshot comparison, test runner | The only tool with built-in pixel-diff `toHaveScreenshot`, native multi-browser support (Chromium, Firefox, WebKit), and a fixture system that lets us cleanly separate page preparation from test logic. Its `mask` parameter lets us overlay opaque rectangles over volatile elements without modifying the page or the screenshot. |
 | **Crawlee** | `^3.16` | Full-site crawling | Crawlee's `PlaywrightCrawler` integrates directly with Playwright pages, so we get a real browser for every crawled page (no HTTP-only scraping). It handles URL deduplication, request queuing, retry logic, and concurrency automatically. We get a fully crawled site with zero URL management code. |
 | **Node.js** | `v22` | Runtime | LTS, required by Crawlee v3, and the native environment for Playwright's JS API. |
-| **dotenv** | `v16` | Environment config | Keeps `BASE_URL` out of source code. Single field, no secrets. |
+| **dotenv** | `v17` | Environment config | Keeps `BASE_URL` out of source code. Single field, no secrets. |
 
 ### Playwright Functions Used
 
@@ -224,7 +224,7 @@ await expect(page).toHaveScreenshot(snapshotName, {
 The interaction suite starts from `BASE_URL` and crawls the entire site using `PlaywrightCrawler`. At every page, `enqueueLinks({ globs: ['${origin}/**'] })` adds all internal links to the queue. Crawlee deduplicates them automatically — each URL is visited exactly once.
 
 Configuration:
-- `maxRequestsPerCrawl: MAX_PAGES` — adjustable ceiling
+- `maxRequestsPerCrawl: MAX_PAGES` — adjustable ceiling (currently 300)
 - `maxConcurrency: 1` — one page at a time, no server load
 - `maxRequestRetries: 0` — failed pages go immediately to `failedRequestHandler` without consuming crawl budget
 - Viewport set to `1920 × 1080` inside `requestHandler` (Crawlee ignores Playwright config viewport)
@@ -257,13 +257,17 @@ Configuration:
 
 **13. Console error check** — records JavaScript errors thrown during the page session → WARN.
 
+### Highlight and screenshot policy
+
+Every page with at least one FAIL gets a full-page screenshot with failing elements highlighted in **red** and warning elements highlighted in **yellow**. Popup screenshots are always captured (not just on failure) — each opened popup is screenshotted with the same colour coding before it is closed.
+
 ### FAIL / WARN / SKIP policy
 
 | Status | What triggers it |
 |---|---|
-| **FAIL** | Disabled button · broken link (4xx/5xx, non-social) · broken image · disabled input · empty/disabled select · page navigation failure · popup with disabled elements |
+| **FAIL** | Disabled button (non-form-submit) · broken link (4xx/5xx, non-social) · broken image · disabled input · empty/disabled select · page navigation failure · popup with disabled non-form-submit elements |
 | **WARN** | Click trial timeout · missing alt text · missing input label · missing iframe title · no accessible name · focusable-hidden · console errors · nav hover fail · sticky header gone · accordion aria stuck · back-to-top not visible · social media link · HTTP 429 |
-| **SKIP** | CAPTCHA elements · hidden elements · form submit buttons |
+| **SKIP** | CAPTCHA elements · hidden elements · form submit buttons (standalone and inside popups — disabled until form is filled) |
 
 ---
 
@@ -326,7 +330,8 @@ Opens the interaction audit HTML report.
 - One test row: `Full Site Crawl`
 - **Annotations** tab shows crawl stats (total pages, failures, warnings, runtime) then one line per crawled URL (✅/⚠️/❌ with PASS/FAIL/WARN/SKIP counts)
 - **Failure annotations** show `[url] [category] element label: detail` for every FAIL
-- **Attachments**: `crawl-summary.json` (full machine-readable results), `❌ slug.png` screenshots for each failing page with failing elements highlighted in red
+- **Attachments**: `crawl-summary.json` (full machine-readable results), popup screenshots (one per opened popup)
+- **Standalone report**: `interaction-results/audit-report.html` — self-contained HTML SPA written directly to disk; open with `npm run report:interaction`. FAILs highlighted red, WARNs highlighted yellow.
 
 Reading a failure:
 ```
@@ -336,7 +341,79 @@ This means the "Contact Us" button link on the /contact page returns a 404. The 
 
 ---
 
-## 9. Manual Effort Reduction
+## 9. System Requirements and Performance Benchmarks
+
+### Local development requirements
+
+| Requirement | Minimum | Recommended |
+|---|---|---|
+| RAM | 2 GB | 4 GB |
+| Disk — code + node_modules | ~250 MB | — |
+| Disk — golden baselines (all 9 devices) | ~1 GB | 2 GB (grows with pages) |
+| Node.js | v22+ | v22 LTS |
+| Internet connection | Required | Stable broadband |
+
+`node_modules` is 118 MB. Golden baselines are 851 MB for 67 pages × 9 devices. Each new device adds ~95 MB of baselines.
+
+### Performance benchmarks
+
+#### Visual suite
+
+| Pages | Devices | Workers | Wall time |
+|---|---|---|---|
+| 67 pages | 1 device | 5 parallel | ~25 minutes |
+| 67 pages | 9 devices | 5 parallel | ~3.5 hours |
+| Per page (1 device) | — | — | ~18–22 seconds |
+
+- Memory peak: ~800 MB–1.2 GB (5 concurrent Chromium processes)
+- Results per run: ~2–5 MB (HTML report + diff images)
+
+#### Interaction suite
+
+| Pages | Concurrency | Wall time |
+|---|---|---|
+| 100 pages | 1 (sequential) | ~60–90 minutes |
+| 300 pages | 1 (sequential) | ~3–4 hours |
+| Per page | — | ~30–60 seconds |
+
+- Memory peak: ~400–600 MB (single Chromium browser, sequential crawl)
+- Results per run: ~50–150 MB (HTML report + per-page screenshots)
+
+The 30–60 second per-page range for interaction reflects real variance: pages with many links trigger many HEAD requests (cached cross-page, but first occurrence takes network time); pages with popups trigger popup audit sequences.
+
+### CI/CD requirements
+
+The framework runs on any CI system that supports Node.js. Recommended setup:
+
+```yaml
+# GitHub Actions example
+runs-on: ubuntu-latest  # or self-hosted runner
+node-version: 22
+
+# Cache these between runs:
+#   ~/.cache/ms-playwright   (~300 MB — Playwright browser binaries)
+#   node_modules/            (~120 MB)
+
+# Golden baselines are committed to git — checked out as part of the repo.
+# Do not gitignore golden-baselines/.
+
+# Separate jobs:
+#   visual-tests:       npm run visual   (~25 min per device)
+#   interaction-audit:  npm run interaction  (~1-4 hours)
+
+# Trigger on:
+#   push to main/staging
+#   nightly cron schedule
+#   manual dispatch (workflow_dispatch)
+```
+
+**CI runner RAM:** 4 GB minimum, 8 GB recommended for visual with multiple devices enabled simultaneously.
+
+**Golden baselines in CI:** The baselines in `golden-baselines/` are the source of truth for visual tests. Baseline capture (`npm run baseline`) should only be triggered deliberately — not on every CI run — to avoid silently accepting regressions as new baselines.
+
+---
+
+## 10. Manual Effort Reduction
 
 ### Before automation
 
@@ -363,7 +440,7 @@ The tests run entirely unattended. A developer triggers `npm run visual`, does o
 
 ---
 
-## 10. How AI (Claude) Accelerated This Build
+## 11. How AI (Claude) Accelerated This Build
 
 This framework was built collaboratively with Claude, Anthropic's AI coding assistant. Here is an honest breakdown of what would have happened without AI, and what AI changed.
 
@@ -426,7 +503,7 @@ The total build time with AI collaboration was a fraction of what a solo enginee
 
 ---
 
-## 11. Best Practices Applied
+## 12. Best Practices Applied
 
 ### 1. Zero hardcoded selectors
 No page-specific CSS arrays anywhere. All detection is behavioral (observed DOM change) or universally structural (known carousel library class names that are part of those libraries' public API). Adding a new page never requires touching the detection code.
@@ -454,21 +531,21 @@ Reports and crawler storage are gitignored — they are outputs, not inputs. Gol
 
 ---
 
-## 12. Known Limitations
+## 13. Known Limitations
 
 | Limitation | Detail | Workaround |
 |---|---|---|
 | **No authenticated pages** | The framework has no login flow. Pages behind authentication are not tested. | Add a `page.fill()` / `page.click()` login step in `base-fixtures.js` if needed. |
 | **Interaction audit doesn't submit forms** | Inputs are checked for visibility and enabled state only. No values are typed, no forms submitted. | Intentional — avoids sending test data to the live site. |
 | **Visual tests are pixel-level** | A font version update or OS-level anti-aliasing difference between two machines can cause failures. | The 2% tolerance band (`maxDiffPixelRatio: 0.02`) absorbs most of this. For larger differences, re-capture baselines. |
-| **Crawlee crawl is depth-unlimited but count-limited** | `MAX_PAGES` in `interaction-engine.js` caps the crawl. Set to 5 during development. For production, raise to 300-500. | Edit `MAX_PAGES` in `utils/interaction-engine.js`. |
+| **Crawlee crawl is depth-unlimited but count-limited** | `MAX_PAGES` in `interaction-engine.js` caps the crawl. Currently set to 300. | Edit `MAX_PAGES` in `utils/interaction-engine.js` to adjust. |
 | **No performance testing** | The framework does not measure page load times, Core Web Vitals, or Lighthouse scores. | A separate tool (Lighthouse CI, WebPageTest) would be needed. |
 | **Social media links are not HTTP-verified** | Links to LinkedIn, Twitter/X, Facebook etc. are flagged as WARN without making a network request, because corporate firewalls block these. | Manual spot-check of WARN items in the interaction report. |
 | **Single-run baselines** | Golden baselines represent one point-in-time capture. If the site was in a bad state when baselines were captured, those bad states become the reference. | Always inspect baselines after capture with `npm run report`. |
 
 ---
 
-## 13. What Could Be Added Next
+## 14. What Could Be Added Next
 
 | Enhancement | Value | Effort |
 |---|---|---|
@@ -482,7 +559,7 @@ Reports and crawler storage are gitignored — they are outputs, not inputs. Gol
 
 ---
 
-## 14. File Reference
+## 15. File Reference
 
 | File | Purpose |
 |---|---|
