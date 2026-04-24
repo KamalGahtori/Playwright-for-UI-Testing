@@ -15,9 +15,20 @@ module.exports = defineConfig({
 
   use: {
     baseURL: process.env.BASE_URL,
+    /* Add the custom header for AWS WAF bypass */
+    extraHTTPHeaders: {
+      'x-waf-bypass-secret': 'a3NvbHZlc3BsYXl3cmlnaHQ=',
+    },
+
+    /* Recommended: Also set a standard User-Agent to avoid generic bot detection */
+    userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36',
     trace: 'on-first-retry',
     screenshot: 'only-on-failure',
     actionTimeout: 30_000,
+    // Other settings...
+    extraHTTPHeaders: {
+      'x-test-bypass-token': 'a3NvbHZlc3BsYXl3cmlnaHQ=',
+    },
   },
 
   expect: {
